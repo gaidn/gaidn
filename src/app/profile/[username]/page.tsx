@@ -1,15 +1,17 @@
 import SimpleNavbar from "@/components/SimpleNavbar";
 
 interface ProfilePageProps {
-  params: {
+  params: Promise<{
     username: string;
-  };
+  }>;
 }
 
-export default function ProfilePage({ params }: ProfilePageProps) {
+export default async function ProfilePage({ params }: ProfilePageProps) {
+  const { username } = await params;
+  
   // 模拟用户数据
   const user = {
-    username: params.username,
+    username: username,
     name: "张三",
     tagline: "全栈开发者，专注于AI和Web技术",
     avatar: "https://github.com/identicons/zhangsan.png",
