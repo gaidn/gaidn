@@ -1,62 +1,39 @@
-# Next.js Framework Starter
+# GAIDN - Global AI Developer Network
 
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/next-starter-template)
+> 以 GitHub 身份为基础的 AI 开发者网络平台，致力于建立一个去中心化、自由协作、公开透明的开发者生态系统。
 
-<!-- dash-content-start -->
+## 🚀 功能特性
 
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app). It's deployed on Cloudflare Workers as a [static website](https://developers.cloudflare.com/workers/static-assets/).
+- **GitHub OAuth 认证** - 使用 GitHub 账号一键登录
+- **开发者画像** - 展示基于 GitHub 数据的个人资料
+- **社区排行榜** - 按注册时间排序的开发者列表(暂时，后面要更新排序算法)
+- **个人主页** - 开发者展示页面，基础信息等。
+- **实时更新** - 支持编辑个人名称和标语
+- 
+## 项目愿景
 
-This template uses [OpenNext](https://opennext.js.org/) via the [OpenNext Cloudflare adapter](https://opennext.js.org/cloudflare), which works by taking the Next.js build output and transforming it, so that it can run in Cloudflare Workers.
+GAIDN 致力于建立一个去中心化的全球 AI 开发者网络，以人为本，促进知识共享和协作创新。
 
-<!-- dash-content-end -->
+## 技术栈
 
-Outside of this repo, you can start a new project with this template using [C3](https://developers.cloudflare.com/pages/get-started/c3/) (the `create-cloudflare` CLI):
+- 前端：React.js + Next.js + TailwindCSS
+- 认证：GitHub OAuth
+- 后端：Next.js API Routes
+- 数据库：Cloudflare D1
 
-```bash
-npm create cloudflare@latest -- --template=cloudflare/templates/next-starter-template
-```
+## 🎨 界面截图
 
-A live public deployment of this template is available at [https://next-starter-template.templates.workers.dev](https://next-starter-template.templates.workers.dev)
+### 首页
+- 精美的渐变标题设计
+- 功能特性介绍卡片
+- 快速导航按钮
 
-## Getting Started
+### 排行榜
+- 按注册时间排序的用户列表（暂时时间排序）
+- 用户头像、姓名、标语展示
+- 点击跳转个人主页
 
-First, run:
-
-```bash
-npm install
-# or
-yarn install
-# or
-pnpm install
-# or
-bun install
-```
-
-Then run the development server (using the package manager of your choice):
-
-```bash
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Deploying To Production
-
-| Command                           | Action                                       |
-| :-------------------------------- | :------------------------------------------- |
-| `npm run build`                   | Build your production site                   |
-| `npm run preview`                 | Preview your build locally, before deploying |
-| `npm run build && npm run deploy` | Deploy your production site to Cloudflare    |
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+### 个人主页
+- GitHub 基本信息展示
+- 自定义名称和标语
+- 加入时间和统计信息

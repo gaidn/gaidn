@@ -11,6 +11,13 @@
     "binding": "ASSETS",
     "directory": ".open-next/assets"
   },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_id": "5b81fdbd-fb2c-4e9e-ad93-0b8151ec6d93",
+      "database_name": "gaidn"
+    }
+  ],
   "observability": {
     "enabled": true
   },
