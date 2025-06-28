@@ -21,15 +21,16 @@ export default function Home() {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <a 
+            <Link 
               href="/leaderboard" 
               className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-10 rounded-md px-8 bg-primary text-primary-foreground shadow hover:bg-primary/90"
             >
               查看排行榜
-            </a>
+            </Link>
             <a 
               href="https://github.com" 
               target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-10 rounded-md px-8 border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground"
             >
               了解更多
