@@ -11,6 +11,10 @@ export const authConfig: NextAuthConfig = {
           scope: 'read:user user:email',
         },
       },
+      httpOptions: {
+        timeout: 40000,
+        retry: 3,
+      } as any,
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET,

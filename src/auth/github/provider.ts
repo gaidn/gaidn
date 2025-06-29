@@ -14,6 +14,10 @@ export const createGitHubProvider = (config: {
         scope: 'read:user user:email',
       },
     },
+    httpOptions: {
+      timeout: 40000, // 增加超时时间到40秒
+      retry: 3, // 添加重试次数
+    } as any,
   })
 }
 
@@ -51,6 +55,10 @@ export const createGitHubAuthConfig = () => {
             scope: 'read:user user:email',
           },
         },
+        httpOptions: {
+          timeout: 40000, // 增加超时时间到40秒
+          retry: 3, // 添加重试次数
+        } as any,
       }),
     ],
     secret: process.env.NEXTAUTH_SECRET,
