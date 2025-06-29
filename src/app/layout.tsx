@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
-// import ClientBody from "./ClientBody";
-// import SessionProvider from "@/components/SessionProvider";
+import ClientBody from "./ClientBody";
+import SessionProvider from "@/components/SessionProvider";
 
 export const metadata: Metadata = {
   title: "GAIDN - Global AI Developer Network",
@@ -16,10 +16,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body suppressHydrationWarning className="antialiased">
-        {/* <SessionProvider>
+        <SessionProvider>
           <ClientBody>{children}</ClientBody>
-        </SessionProvider> */}
-        {children}
+        </SessionProvider>
       </body>
     </html>
   );

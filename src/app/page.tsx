@@ -1,10 +1,10 @@
-import SimpleNavbar from "@/components/SimpleNavbar";
+import Navbar from "@/components/Navbar";
 import Link from "next/link";
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-background">
-      <SimpleNavbar />
+      <Navbar />
 
       <main className="container mx-auto px-4 py-16">
         <div className="text-center space-y-8">
