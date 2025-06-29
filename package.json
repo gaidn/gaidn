@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "bunx biome lint --write && bunx tsc --noEmit",
-    "format": "bunx biome format --write"
+    "format": "bunx biome format --write",
+    "deploy": "wrangler deploy"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.10.0",
