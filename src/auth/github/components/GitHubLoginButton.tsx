@@ -19,26 +19,35 @@ export const GitHubLoginButton = ({
   variant = 'default',
   size = 'default',
   children,
-  callbackUrl,
+  callbackUrl = '/',
   onError,
 }: GitHubLoginButtonProps) => {
-  const { loginWithGitHub, isLoading, error } = useGitHubAuth()
+  const { loginWithGitHub, isLoading } = useGitHubAuth()
   const [isButtonLoading, setIsButtonLoading] = useState(false)
+  const [loginError, setLoginError] = useState<string | null>(null)
 
   const handleLogin = async () => {
     try {
       setIsButtonLoading(true)
-      console.log('开始 GitHub 登录流程...')
-      const result = await loginWithGitHub({ 
-        callbackUrl,
-        redirect: true 
-      })
-      console.log('GitHub 登录结果:', result)
+      setLoginError(null)
+      
+      console.log('GitHubLoginButton: 点击登录按钮，准备开始登录流程...')
+      console.log('GitHubLoginButton: 使用回调URL:', callbackUrl)
+      
+      // 使用重定向模式，直接跳转到GitHub授权页面
+      await loginWithGitHub({ callbackUrl })
+      
+      // 注意：重定向模式下，这里的代码不会继续执行，因为页面会被重定向
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : '登录失败'
-      console.error('登录失败:', error)
+      const errorMessage = error instanceof Error 
+        ? `登录错误: ${error.message}` 
+        : '登录过程中发生未知错误'
+      
+      console.error('GitHubLoginButton: 登录过程中捕获到错误:', error)
+      setLoginError(errorMessage)
       onError?.(errorMessage)
-    } finally {
+      
+      // 确保按钮状态重置
       setIsButtonLoading(false)
     }
   }
@@ -57,8 +66,12 @@ export const GitHubLoginButton = ({
         <Github className="mr-2 h-4 w-4" />
         {children || (buttonLoading ? '登录中...' : '使用 GitHub 登录')}
       </Button>
-      {error && !onError && (
-        <p className="text-sm text-red-500">{error}</p>
+      
+      {/* 显示错误信息 */}
+      {loginError && (
+        <p className="text-sm text-red-500">
+          {loginError}
+        </p>
       )}
     </div>
   )
