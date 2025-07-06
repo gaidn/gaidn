@@ -35,10 +35,18 @@ export const GitHubLoginButton = ({
       console.log('GitHubLoginButton: 使用回调URL:', callbackUrl)
       
       // 使用重定向模式，直接跳转到GitHub授权页面
-      await loginWithGitHub({ callbackUrl })
+      const result = await loginWithGitHub({ callbackUrl })
+      
+      // 检查是否有错误返回（非重定向模式或出错的情况）
+      if (result?.error) {
+        setLoginError(result.error)
+        onError?.(result.error)
+        setIsButtonLoading(false)
+      }
       
       // 注意：重定向模式下，这里的代码不会继续执行，因为页面会被重定向
     } catch (error) {
+      // 这个 catch 块现在应该很少被触发，因为大多数错误都在 hook 中处理了
       const errorMessage = error instanceof Error 
         ? `登录错误: ${error.message}` 
         : '登录过程中发生未知错误'

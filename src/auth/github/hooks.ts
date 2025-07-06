@@ -1,3 +1,5 @@
+'use client'
+
 import { useSession, signIn, signOut } from 'next-auth/react'
 import { useCallback, useState } from 'react'
 import type { GitHubUser, GitHubLoginOptions } from './types'
@@ -35,7 +37,8 @@ export const useGitHubAuth = () => {
           return result
         } catch (err) {
           console.error('useGitHubAuth: signIn 非重定向模式内部错误:', err)
-          throw err
+          setError(err instanceof Error ? err.message : '登录过程出错')
+          return { error: '登录失败' }
         }
       } else {
         // 重定向模式
@@ -49,14 +52,15 @@ export const useGitHubAuth = () => {
           return undefined
         } catch (err) {
           console.error('useGitHubAuth: signIn 重定向模式内部错误:', err)
-          throw err
+          setError(err instanceof Error ? err.message : '登录过程出错')
+          return { error: '登录失败' }
         }
       }
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : '登录失败'
       setError(errorMessage)
       console.error('useGitHubAuth: GitHub 登录过程中捕获到错误:', error)
-      throw error
+      return { error: errorMessage }
     }
   }, [])
 
@@ -66,11 +70,12 @@ export const useGitHubAuth = () => {
       console.log('useGitHubAuth: 开始登出流程...')
       await signOut({ callbackUrl: '/' })
       console.log('useGitHubAuth: 登出成功')
+      return true
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : '登出失败'
       setError(errorMessage)
       console.error('useGitHubAuth: 登出失败:', error)
-      throw error
+      return false
     }
   }, [])
 
