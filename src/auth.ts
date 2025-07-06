@@ -50,7 +50,7 @@ export const authConfig = {
     signIn: '/auth/signin', // 自定义登录页面路径
   },
   callbacks: {
-    // @ts-ignore
+    // @ts-expect-error - NextAuth类型定义不完整，session回调的参数类型需要补充
     async session({ session, token }) {
       console.log('NextAuth session回调被调用:', { sessionData: session, tokenData: token })
       if (token.githubUsername) {
@@ -58,7 +58,7 @@ export const authConfig = {
       }
       return session
     },
-    // @ts-ignore
+    // @ts-expect-error - NextAuth类型定义不完整，jwt回调的参数类型需要补充
     async jwt({ token, account, profile }) {
       console.log('NextAuth jwt回调被调用:', { 
         tokenData: token, 
@@ -72,7 +72,7 @@ export const authConfig = {
       }
       return token
     },
-    // @ts-ignore
+    // @ts-expect-error - NextAuth类型定义不完整，signIn回调的参数类型需要补充
     async signIn({ user, account, profile }) {
       console.log('NextAuth signIn回调被调用:', { 
         userData: user, 
@@ -81,7 +81,7 @@ export const authConfig = {
       })
       return true
     },
-    // @ts-ignore
+    // @ts-expect-error - NextAuth类型定义不完整，redirect回调的参数类型需要补充
     async redirect({ url, baseUrl }) {
       // 确保重定向URL的安全性
       if (url.startsWith('/')) {
@@ -94,21 +94,21 @@ export const authConfig = {
   },
   debug: process.env.NODE_ENV === 'development',
   logger: {
-    // @ts-ignore
+    // @ts-expect-error - NextAuth类型定义不完整，error方法的参数类型需要补充
     error(code, metadata) {
       console.error(`NextAuth错误 [${code}]:`, metadata)
     },
-    // @ts-ignore
+    // @ts-expect-error - NextAuth类型定义不完整，warn方法的参数类型需要补充
     warn(code) {
       console.warn(`NextAuth警告 [${code}]`)
     },
-    // @ts-ignore
+    // @ts-expect-error - NextAuth类型定义不完整，debug方法的参数类型需要补充
     debug(code, metadata) {
       console.log(`NextAuth调试 [${code}]:`, metadata)
     },
   },
 }
 
-// @ts-ignore
+// @ts-expect-error - NextAuth类型定义不完整，返回值类型需要补充
 export const { handlers, auth, signIn, signOut } = NextAuth(authConfig)
 console.log('NextAuth实例创建完成') 

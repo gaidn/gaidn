@@ -1,17 +1,8 @@
 "use client"
 
-// 兼容 next-auth 扩展属性
-type UserWithGithub = {
-  name?: string | null;
-  email?: string | null;
-  image?: string | null;
-  githubUsername?: string;
-  customName?: string;
-};
-
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { GitHubLoginButton, GitHubUserProfile } from "@/auth/github"
+import { GitHubLoginButton } from "@/auth/github"
 import { useGitHubAuth } from "@/auth/github/hooks"
 import Link from "next/link"
 import {

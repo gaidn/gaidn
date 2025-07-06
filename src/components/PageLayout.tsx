@@ -9,7 +9,8 @@ interface PageLayoutProps {
 }
 
 export default function PageLayout({ children, className = "" }: PageLayoutProps) {
-  const { isAuthenticated } = useGitHubAuth();
+  // 如果后续需要使用身份验证状态，可以取消注释下面的行
+  // const { isAuthenticated } = useGitHubAuth();
 
   return (
     <div className="min-h-screen bg-background flex flex-col">

@@ -1,7 +1,32 @@
-import type { NextAuthConfig } from 'next-auth'
 import GithubProvider from 'next-auth/providers/github'
+import type { JWT } from 'next-auth/jwt'
+import type { Session } from 'next-auth'
 
-export const authConfig: NextAuthConfig = {
+// 定义 GitHub Profile 类型
+interface GitHubProfile {
+  login: string;
+  id: number;
+  [key: string]: unknown;
+}
+
+// 定义配置类型
+interface AuthConfig {
+  providers: unknown[];
+  secret?: string;
+  session?: {
+    strategy: 'jwt' | 'database';
+  };
+  callbacks?: {
+    session?: (params: { session: Session; token: JWT }) => Promise<Session>;
+    jwt?: (params: { 
+      token: JWT; 
+      account: { provider?: string } | null; 
+      profile?: GitHubProfile 
+    }) => Promise<JWT>;
+  };
+}
+
+export const authConfig: AuthConfig = {
   providers: [
     GithubProvider({
       clientId: process.env.GITHUB_ID!,
@@ -11,10 +36,6 @@ export const authConfig: NextAuthConfig = {
           scope: 'read:user user:email',
         },
       },
-      httpOptions: {
-        timeout: 40000,
-        retry: 3,
-      } as any,
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
@@ -22,13 +43,17 @@ export const authConfig: NextAuthConfig = {
     strategy: 'jwt',
   },
   callbacks: {
-    async session({ session, token }) {
+    async session({ session, token }: { session: Session; token: JWT }) {
       if (token.githubUsername) {
         session.user.githubUsername = token.githubUsername as string
       }
       return session
     },
-    async jwt({ token, account, profile }) {
+    async jwt({ token, account, profile }: { 
+      token: JWT; 
+      account: { provider?: string } | null; 
+      profile?: GitHubProfile 
+    }) {
       if (account?.provider === 'github' && profile) {
         token.githubUsername = profile.login
       }

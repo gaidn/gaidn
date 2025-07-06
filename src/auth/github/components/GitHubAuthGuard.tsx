@@ -18,7 +18,7 @@ export const GitHubAuthGuard = ({
   className,
   redirectUrl,
 }: GitHubAuthGuardProps) => {
-  const { isAuthenticated, isLoading, requiresAuth, error: authError } = useAuthGuard()
+  const { isLoading, requiresAuth, error: authError } = useAuthGuard()
   const [loginError, setLoginError] = useState<string | null>(null)
 
   const handleLoginError = (error: string) => {

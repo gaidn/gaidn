@@ -1,11 +1,25 @@
 import GithubProvider from 'next-auth/providers/github'
 import type { OAuthConfig } from 'next-auth/providers'
+import type { Session } from 'next-auth'
+import type { JWT } from 'next-auth/jwt'
+import type { GitHubUser } from './types'
+
+// 定义 GitHub Profile 类型
+interface GitHubProfile {
+  login: string;
+  id: number;
+  node_id: string;
+  avatar_url: string;
+  name: string;
+  email: string;
+  [key: string]: unknown;
+}
 
 // GitHub 认证提供者配置
 export const createGitHubProvider = (config: {
   clientId: string
   clientSecret: string
-}): OAuthConfig<any> => {
+}) => {
   return GithubProvider({
     clientId: config.clientId,
     clientSecret: config.clientSecret,
@@ -14,26 +28,28 @@ export const createGitHubProvider = (config: {
         scope: 'read:user user:email',
       },
     },
-    httpOptions: {
-      timeout: 40000, // 增加超时时间到40秒
-      retry: 3, // 添加重试次数
-    } as any,
   })
 }
 
 // 扩展 NextAuth 配置以支持 GitHub
-export const extendAuthOptions = (options: any): any => {
+export const extendAuthOptions = (options: Record<string, unknown>) => {
+  const callbacks = options.callbacks as Record<string, unknown> || {};
+  
   return {
     ...options,
     callbacks: {
-      ...options.callbacks,
-      async session({ session, token }: { session: any; token: any }) {
+      ...callbacks,
+      async session({ session, token }: { session: Session; token: JWT }) {
         if (token.githubUsername) {
           session.user.githubUsername = token.githubUsername as string
         }
         return session
       },
-      async jwt({ token, account, profile }: { token: any; account: any; profile: any }) {
+      async jwt({ token, account, profile }: { 
+        token: JWT; 
+        account: { provider?: string } | null; 
+        profile?: { login: string } 
+      }) {
         if (account?.provider === 'github' && profile) {
           token.githubUsername = profile.login
         }
@@ -55,10 +71,6 @@ export const createGitHubAuthConfig = () => {
             scope: 'read:user user:email',
           },
         },
-        httpOptions: {
-          timeout: 40000, // 增加超时时间到40秒
-          retry: 3, // 添加重试次数
-        } as any,
       }),
     ],
     secret: process.env.NEXTAUTH_SECRET,
@@ -66,13 +78,17 @@ export const createGitHubAuthConfig = () => {
       strategy: 'jwt',
     },
     callbacks: {
-      async session({ session, token }: { session: any; token: any }) {
+      async session({ session, token }: { session: Session; token: JWT }) {
         if (token.githubUsername) {
           session.user.githubUsername = token.githubUsername as string
         }
         return session
       },
-      async jwt({ token, account, profile }: { token: any; account: any; profile: any }) {
+      async jwt({ token, account, profile }: { 
+        token: JWT; 
+        account: { provider?: string } | null; 
+        profile?: { login: string } 
+      }) {
         if (account?.provider === 'github' && profile) {
           token.githubUsername = profile.login
         }
