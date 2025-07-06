@@ -4,12 +4,19 @@ import { useSession, signIn, signOut } from 'next-auth/react'
 import { useCallback, useState } from 'react'
 import type { GitHubUser, GitHubLoginOptions } from './types'
 
+interface LoginResult {
+  error?: string;
+  ok?: boolean;
+  url?: string;
+  status?: number;
+}
+
 // 使用 GitHub 登录的 Hook
 export const useGitHubAuth = () => {
   const { data: session, status } = useSession()
   const [error, setError] = useState<string | null>(null)
 
-  const loginWithGitHub = useCallback(async (options?: GitHubLoginOptions) => {
+  const loginWithGitHub = useCallback(async (options?: GitHubLoginOptions): Promise<LoginResult | undefined> => {
     try {
       setError(null)
       console.log('useGitHubAuth: 开始 GitHub 登录流程...', { 
@@ -26,7 +33,7 @@ export const useGitHubAuth = () => {
           const result = await signIn('github', {
             ...options,
             redirect: false,
-          })
+          }) as LoginResult
           console.log('useGitHubAuth: 非重定向登录结果:', result)
           
           if (result?.error) {
@@ -64,7 +71,7 @@ export const useGitHubAuth = () => {
     }
   }, [])
 
-  const logout = useCallback(async () => {
+  const logout = useCallback(async (): Promise<boolean> => {
     try {
       setError(null)
       console.log('useGitHubAuth: 开始登出流程...')

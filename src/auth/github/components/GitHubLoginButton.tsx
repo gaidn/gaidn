@@ -1,6 +1,6 @@
 'use client'
 
-import { useGitHubAuth } from '../hooks'
+import { useGitHubAuth } from '@/auth/github/hooks'
 import { Button } from '@/components/ui/button'
 import { Github } from 'lucide-react'
 import { useState } from 'react'

@@ -1,6 +1,6 @@
 'use client'
 
-import { useGitHubAuth } from '../hooks'
+import { useGitHubAuth } from '@/auth/github/hooks'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { LogOut, User } from 'lucide-react'
