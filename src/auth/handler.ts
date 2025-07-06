@@ -9,10 +9,10 @@ export async function handleSignInUser(
 ): Promise<UserType | null> {
   try {
     if (!user.email) {
-      throw new Error("无效的登录用户");
+      throw new Error("invalid signin user");
     }
     if (!account.type || !account.provider || !account.providerAccountId) {
-      throw new Error("无效的登录账号");
+      throw new Error("invalid signin account");
     }
 
     const userInfo: UserType = {
@@ -24,7 +24,7 @@ export async function handleSignInUser(
       signin_provider: account.provider,
       signin_openid: account.providerAccountId,
       created_at: new Date(),
-      signin_ip: "127.0.0.1", // 简化版本，实际应该获取真实 IP
+      signin_ip: "127.0.0.1", // 简化版本
       githubUsername: account.provider === 'github' ? (user.name || undefined) : undefined
     };
 
@@ -34,7 +34,7 @@ export async function handleSignInUser(
 
     return userInfo;
   } catch (e) {
-    console.error("处理用户登录失败:", e);
+    console.error("handle signin user failed:", e);
     throw e;
   }
 } 
