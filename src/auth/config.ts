@@ -2,7 +2,7 @@ import GitHubProvider from "next-auth/providers/github";
 import { NextAuthConfig } from "next-auth";
 import { Provider } from "@auth/core/providers";
 import { User } from "@/types/user";
-import { handleSignInUser } from "./handler";
+import { handleSignInUser } from "@/auth/handler";
 
 const providers: Provider[] = [];
 
@@ -38,6 +38,22 @@ export const authOptions: NextAuthConfig = {
   providers,
   pages: {
     signIn: "/auth/signin",
+  },
+  secret: process.env.NEXTAUTH_SECRET,
+  session: {
+    strategy: 'jwt',
+    maxAge: 30 * 24 * 60 * 60, // 30 天
+  },
+  cookies: {
+    sessionToken: {
+      name: `next-auth.session-token`,
+      options: {
+        httpOnly: true,
+        sameSite: "lax",
+        path: "/",
+        secure: process.env.NODE_ENV === "production",
+      },
+    },
   },
   callbacks: {
     async signIn({ user, account, profile }: any) {
