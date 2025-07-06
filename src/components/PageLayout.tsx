@@ -1,7 +1,7 @@
 "use client";
 
 import Navbar from "@/components/Navbar";
-// import { useGitHubAuth } from "@/auth/github/hooks";
+import { useGitHubAuth } from "@/auth/github/hooks";
 
 interface PageLayoutProps {
   children: React.ReactNode;
