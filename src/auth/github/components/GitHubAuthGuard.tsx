@@ -1,7 +1,7 @@
 'use client'
 
 import { useAuthGuard } from '../hooks'
-import { GitHubLoginButton } from './GitHubLoginButton'
+import { GitHubLoginButton } from '@/auth/github'
 import { Lock, AlertCircle } from 'lucide-react'
 import { useState } from 'react'
 

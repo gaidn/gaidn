@@ -1,19 +1,19 @@
 import GithubProvider from 'next-auth/providers/github'
-import type { OAuthConfig } from 'next-auth/providers'
+// import type { OAuthConfig } from 'next-auth/providers'
 import type { Session } from 'next-auth'
 import type { JWT } from 'next-auth/jwt'
-import type { GitHubUser } from './types'
+// import type { GitHubUser } from './types'
 
 // 定义 GitHub Profile 类型
-interface GitHubProfile {
-  login: string;
-  id: number;
-  node_id: string;
-  avatar_url: string;
-  name: string;
-  email: string;
-  [key: string]: unknown;
-}
+// interface GitHubProfile {
+//   login: string;
+//   id: number;
+//   node_id: string;
+//   avatar_url: string;
+//   name: string;
+//   email: string;
+//   [key: string]: unknown;
+// }
 
 // GitHub 认证提供者配置
 export const createGitHubProvider = (config: {
