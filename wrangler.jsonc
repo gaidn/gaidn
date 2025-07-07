@@ -8,7 +8,7 @@
     "GITHUB_ID": "Ov23lid1sGmndBxKd4mO",
     "GITHUB_SECRET": "0d37a2dcefaed7866bfc8551588595aff1068e4c",
     "NEXTAUTH_SECRET": "oEhc9ylMKs1hUpKZeph34Y/wV8fwNfzFPFLZ/KdKRf8=",
-    "NEXTAUTH_URL": "http://gaidn.org"
+    "NEXTAUTH_URL": "https://gaidn.org"
   },
   "main": ".open-next/worker.js",
   "compatibility_date": "2025-04-01",
