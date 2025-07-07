@@ -50,6 +50,8 @@ export const authOptions: NextAuthConfig = {
     strategy: 'jwt',
     maxAge: 30 * 24 * 60 * 60, // 30 天
   },
+  // 添加可信主机配置，解决 UntrustedHost 错误
+  trustHost: true, // 信任所有主机，包括 gaidn.org 和 gaidn.1105950073.workers.dev
   // Cloudflare Workers 环境下的 cookie 配置
   cookies: {
     sessionToken: {
