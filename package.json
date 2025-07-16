@@ -3,13 +3,18 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -H 0.0.0.0 --turbopack",
     "build": "next build",
-    "start": "next start",
+    "cf-typegen": "wrangler types --env-interface CloudflareEnv env.d.ts",
+    "check": "npm run build && tsc",
+    "deploy": "npx @opennextjs/cloudflare build && npx @opennextjs/cloudflare deploy",
+    "dev": "next dev",
+    "dev:port": "next dev -p",
+    "kill-port": "powershell -Command \"$port = if ($env:PORT) { $env:PORT } else { 3000 }; Get-NetTCPConnection -LocalPort $port -ErrorAction SilentlyContinue | ForEach-Object { Stop-Process -Id $_.OwningProcess -Force -ErrorAction SilentlyContinue } ; Write-Host \\\"Port $port cleared\\\"\"",
     "lint": "bunx biome lint --write && bunx tsc --noEmit",
     "format": "bunx biome format --write",
-    "deploy": "npx @opennextjs/cloudflare build && npx @opennextjs/cloudflare deploy",
     "preview": "npx @opennextjs/cloudflare build && npx @opennextjs/cloudflare preview",
+    "restart": "powershell -Command \"$port = if ($env:PORT) { $env:PORT } else { 3000 }; Get-NetTCPConnection -LocalPort $port -ErrorAction SilentlyContinue | ForEach-Object { Stop-Process -Id $_.OwningProcess -Force -ErrorAction SilentlyContinue } ; if ($env:PORT) { npm run dev -- -p $env:PORT } else { npm run dev }\"",
+    "start": "next start",
     "validate": "./validate-build-only.sh"
   },
   "dependencies": {

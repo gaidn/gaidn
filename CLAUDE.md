@@ -1,4 +1,5 @@
 # CLAUDE.md
+claude --dangerously-skip-permissions
 
 此文件为 Claude Code (claude.ai/code) 在此代码库中工作时提供指导。
 
@@ -36,7 +37,7 @@
 
 ### 关键技术
 - **框架**: Next.js 15 with App Router 和 Turbopack
-- **数据库**: 使用 Cloudflare 的 D1 数据库
+- **数据库**: 使用 Cloudflare 的 D1 数据库，Migration-First 设计
 - **认证**: NextAuth.js 支持 Google、GitHub 和 Google One Tap （如果有该认证模块）
 - **支付**: Stripe 集成（如果有该模块）
 - **国际化**: next-intl 路由本地化
@@ -45,24 +46,85 @@
 
 ### 项目结构
 
-- `src/app/` - Next.js App Router 基于区域设置的路由
-  - `[locale]/` - 特定区域设置的页面（en、zh）
-  - `api/` - API 路由，单一职责的 api 端点、统一响应格式，完善的错误处理
-  - `theme.css` - 主题样式文件
-- `src/components/` - React 组件
-  - `blocks/` - 落地页布局块（header、footer、feature 等）
-  - `ui/` - 可重复使用的 shadcn/ui 组件
-- `src/auth/` - NextAuth.js 配置和处理程序（如果有认证模块）
-- `src/db/` - 数据库架构和迁移（Cloudflare 的 D1 数据库）
-- `src/i18n/` - 国际化设置
-  - `pages/` - 页面特定的翻译
-  - `messages/` - 全局消息翻译
-- `src/models/` - 数据模型和数据库操作
-- `src/services/` - 业务逻辑层
-- `src/lib/` - 自定义库与函数
-- `src/types/` - TypeScript 类型定义
-  - `pages/` - 页面的类型定义
-  - `blocks/` - 结构模块的类型定义
+```
+your-project/
+├── src/
+│   ├── app/                       # Next.js App Router
+│   │   ├── [locale]/              # 特定区域设置的页面（en、zh）
+│   │   ├── api/                   # API 路由，统一响应格式
+│   │   └── theme.css              # 主题样式文件
+│   ├── components/                # React 组件
+│   │   ├── blocks/                # 落地页布局块
+│   │   └── ui/                    # 可复用的基础组件
+│   ├── auth/                      # NextAuth.js 配置（如有）
+│   ├── db/                        # 数据库架构和迁移
+│   │   ├── mock-db.ts             # Mock数据库实现
+│   │   └── migrations/            # Migration 系统
+│   │       ├── index.ts           # 迁移管理器
+│   │       └── 001_xxx.ts         # 迁移文件
+│   ├── i18n/                      # 国际化设置
+│   │   ├── pages/                 # 页面特定翻译
+│   │   └── messages/              # 全局消息翻译
+│   ├── lib/                       # 自定义库与函数
+│   │   └── db.ts                  # 数据库连接管理
+│   ├── models/                    # 数据模型（纯数据访问）
+│   │   └── user.ts                # 用户数据模型
+│   ├── services/                  # 业务逻辑层
+│   │   └── user.service.ts        # 用户业务逻辑
+│   └── types/                     # TypeScript 类型定义
+│       ├── pages/                 # 页面类型定义
+│       └── blocks/                # 结构模块类型定义
+├── wrangler.jsonc                 # Cloudflare 配置
+├── env.d.ts                       # 环境类型定义
+└── package.json                   # 项目配置
+```
+
+### 数据库架构
+
+本项目采用 **Migration-First** 设计理念，通过分层架构实现环境无关的数据库操作。
+
+#### 数据库分层架构
+
+| 层级 | 目录 | 职责 | 说明 |
+|------|------|------|------|
+| **连接层** | `src/lib/db.ts` | 数据库连接与环境检测 | 统一抽象，自动切换 |
+| **数据层** | `src/db/` | 数据存储与迁移管理 | Mock、Migration |
+| **模型层** | `src/models/` | 数据库操作封装 | 纯数据访问，CRUD操作 |
+| **服务层** | `src/services/` | 业务逻辑处理 | 复杂业务规则，跨模型操作 |
+| **路由层** | `src/app/api/` | API 接口控制 | 请求处理，调用服务层 |
+
+#### 数据库更详细介绍文档，可以看 d1_db.md 里面说明
+
+#### 层级职责详解
+
+1. **模型层 (Models)** - 纯数据访问
+  - 职责：封装数据库 CRUD 操作
+  - 特点：一个数据表对应一个模型文件
+  - 原则：只包含数据访问逻辑，不包含业务规则
+
+2. **服务层 (Services)** - 业务逻辑处理
+  - 职责：处理复杂业务规则和跨模型操作
+  - 特点：包含验证、权限检查、数据转换等逻辑，一个文件对应一个 models 文件
+  - 原则：调用模型层，不直接操作数据库
+
+3. **路由层 (API Routes)** - 接口控制
+  - 职责：处理 HTTP 请求和响应
+  - 特点：参数验证、格式转换、错误处理
+  - 原则：调用服务层，不直接调用模型层
+
+
+#### Migration 系统
+
+- **自动化**：环境检测后自动执行未执行的迁移
+- **幂等性**：多次执行相同的迁移是安全的
+- **版本控制**：通过迁移ID和状态表跟踪执行情况
+
+#### SQL 最佳实践
+
+- 使用 `prepare().run()` 而不是 `exec()`
+- SQL语句使用单行格式，避免多行模板字符串
+- 使用参数绑定防止SQL注入
+- 表名和字段名使用小写和下划线命名
 
 ### 认证流程
 
@@ -85,8 +147,18 @@
 
 所需的环境文件：
 - `.env.development` - 开发环境变量
-- `.env.production` - 生产环境变量（Cloudflare）
-- `wrangler.toml` - Cloudflare Workers 配置
+- `wrangler.jsonc` - Cloudflare Workers 和 D1 数据库配置
+
+
+## 开发流程
+
+```bash
+# 开发环境（Mock数据库）
+npm run dev
+
+# 本地预览（真实D1数据库）
+npm run preview
+```
 
 ## 开发注意事项
 
@@ -96,6 +168,7 @@
 - 遵循 TypeScript 最佳实践
 - 使用 Sonner 进行消息提示
 - 实现适当的错误处理和验证
+- 遵循数据库层级职责分离原则
 
 ## TypeScript 导入导出经验
 
