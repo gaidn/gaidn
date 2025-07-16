@@ -48,5 +48,41 @@ export default [
       "@typescript-eslint/no-empty-function": "error",
       "@typescript-eslint/no-empty": ["error", { allowEmptyCatch: false }],
     },
+    // 忽略文件和目录
+    ignores: [
+      // Markdown 文档
+      "**/*.md",
+      "**/*.mdx",
+      "docs/**",
+      "tasks/**",
+      "README.md",
+      "CHANGELOG.md",
+
+      // 构建输出
+      ".next/**",
+      ".open-next/**",
+      "out/**",
+      "build/**",
+      "dist/**",
+
+      // 依赖
+      "node_modules/**",
+
+      // 环境文件
+      ".env*",
+
+      // 配置文件
+      "wrangler.jsonc",
+      "next.config.ts",
+      "postcss.config.mjs",
+
+      // IDE 文件
+      ".vscode/**",
+      ".idea/**",
+
+      // 其他
+      ".DS_Store",
+      "*.log"
+    ]
   },
 ];
