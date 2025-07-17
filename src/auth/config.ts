@@ -4,6 +4,7 @@ import type { Provider } from "@auth/core/providers";
 import { handleSignInUser } from "@/auth/handler";
 import type { Session } from "next-auth";
 import type { JWT } from "next-auth/jwt";
+import { User } from "@/types/user";
 
 const providers: Provider[] = [];
 
@@ -80,7 +81,6 @@ export const authOptions: NextAuthConfig = {
     }
   },
   callbacks: {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async signIn(_params) {
       const isAllowedToSignIn = true;
       if (isAllowedToSignIn) {
@@ -101,14 +101,12 @@ export const authOptions: NextAuthConfig = {
       }
       return baseUrl;
     },
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    async session({ session, token }: { session: Session; token: JWT & { user?: any } }) {
+    async session({ session, token }: { session: Session; token: JWT & { user?: User } }) {
       if (token && token.user) {
         session.user = token.user;
       }
       return session;
     },
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     async jwt({ token, user, account }) {
       // 登录后立即将 OAuth access_token 和/或用户 ID 保存到 token 中
       try {
@@ -121,7 +119,6 @@ export const authOptions: NextAuthConfig = {
           throw new Error("保存用户失败");
         }
 
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         token.user = {
           id: userInfo.id ?? 0,
           name: userInfo.name ?? '',
@@ -129,7 +126,7 @@ export const authOptions: NextAuthConfig = {
           image: userInfo.image ?? undefined,
           github_id: userInfo.github_id,
           created_at: userInfo.created_at ?? '',
-        } as any;
+        };
 
         // 保存 access_token 用于后续的 GitHub API 调用
         if (account.provider === 'github' && account.access_token) {
