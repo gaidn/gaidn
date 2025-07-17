@@ -1,46 +1,47 @@
 import { UserInfo } from "@/components/UserInfo";
 import { auth } from "@/auth";
 import PageLayout from "@/components/PageLayout";
+import { PageHeader } from "@/components/ui/page-header";
 import Link from "next/link";
 
 export default async function Home(): Promise<JSX.Element> {
   const session = await auth();
 
   return (
-    <PageLayout>
-      <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-6">欢迎来到 GAIDN - Global AI Developer Network</h1>
-        
-        <div className="mb-8">
+    <PageLayout pattern="grid">
+      <PageHeader
+        title="欢迎来到 GAIDN"
+        description="Global AI Developer Network - 连接全球 AI 开发者的社区平台"
+      >
+        <div className="mt-6">
           {session ? (
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h2 className="text-xl font-semibold mb-4">已登录用户</h2>
-              <UserInfo />
+            <div className="bg-card/50 backdrop-blur-sm p-6 rounded-lg border">
+              <h2 className="text-xl font-semibold mb-4">欢迎回来！</h2>
+              <div className="flex items-center justify-center">
+                <UserInfo />
+              </div>
             </div>
           ) : (
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h2 className="text-xl font-semibold mb-4">请登录</h2>
-              <UserInfo />
+            <div className="bg-card/50 backdrop-blur-sm p-6 rounded-lg border">
+              <h2 className="text-xl font-semibold mb-4">开始您的 AI 开发者之旅</h2>
+              <div className="flex items-center justify-center">
+                <UserInfo />
+              </div>
             </div>
           )}
         </div>
+      </PageHeader>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Link href="/profile" className="block bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-            <h2 className="text-xl font-semibold mb-2">个人资料</h2>
-            <p className="text-gray-600">查看和编辑您的个人资料信息。</p>
-          </Link>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <Link href="/profile" className="group block bg-card/50 backdrop-blur-sm p-6 rounded-lg border hover:shadow-md hover:border-primary/20 transition-all duration-300">
+          <h2 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">个人资料</h2>
+          <p className="text-muted-foreground">查看和管理您的个人资料信息。</p>
+        </Link>
 
-          <Link href="/leaderboard" className="block bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-            <h2 className="text-xl font-semibold mb-2">排行榜</h2>
-            <p className="text-gray-600">查看开发者排名和贡献情况。</p>
-          </Link>
-
-          <Link href="/settings" className="block bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-            <h2 className="text-xl font-semibold mb-2">设置</h2>
-            <p className="text-gray-600">管理您的账户设置和偏好。</p>
-          </Link>
-        </div>
+        <Link href="/leaderboard" className="group block bg-card/50 backdrop-blur-sm p-6 rounded-lg border hover:shadow-md hover:border-primary/20 transition-all duration-300">
+          <h2 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">排行榜</h2>
+          <p className="text-muted-foreground">查看开发者排名和贡献情况。</p>
+        </Link>
       </div>
     </PageLayout>
   );

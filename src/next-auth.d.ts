@@ -10,6 +10,7 @@ declare module "next-auth" {
       email?: string | null
       image?: string | null
     }
+    accessToken?: string
   }
 
   interface User {
@@ -78,5 +79,6 @@ declare module "next-auth/jwt" {
       github_id?: string
       created_at: string
     }
+    accessToken?: string
   }
 } 

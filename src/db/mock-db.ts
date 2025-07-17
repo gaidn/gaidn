@@ -57,7 +57,6 @@ let nextUserId = 3;
  */
 export const mockDB = {
   prepare(sql: string) {
-    console.log('Mock SQL:', sql);
     
     return {
       all() {
@@ -149,7 +148,6 @@ export const mockDB = {
           run() {
             // 创建表
             if (sql.includes('CREATE TABLE')) {
-              console.log('Mock: 创建表');
               return Promise.resolve({ success: true });
             }
             
@@ -250,7 +248,6 @@ export const mockDB = {
       
       run() {
         if (sql.includes('CREATE TABLE')) {
-          console.log('Mock: 创建表');
           return Promise.resolve({ success: true });
         }
         return Promise.resolve({ success: true });
@@ -259,8 +256,7 @@ export const mockDB = {
   },
   
   // 添加 exec 方法模拟
-  exec(sql: string) {
-    console.log('Mock SQL exec:', sql);
+  exec(_sql: string) {
     return Promise.resolve({ success: true });
   }
 } as unknown as D1Database; 

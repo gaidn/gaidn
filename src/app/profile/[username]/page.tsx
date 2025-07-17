@@ -1,5 +1,6 @@
 import PageLayout from "@/components/PageLayout";
-import GitHubProfile from "@/components/GitHubProfile";
+import ProfileTabs from "@/components/ProfileTabs";
+import { PageHeader } from "@/components/ui/page-header";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { getDB } from "@/lib/db";
@@ -9,10 +10,14 @@ interface ProfilePageProps {
   params: Promise<{
     username: string;
   }>;
+  searchParams: Promise<{
+    tab?: string;
+  }>;
 }
 
-export default async function ProfilePage({ params }: ProfilePageProps): Promise<JSX.Element> {
+export default async function ProfilePage({ params, searchParams }: ProfilePageProps): Promise<JSX.Element> {
   const { username } = await params;
+  const { tab: _tab } = await searchParams;
   const session = await auth();
   
   if (!session?.user) {
@@ -34,20 +39,14 @@ export default async function ProfilePage({ params }: ProfilePageProps): Promise
   const isOwnProfile = user.login === username || user.name === username;
 
   return (
-    <PageLayout>
-      <div className="container mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">
-            {isOwnProfile ? '我的资料' : `${user.name} 的资料`}
-          </h1>
-          <p className="text-gray-600">
-            {isOwnProfile ? '查看您的 GitHub 数据和个人信息' : `查看 ${user.name} 的 GitHub 数据和个人信息`}
-          </p>
-        </div>
-        
-        {/* 使用新的 GitHubProfile 组件 */}
-        <GitHubProfile user={user} />
-      </div>
+    <PageLayout pattern="dots">
+      <PageHeader
+        title={isOwnProfile ? '我的资料' : `${user.name} 的资料`}
+        description={isOwnProfile ? '查看和管理您的个人资料信息' : `查看 ${user.name} 的个人资料信息`}
+      />
+      
+      {/* 使用新的 ProfileTabs 组件 */}
+      <ProfileTabs user={user} isOwnProfile={isOwnProfile} />
     </PageLayout>
   );
 } 

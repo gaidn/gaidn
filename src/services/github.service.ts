@@ -12,31 +12,8 @@ export class GitHubService {
    * 获取用户详细信息
    */
   async getUserProfile(accessToken: string): Promise<GitHubUserProfile> {
-    const response = await fetch(`${this.baseUrl}/user`, {
-      headers: {
-        'Authorization': `token ${accessToken}`,
-        'Accept': 'application/vnd.github.v3+json',
-        'User-Agent': 'gaidn-app'
-      }
-    });
-    
-    if (!response.ok) {
-      throw new Error(`GitHub API 错误: ${response.status} ${response.statusText}`);
-    }
-    
-    return await response.json();
-  }
-
-  /**
-   * 获取用户仓库列表
-   */
-  async getUserRepositories(accessToken: string, username: string): Promise<GitHubRepository[]> {
-    const allRepos: GitHubRepository[] = [];
-    let page = 1;
-    const perPage = 100;
-    
-    while (true) {
-      const response = await fetch(`${this.baseUrl}/users/${username}/repos?page=${page}&per_page=${perPage}&sort=updated`, {
+    try {
+      const response = await fetch(`${this.baseUrl}/user`, {
         headers: {
           'Authorization': `token ${accessToken}`,
           'Accept': 'application/vnd.github.v3+json',
@@ -45,93 +22,95 @@ export class GitHubService {
       });
       
       if (!response.ok) {
-        throw new Error(`GitHub API 错误: ${response.status} ${response.statusText}`);
+        const errorText = await response.text();
+        console.error(`GitHub API 用户信息获取失败: ${response.status} ${response.statusText}`, errorText);
+        throw new Error(`GitHub API 用户信息获取失败: ${response.status} ${response.statusText}`);
       }
       
-      const repos = await response.json() as GitHubRepository[];
-      
-      if (repos.length === 0) {
-        break;
-      }
-      
-      allRepos.push(...repos);
-      page++;
+      return await response.json();
+    } catch (error) {
+      console.error('获取 GitHub 用户信息时发生错误:', error);
+      throw error;
     }
-    
-    return allRepos;
+  }
+
+  /**
+   * 获取用户仓库列表（限制前100个最新仓库）
+   */
+  async getUserRepositories(accessToken: string, username: string): Promise<GitHubRepository[]> {
+    try {
+      const response = await fetch(`${this.baseUrl}/users/${username}/repos?per_page=100&sort=updated`, {
+        headers: {
+          'Authorization': `token ${accessToken}`,
+          'Accept': 'application/vnd.github.v3+json',
+          'User-Agent': 'gaidn-app'
+        }
+      });
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error(`GitHub API 仓库列表获取失败: ${response.status} ${response.statusText}`, errorText);
+        throw new Error(`GitHub API 仓库列表获取失败: ${response.status} ${response.statusText}`);
+      }
+      
+      return await response.json() as GitHubRepository[];
+    } catch (error) {
+      console.error('获取 GitHub 仓库列表时发生错误:', error);
+      throw error;
+    }
   }
 
   /**
    * 获取用户的组织信息
    */
   async getUserOrganizations(accessToken: string): Promise<GitHubOrganization[]> {
-    const response = await fetch(`${this.baseUrl}/user/orgs`, {
-      headers: {
-        'Authorization': `token ${accessToken}`,
-        'Accept': 'application/vnd.github.v3+json',
-        'User-Agent': 'gaidn-app'
+    try {
+      const response = await fetch(`${this.baseUrl}/user/orgs`, {
+        headers: {
+          'Authorization': `token ${accessToken}`,
+          'Accept': 'application/vnd.github.v3+json',
+          'User-Agent': 'gaidn-app'
+        }
+      });
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error(`GitHub API 组织信息获取失败: ${response.status} ${response.statusText}`, errorText);
+        throw new Error(`GitHub API 组织信息获取失败: ${response.status} ${response.statusText}`);
       }
-    });
-    
-    if (!response.ok) {
-      throw new Error(`GitHub API 错误: ${response.status} ${response.statusText}`);
+      
+      return await response.json();
+    } catch (error) {
+      console.error('获取 GitHub 组织信息时发生错误:', error);
+      throw error;
     }
-    
-    return await response.json();
   }
 
   /**
-   * 获取仓库的语言统计
-   */
-  async getRepositoryLanguages(accessToken: string, owner: string, repo: string): Promise<Record<string, number>> {
-    const response = await fetch(`${this.baseUrl}/repos/${owner}/${repo}/languages`, {
-      headers: {
-        'Authorization': `token ${accessToken}`,
-        'Accept': 'application/vnd.github.v3+json',
-        'User-Agent': 'gaidn-app'
-      }
-    });
-    
-    if (!response.ok) {
-      if (response.status === 403) {
-        // 可能是私有仓库或权限不足，跳过
-        return {};
-      }
-      throw new Error(`GitHub API 错误: ${response.status} ${response.statusText}`);
-    }
-    
-    return await response.json();
-  }
-
-  /**
-   * 汇总用户所有仓库的语言统计
+   * 基于仓库的 language 字段统计用户语言使用情况
+   * 避免为每个仓库单独调用 API
    */
   async getUserLanguageStats(accessToken: string, repositories: GitHubRepository[]): Promise<UserLanguage[]> {
     const languageStats: Record<string, number> = {};
     
-    // 遍历所有仓库获取语言统计
+    // 基于仓库的主要语言进行统计
     for (const repo of repositories) {
-      try {
-        const languages = await this.getRepositoryLanguages(accessToken, repo.full_name.split('/')[0], repo.name);
-        
-        for (const [language, bytes] of Object.entries(languages)) {
-          languageStats[language] = (languageStats[language] || 0) + bytes;
-        }
-      } catch (error) {
-        console.warn(`获取仓库 ${repo.full_name} 语言统计失败:`, error);
-        // 继续处理其他仓库
+      if (repo.language) {
+        // 使用 star 数作为权重，更能反映用户的技能水平
+        const weight = repo.stargazers_count + 1; // +1 避免0权重
+        languageStats[repo.language] = (languageStats[repo.language] || 0) + weight;
       }
     }
     
     // 计算百分比
-    const totalBytes = Object.values(languageStats).reduce((sum, bytes) => sum + bytes, 0);
+    const totalWeight = Object.values(languageStats).reduce((sum, weight) => sum + weight, 0);
     
-    return Object.entries(languageStats).map(([language, bytes]) => ({
+    return Object.entries(languageStats).map(([language, weight]) => ({
       id: 0, // 这会在数据库中自动分配
       user_id: 0, // 这会在调用时设置
       language,
-      bytes,
-      percentage: totalBytes > 0 ? (bytes / totalBytes) * 100 : 0,
+      bytes: weight, // 使用权重代替字节数
+      percentage: totalWeight > 0 ? (weight / totalWeight) * 100 : 0,
       last_updated: new Date().toISOString()
     })).sort((a, b) => b.percentage - a.percentage);
   }
@@ -183,23 +162,25 @@ export class GitHubService {
     languages: UserLanguage[];
   }> {
     try {
-      console.log('开始收集 GitHub 用户数据...');
-      
       // 获取用户基本信息
+      console.log(`👤 正在获取用户基本信息...`);
       const profile = await this.getUserProfile(accessToken);
-      console.log(`获取用户信息成功: ${profile.login}`);
+      console.log(`✅ 用户信息获取成功: ${profile.login} (${profile.name})`);
       
       // 获取用户仓库
+      console.log(`📚 正在获取用户仓库列表...`);
       const repositories = await this.getUserRepositories(accessToken, profile.login);
-      console.log(`获取到 ${repositories.length} 个仓库`);
+      console.log(`✅ 仓库列表获取成功: ${repositories.length} 个仓库`);
       
       // 获取用户组织
+      console.log(`🏢 正在获取用户组织信息...`);
       const organizations = await this.getUserOrganizations(accessToken);
-      console.log(`获取到 ${organizations.length} 个组织`);
+      console.log(`✅ 组织信息获取成功: ${organizations.length} 个组织`);
       
       // 获取语言统计
+      console.log(`🔤 正在统计编程语言使用情况...`);
       const languages = await this.getUserLanguageStats(accessToken, repositories);
-      console.log(`统计到 ${languages.length} 种编程语言`);
+      console.log(`✅ 语言统计完成: ${languages.length} 种编程语言`);
       
       return {
         profile,
@@ -208,8 +189,24 @@ export class GitHubService {
         languages
       };
     } catch (error) {
-      console.error('收集 GitHub 用户数据失败:', error);
-      throw error;
+      console.error('❌ GitHub 数据收集失败:', error);
+      
+      // 提供更详细的错误信息
+      if (error instanceof Error) {
+        if (error.message.includes('403')) {
+          throw new Error('GitHub API 访问权限不足，请检查 access token 权限');
+        } else if (error.message.includes('401')) {
+          throw new Error('GitHub API 认证失败，access token 可能已过期');
+        } else if (error.message.includes('404')) {
+          throw new Error('GitHub 用户或资源不存在');
+        } else if (error.message.includes('rate limit')) {
+          throw new Error('GitHub API 速率限制，请稍后重试');
+        } else {
+          throw new Error(`GitHub API 调用失败: ${error.message}`);
+        }
+      }
+      
+      throw new Error('GitHub 数据收集过程中发生未知错误');
     }
   }
 }

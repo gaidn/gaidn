@@ -61,35 +61,24 @@ export class DefaultMigrationManager implements MigrationManager {
   
   async migrate(db: D1Database): Promise<void> {
     try {
-      console.log('🔄 开始执行数据库迁移...');
-      
       await this.createMigrationTable(db);
       
       for (const migration of migrations) {
         const isExecuted = await this.isMigrationExecuted(db, migration.id);
         
         if (!isExecuted) {
-          console.log(`🔄 执行迁移: ${migration.id} - ${migration.description}`);
           await migration.up(db);
           await this.recordMigration(db, migration);
-          console.log(`✅ 迁移完成: ${migration.id}`);
-        } else {
-          console.log(`⏭️  跳过已执行的迁移: ${migration.id}`);
         }
       }
       
-      console.log('✅ 所有迁移执行完成');
-      
     } catch (error) {
-      console.error('❌ 迁移执行失败:', error);
       throw error;
     }
   }
   
   async rollback(db: D1Database, steps = 1): Promise<void> {
     try {
-      console.log(`🔄 开始回滚最近的 ${steps} 个迁移...`);
-      
       // 获取所有已执行的迁移
       const result = await db.prepare(
         'SELECT id FROM _migrations ORDER BY executed_at DESC LIMIT ?'
@@ -100,19 +89,12 @@ export class DefaultMigrationManager implements MigrationManager {
       for (const { id } of executedMigrations) {
         const migration = migrations.find(m => m.id === id);
         if (migration) {
-          console.log(`🔄 回滚迁移: ${migration.id} - ${migration.description}`);
           await migration.down(db);
           await db.prepare('DELETE FROM _migrations WHERE id = ?').bind(id).run();
-          console.log(`✅ 回滚完成: ${migration.id}`);
-        } else {
-          console.error(`❌ 未找到迁移: ${id}`);
         }
       }
       
-      console.log('✅ 回滚操作完成');
-      
     } catch (error) {
-      console.error('❌ 回滚失败:', error);
       throw error;
     }
   }
@@ -134,7 +116,6 @@ export class DefaultMigrationManager implements MigrationManager {
         };
       });
     } catch (error) {
-      console.error('❌ 获取迁移状态失败:', error);
       throw error;
     }
   }

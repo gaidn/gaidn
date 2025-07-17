@@ -13,6 +13,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
 import { GitFork, Star, Calendar, ExternalLink, RefreshCw } from 'lucide-react';
+import { type GitHubCollectApiResponse } from '@/types/api';
 
 interface GitHubStats {
   public_repos: number;
@@ -75,74 +76,136 @@ export default function GitHubProfile({ user }: GitHubProfileProps): JSX.Element
   const [organizations, setOrganizations] = useState<Organization[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [loadingSteps, setLoadingSteps] = useState<string[]>([]);
 
-  const fetchGitHubData = useCallback(async (): Promise<void> => {
+  const fetchGitHubData = useCallback(async (forceRefresh = false): Promise<void> => {
     try {
       setIsLoading(true);
+      setError(null);
+      setLoadingSteps([]);
       
       // 获取基本统计信息
+      setLoadingSteps(prev => [...prev, '正在获取基本统计信息...']);
+      console.log('🔄 前端：开始获取基本统计信息');
       const statsResponse = await fetch('/api/github/collect');
       if (statsResponse.ok) {
         const statsData = await statsResponse.json() as ApiResponse<GitHubStats>;
         if (statsData.success && statsData.data) {
           setStats(statsData.data);
+          console.log('✅ 前端：基本统计信息获取成功', statsData.data);
+        } else {
+          console.error('❌ 前端：基本统计信息获取失败', statsData.error);
         }
+      } else {
+        console.error('❌ 前端：基本统计信息 API 调用失败', statsResponse.status);
       }
 
       // 获取仓库信息
+      setLoadingSteps(prev => [...prev, '正在获取仓库信息...']);
+      console.log('🔄 前端：开始获取仓库信息');
       const reposResponse = await fetch(`/api/users/${user.id}/repositories`);
       if (reposResponse.ok) {
         const reposData = await reposResponse.json() as ApiResponse<Repository[]>;
         if (reposData.success && reposData.data) {
           setRepositories(reposData.data);
+          console.log('✅ 前端：仓库信息获取成功', `${reposData.data.length} 个仓库`);
+        } else {
+          console.error('❌ 前端：仓库信息获取失败', reposData.error);
         }
+      } else {
+        console.error('❌ 前端：仓库信息 API 调用失败', reposResponse.status);
       }
 
       // 获取语言统计
+      setLoadingSteps(prev => [...prev, '正在获取语言统计...']);
+      console.log('🔄 前端：开始获取语言统计');
       const languagesResponse = await fetch(`/api/users/${user.id}/languages`);
       if (languagesResponse.ok) {
         const languagesData = await languagesResponse.json() as ApiResponse<Language[]>;
         if (languagesData.success && languagesData.data) {
           setLanguages(languagesData.data);
+          console.log('✅ 前端：语言统计获取成功', `${languagesData.data.length} 种语言`);
+        } else {
+          console.error('❌ 前端：语言统计获取失败', languagesData.error);
         }
+      } else {
+        console.error('❌ 前端：语言统计 API 调用失败', languagesResponse.status);
       }
 
       // 获取组织信息
+      setLoadingSteps(prev => [...prev, '正在获取组织信息...']);
+      console.log('🔄 前端：开始获取组织信息');
       const orgsResponse = await fetch(`/api/users/${user.id}/organizations`);
       if (orgsResponse.ok) {
         const orgsData = await orgsResponse.json() as ApiResponse<Organization[]>;
         if (orgsData.success && orgsData.data) {
           setOrganizations(orgsData.data);
+          console.log('✅ 前端：组织信息获取成功', `${orgsData.data.length} 个组织`);
+        } else {
+          console.error('❌ 前端：组织信息获取失败', orgsData.error);
+        }
+      } else {
+        console.error('❌ 前端：组织信息 API 调用失败', orgsResponse.status);
+      }
+      
+      // 如果没有数据或者强制刷新，则触发数据收集
+      const hasData = stats && repositories.length > 0;
+      if (!hasData || forceRefresh) {
+        setLoadingSteps(prev => [...prev, '正在收集 GitHub 数据...']);
+        console.log('🔄 前端：数据不完整，开始异步收集 GitHub 数据');
+        
+        try {
+          const collectResponse = await fetch('/api/github/collect', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+          
+          if (collectResponse.ok) {
+            const collectData: GitHubCollectApiResponse = await collectResponse.json();
+            if (collectData.success) {
+              console.log('✅ 前端：GitHub 数据收集成功，重新获取数据');
+              setLoadingSteps(prev => [...prev, '数据收集完成，正在刷新...']);
+              
+              // 重新获取数据
+              await fetchGitHubData(false);
+              return;
+            } else {
+              console.error('❌ 前端：GitHub 数据收集失败', collectData.error);
+              setError(`数据收集失败: ${collectData.error}`);
+            }
+          } else {
+            console.error('❌ 前端：GitHub 数据收集 API 调用失败', collectResponse.status);
+            setError('数据收集失败，请稍后重试');
+          }
+        } catch (collectError) {
+          console.error('💥 前端：GitHub 数据收集异常:', collectError);
+          setError('数据收集失败，请稍后重试');
         }
       }
+      
+      setLoadingSteps(prev => [...prev, '数据获取完成！']);
+      console.log('🎉 前端：所有数据获取完成');
     } catch (error) {
-      console.error('获取 GitHub 数据失败:', error);
+      console.error('💥 前端：获取 GitHub 数据时发生异常:', error);
+      setError(error instanceof Error ? error.message : '获取数据时发生未知错误');
     } finally {
       setIsLoading(false);
     }
-  }, [user.id]);
+  }, [user.id, stats, repositories.length]);
 
   const handleRefresh = async (): Promise<void> => {
     setIsRefreshing(true);
     
     try {
-      // 触发数据重新收集
-      const response = await fetch('/api/github/collect', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          accessToken: 'from-session' // 实际使用时从 session 获取
-        })
-      });
-      
-      if (response.ok) {
-        // 重新获取数据
-        await fetchGitHubData();
-      }
+      console.log('🔄 用户点击刷新按钮，开始强制刷新数据');
+      // 使用 forceRefresh 参数强制重新收集数据
+      await fetchGitHubData(true);
     } catch (error) {
       console.error('刷新数据失败:', error);
+      setError('刷新数据失败，请稍后重试');
     } finally {
       setIsRefreshing(false);
     }
@@ -154,8 +217,32 @@ export default function GitHubProfile({ user }: GitHubProfileProps): JSX.Element
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-64">
+      <div className="flex flex-col items-center justify-center h-64 space-y-4">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <div className="text-center space-y-2">
+          <p className="text-lg font-medium">正在加载 GitHub 数据...</p>
+          <div className="space-y-1">
+            {loadingSteps.map((step, index) => (
+              <p key={index} className="text-sm text-muted-foreground">
+                {step}
+              </p>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center h-64 space-y-4">
+        <div className="text-center space-y-2">
+          <p className="text-lg font-medium text-red-600">数据加载失败</p>
+          <p className="text-sm text-muted-foreground">{error}</p>
+          <Button onClick={() => fetchGitHubData(false)} variant="outline">
+            重试
+          </Button>
+        </div>
       </div>
     );
   }
@@ -241,7 +328,19 @@ export default function GitHubProfile({ user }: GitHubProfileProps): JSX.Element
         {/* 仓库列表 */}
         <TabsContent value="repositories" className="space-y-4">
           <div className="grid gap-4">
-            {repositories.map((repo) => (
+            {repositories.length === 0 ? (
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="text-center space-y-2">
+                    <p className="text-muted-foreground">暂无仓库数据</p>
+                    <p className="text-sm text-muted-foreground">
+                      数据可能还在收集中，请稍后刷新页面或点击刷新按钮
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            ) : (
+              repositories.map((repo) => (
               <Card key={repo.id}>
                 <CardContent className="pt-6">
                   <div className="flex items-start justify-between">
@@ -287,7 +386,7 @@ export default function GitHubProfile({ user }: GitHubProfileProps): JSX.Element
                   </div>
                 </CardContent>
               </Card>
-            ))}
+            )))}
           </div>
         </TabsContent>
 
@@ -299,20 +398,29 @@ export default function GitHubProfile({ user }: GitHubProfileProps): JSX.Element
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {languages.map((lang) => (
-                  <div key={lang.language} className="flex items-center justify-between">
-                    <div className="flex items-center space-x-2">
-                      <span className="w-3 h-3 rounded-full bg-blue-500"></span>
-                      <span className="font-medium">{lang.language}</span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Progress value={lang.percentage} className="w-32" />
-                      <span className="text-sm text-muted-foreground">
-                        {lang.percentage.toFixed(1)}%
-                      </span>
-                    </div>
+                {languages.length === 0 ? (
+                  <div className="text-center space-y-2">
+                    <p className="text-muted-foreground">暂无语言统计数据</p>
+                    <p className="text-sm text-muted-foreground">
+                      数据可能还在收集中，请稍后刷新页面或点击刷新按钮
+                    </p>
                   </div>
-                ))}
+                ) : (
+                  languages.map((lang) => (
+                    <div key={lang.language} className="flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        <span className="w-3 h-3 rounded-full bg-blue-500"></span>
+                        <span className="font-medium">{lang.language}</span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Progress value={lang.percentage} className="w-32" />
+                        <span className="text-sm text-muted-foreground">
+                          {lang.percentage.toFixed(1)}%
+                        </span>
+                      </div>
+                    </div>
+                  ))
+                )}
               </div>
             </CardContent>
           </Card>
@@ -321,7 +429,19 @@ export default function GitHubProfile({ user }: GitHubProfileProps): JSX.Element
         {/* 组织列表 */}
         <TabsContent value="organizations" className="space-y-4">
           <div className="grid gap-4">
-            {organizations.map((org) => (
+            {organizations.length === 0 ? (
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="text-center space-y-2">
+                    <p className="text-muted-foreground">暂无组织数据</p>
+                    <p className="text-sm text-muted-foreground">
+                      数据可能还在收集中，请稍后刷新页面或点击刷新按钮
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            ) : (
+              organizations.map((org) => (
               <Card key={org.login}>
                 <CardContent className="pt-6">
                   <div className="flex items-center space-x-4">
@@ -347,7 +467,7 @@ export default function GitHubProfile({ user }: GitHubProfileProps): JSX.Element
                   </div>
                 </CardContent>
               </Card>
-            ))}
+            )))}
           </div>
         </TabsContent>
       </Tabs>

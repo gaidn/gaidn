@@ -61,9 +61,96 @@
 
 @layer base {
   * {
-    @apply border-neutral-200;
+    @apply border-neutral-200 dark:border-neutral-800;
   }
+  
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  
+  /* 改善滚动条样式 */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    @apply bg-muted;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-muted-foreground/30 rounded-full;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted-foreground/50;
+  }
+}
+
+@layer components {
+  /* 增强按钮样式 */
+  .btn-gradient {
+    @apply bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300;
+  }
+  
+  /* 玻璃效果 */
+  .glass {
+    @apply bg-white/10 backdrop-blur-md border border-white/20 shadow-lg;
+  }
+  
+  .glass-dark {
+    @apply bg-black/10 backdrop-blur-md border border-black/20 shadow-lg;
+  }
+  
+  /* 卡片阴影增强 */
+  .card-shadow {
+    @apply shadow-[0_0_0_1px_rgba(0,0,0,0.05),0_1px_2px_rgba(0,0,0,0.1)] hover:shadow-[0_0_0_1px_rgba(0,0,0,0.05),0_8px_16px_rgba(0,0,0,0.1)] transition-shadow duration-300;
+  }
+  
+  /* 渐变文字 */
+  .gradient-text {
+    @apply bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent;
+  }
+  
+  /* 增强的输入框样式 */
+  .input-enhanced {
+    @apply transition-all duration-200 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 hover:border-blue-300;
+  }
+}
+
+@layer utilities {
+  /* 呼吸动画 */
+  .animate-breathe {
+    animation: breathe 4s ease-in-out infinite;
+  }
+  
+  @keyframes breathe {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+  
+  /* 柔和的阴影 */
+  .shadow-soft {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.06);
+  }
+  
+  /* 增强的间距 */
+  .space-y-comfortable > :not([hidden]) ~ :not([hidden]) {
+    --tw-space-y-reverse: 0;
+    margin-top: calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));
+    margin-bottom: calc(1.5rem * var(--tw-space-y-reverse));
+  }
+  
+  /* 响应式文字大小 */
+  .text-responsive {
+    font-size: clamp(0.875rem, 0.8rem + 0.5vw, 1.125rem);
+  }
+  
+  .text-responsive-lg {
+    font-size: clamp(1.25rem, 1.1rem + 0.8vw, 1.875rem);
+  }
+  
+  .text-responsive-xl {
+    font-size: clamp(1.875rem, 1.6rem + 1.2vw, 2.5rem);
   }
 }

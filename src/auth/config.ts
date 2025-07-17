@@ -24,8 +24,6 @@ if (
       },
     })
   );
-} else {
-  console.warn("GitHub 提供商配置失败 - 缺少环境变量");
 }
 
 export const providerMap = providers
@@ -92,8 +90,7 @@ export const authOptions: NextAuthConfig = {
     async redirect({ url, baseUrl }) {
       // 允许相对回调 URL
       if (url.startsWith("/")) {
-        const redirectUrl = `${baseUrl}${url}`;
-        return redirectUrl;
+        return `${baseUrl}${url}`;
       }
       // 允许同源的回调 URL
       else if (new URL(url).origin === baseUrl) {
@@ -101,68 +98,94 @@ export const authOptions: NextAuthConfig = {
       }
       return baseUrl;
     },
-    async session({ session, token }: { session: Session; token: JWT & { user?: User } }) {
+    async session({ session, token }: { session: Session; token: JWT & { user?: User; accessToken?: string } }) {
       if (token && token.user) {
         session.user = token.user;
+      }
+      if (token && token.accessToken) {
+        session.accessToken = token.accessToken;
       }
       return session;
     },
     async jwt({ token, user, account }) {
       // 登录后立即将 OAuth access_token 和/或用户 ID 保存到 token 中
       try {
-        if (!user || !account) {
-          return token;
-        }
-
-        const userInfo = await handleSignInUser(user, account);
-        if (!userInfo) {
-          throw new Error("保存用户失败");
-        }
-
-        token.user = {
-          id: userInfo.id ?? 0,
-          name: userInfo.name ?? '',
-          email: userInfo.email ?? '',
-          image: userInfo.image ?? undefined,
-          github_id: userInfo.github_id,
-          created_at: userInfo.created_at ?? '',
-        };
-
-        // 保存 access_token 用于后续的 GitHub API 调用
-        if (account.provider === 'github' && account.access_token) {
-          token.accessToken = account.access_token;
+        // 首先处理用户登录
+        if (user && account) {
+          console.log(`🔐 开始处理用户登录：${user.email}`);
           
-          // 每次登录时异步收集完整的 GitHub 数据
-          // 使用 setTimeout 避免阻塞登录流程
-          setTimeout(async () => {
-            try {
-              if (!userInfo.id) {
-                console.error('用户 ID 为空，无法收集 GitHub 数据');
-                return;
-              }
-              
-              const { userService } = await import('@/services/user.service');
-              console.log(`开始为用户 ${userInfo.id} 收集 GitHub 数据...`);
-              
-              const result = await userService.collectAndSaveGitHubData(
-                userInfo.id.toString(),
-                account.access_token!
-              );
-              
-              if (result.success) {
-                console.log(`用户 ${userInfo.id} 的 GitHub 数据收集完成`);
-              } else {
-                console.error(`用户 ${userInfo.id} 的 GitHub 数据收集失败:`, result.error);
-              }
-            } catch (error) {
-              console.error('异步收集 GitHub 数据失败:', error);
+          let userInfo = null;
+          try {
+            userInfo = await handleSignInUser(user, account);
+            console.log(`✅ 用户登录处理成功：${userInfo?.name} (ID: ${userInfo?.id})`);
+          } catch (error) {
+            console.error(`❌ 用户登录处理失败：`, error);
+            
+            // 创建基础用户信息，避免登录完全失败
+            if (user.email && user.name) {
+              console.log(`🔄 尝试创建基础用户信息...`);
+              userInfo = {
+                id: 0, // 临时 ID
+                name: user.name,
+                email: user.email,
+                image: user.image,
+                github_id: account.providerAccountId,
+                created_at: new Date().toISOString()
+              };
+            } else {
+              console.error(`💥 无法创建基础用户信息，缺少必要字段`);
+              // 返回 token 但不设置用户信息
+              return token;
             }
-          }, 1000); // 1秒后执行，确保用户会话已建立
+          }
+
+          if (userInfo) {
+            token.user = {
+              id: userInfo.id ?? 0,
+              name: userInfo.name ?? '',
+              email: userInfo.email ?? '',
+              image: userInfo.image ?? undefined,
+              github_id: userInfo.github_id,
+              created_at: userInfo.created_at ?? '',
+            };
+
+            // 保存 access_token 用于后续的 GitHub API 调用
+            if (account.provider === 'github' && account.access_token) {
+              token.accessToken = account.access_token;
+              console.log(`🔑 已保存 GitHub access_token 到 token 中`);
+              
+              // 【临时注释掉同步数据收集，避免登录流程阻塞】
+              // TODO: 稍后改为异步触发
+              /*
+              try {
+                if (!userInfo.id) {
+                  console.warn('⚠️  用户 ID 不存在，跳过 GitHub 数据收集');
+                } else {
+                  const { userService } = await import('@/services/user.service');
+                  console.log(`🚀 开始为用户 ${userInfo.id} 同步收集 GitHub 数据...`);
+                  
+                  const result = await userService.collectAndSaveGitHubData(
+                    userInfo.id.toString(),
+                    account.access_token!
+                  );
+                  
+                  if (result.success) {
+                    console.log(`✅ 用户 ${userInfo.id} 的 GitHub 数据收集完成`);
+                  } else {
+                    console.error(`❌ 用户 ${userInfo.id} 的 GitHub 数据收集失败:`, result.error);
+                  }
+                }
+              } catch (error) {
+                console.error(`💥 用户 ${userInfo.id} 的 GitHub 数据收集异常:`, error);
+              }
+              */
+            }
+          }
         }
 
         return token;
-      } catch (e) {
-        console.error("jwt 回调错误:", e);
+      } catch (error) {
+        console.error(`🚨 JWT 回调异常：`, error);
         return token;
       }
     },
