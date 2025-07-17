@@ -5,15 +5,14 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
-import { GitFork, Star, Users, Calendar, ExternalLink, RefreshCw } from 'lucide-react';
+import { GitFork, Star, Calendar, ExternalLink, RefreshCw } from 'lucide-react';
 
 interface GitHubStats {
   public_repos: number;
@@ -49,6 +48,12 @@ interface Organization {
   description: string;
 }
 
+interface ApiResponse<T = unknown> {
+  success: boolean;
+  data?: T;
+  error?: string;
+}
+
 interface GitHubProfileProps {
   user: {
     id: number;
@@ -63,7 +68,7 @@ interface GitHubProfileProps {
   };
 }
 
-export default function GitHubProfile({ user }: GitHubProfileProps) {
+export default function GitHubProfile({ user }: GitHubProfileProps): JSX.Element {
   const [stats, setStats] = useState<GitHubStats | null>(null);
   const [repositories, setRepositories] = useState<Repository[]>([]);
   const [languages, setLanguages] = useState<Language[]>([]);
@@ -71,15 +76,15 @@ export default function GitHubProfile({ user }: GitHubProfileProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
-  const fetchGitHubData = async () => {
+  const fetchGitHubData = useCallback(async (): Promise<void> => {
     try {
       setIsLoading(true);
       
       // 获取基本统计信息
       const statsResponse = await fetch('/api/github/collect');
       if (statsResponse.ok) {
-        const statsData = await statsResponse.json();
-        if (statsData.success) {
+        const statsData = await statsResponse.json() as ApiResponse<GitHubStats>;
+        if (statsData.success && statsData.data) {
           setStats(statsData.data);
         }
       }
@@ -87,8 +92,8 @@ export default function GitHubProfile({ user }: GitHubProfileProps) {
       // 获取仓库信息
       const reposResponse = await fetch(`/api/users/${user.id}/repositories`);
       if (reposResponse.ok) {
-        const reposData = await reposResponse.json();
-        if (reposData.success) {
+        const reposData = await reposResponse.json() as ApiResponse<Repository[]>;
+        if (reposData.success && reposData.data) {
           setRepositories(reposData.data);
         }
       }
@@ -96,8 +101,8 @@ export default function GitHubProfile({ user }: GitHubProfileProps) {
       // 获取语言统计
       const languagesResponse = await fetch(`/api/users/${user.id}/languages`);
       if (languagesResponse.ok) {
-        const languagesData = await languagesResponse.json();
-        if (languagesData.success) {
+        const languagesData = await languagesResponse.json() as ApiResponse<Language[]>;
+        if (languagesData.success && languagesData.data) {
           setLanguages(languagesData.data);
         }
       }
@@ -105,8 +110,8 @@ export default function GitHubProfile({ user }: GitHubProfileProps) {
       // 获取组织信息
       const orgsResponse = await fetch(`/api/users/${user.id}/organizations`);
       if (orgsResponse.ok) {
-        const orgsData = await orgsResponse.json();
-        if (orgsData.success) {
+        const orgsData = await orgsResponse.json() as ApiResponse<Organization[]>;
+        if (orgsData.success && orgsData.data) {
           setOrganizations(orgsData.data);
         }
       }
@@ -115,9 +120,9 @@ export default function GitHubProfile({ user }: GitHubProfileProps) {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [user.id]);
 
-  const handleRefresh = async () => {
+  const handleRefresh = async (): Promise<void> => {
     setIsRefreshing(true);
     
     try {
@@ -145,7 +150,7 @@ export default function GitHubProfile({ user }: GitHubProfileProps) {
 
   useEffect(() => {
     fetchGitHubData();
-  }, [user.id]);
+  }, [fetchGitHubData]);
 
   if (isLoading) {
     return (

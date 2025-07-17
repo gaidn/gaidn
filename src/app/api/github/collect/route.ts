@@ -24,7 +24,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     // 如果没有提供 accessToken，尝试从 session 中获取
     if (!accessToken || accessToken === 'from-session') {
-      const sessionWithToken = session as any;
+      const sessionWithToken = session as { accessToken?: string };
       accessToken = sessionWithToken.accessToken;
     }
 

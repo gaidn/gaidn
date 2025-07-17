@@ -136,6 +136,11 @@ export const authOptions: NextAuthConfig = {
           // 使用 setTimeout 避免阻塞登录流程
           setTimeout(async () => {
             try {
+              if (!userInfo.id) {
+                console.error('用户 ID 为空，无法收集 GitHub 数据');
+                return;
+              }
+              
               const { userService } = await import('@/services/user.service');
               console.log(`开始为用户 ${userInfo.id} 收集 GitHub 数据...`);
               
