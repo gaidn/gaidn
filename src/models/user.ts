@@ -203,9 +203,9 @@ export class UserModel {
     // 批量插入新的语言统计
     for (const lang of languages) {
       await this.db.prepare(`
-        INSERT INTO user_languages (user_id, language, bytes, percentage)
-        VALUES (?, ?, ?, ?)
-      `).bind(userId, lang.language, lang.bytes, lang.percentage).run();
+        INSERT INTO user_languages (user_id, language, bytes, percentage, last_updated)
+        VALUES (?, ?, ?, ?, ?)
+      `).bind(userId, lang.language, lang.bytes, lang.percentage, lang.last_updated || new Date().toISOString()).run();
     }
   }
 
@@ -227,9 +227,9 @@ export class UserModel {
     // 批量插入新的组织记录
     for (const org of organizations) {
       await this.db.prepare(`
-        INSERT INTO user_organizations (user_id, org_id, login, name, avatar_url, description)
-        VALUES (?, ?, ?, ?, ?, ?)
-      `).bind(userId, org.org_id, org.login, org.name || null, org.avatar_url || null, org.description || null).run();
+        INSERT INTO user_organizations (user_id, org_id, login, name, avatar_url, description, created_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+      `).bind(userId, org.org_id, org.login, org.name || null, org.avatar_url || null, org.description || null, org.created_at || new Date().toISOString()).run();
     }
   }
 
