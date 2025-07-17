@@ -3,7 +3,7 @@
  */
 
 import { UserModel } from '@/models/user';
-import type { CreateUserRequest } from '@/types/user';
+import type { CreateUserRequest, GitHubUserProfile } from '@/types/user';
 import { testDB, resetTestData } from '../../setup/mocks/db-mock';
 
 describe('用户模型层测试', () => {
@@ -151,11 +151,22 @@ describe('用户模型层测试', () => {
 
   describe('upsertUserByGithub()', () => {
     test('应创建新的GitHub用户', async () => {
-      const profile = {
+      const profile: GitHubUserProfile = {
+        id: 789,
+        login: 'testuser',
         name: 'GitHub用户',
         email: 'github@example.com',
-        image: 'https://github.com/avatar.jpg',
-        id: 'github789'
+        avatar_url: 'https://github.com/avatar.jpg',
+        bio: '测试用户简介',
+        company: 'Test Company',
+        location: '北京',
+        blog: 'https://example.com',
+        public_repos: 10,
+        public_gists: 5,
+        followers: 100,
+        following: 50,
+        created_at: '2020-01-01T00:00:00Z',
+        updated_at: '2023-01-01T00:00:00Z'
       };
       
       const user = await userModel.upsertUserByGithub(profile);
@@ -163,15 +174,26 @@ describe('用户模型层测试', () => {
       expect(user).toBeDefined();
       expect(user.name).toBe('GitHub用户');
       expect(user.email).toBe('github@example.com');
-      expect(user.github_id).toBe('github789');
+      expect(user.github_id).toBe('789');
     });
 
     test('应更新现有的GitHub用户', async () => {
-      const profile = {
+      const profile: GitHubUserProfile = {
+        id: 123,
+        login: 'existinguser',
         name: '更新的GitHub用户',
         email: 'updated@example.com',
-        image: 'https://github.com/updated.jpg',
-        id: 'github123' // 这个ID已存在
+        avatar_url: 'https://github.com/updated.jpg',
+        bio: '更新的简介',
+        company: 'Updated Company',
+        location: '上海',
+        blog: 'https://updated.com',
+        public_repos: 20,
+        public_gists: 10,
+        followers: 200,
+        following: 100,
+        created_at: '2019-01-01T00:00:00Z',
+        updated_at: '2023-02-01T00:00:00Z'
       };
       
       const user = await userModel.upsertUserByGithub(profile);
@@ -179,7 +201,7 @@ describe('用户模型层测试', () => {
       expect(user).toBeDefined();
       expect(user.name).toBe('更新的GitHub用户');
       expect(user.email).toBe('updated@example.com');
-      expect(user.github_id).toBe('github123');
+      expect(user.github_id).toBe('123');
     });
   });
 });

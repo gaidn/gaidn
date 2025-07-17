@@ -69,8 +69,10 @@ const createMockMigrate = () => {
   };
 };
 
-// 创建模拟迁移函数
-const mockMigrate = jest.fn(createMockMigrate());
+// 创建模拟迁移函数的实例
+const migrateFn = createMockMigrate();
+// 使用 jest.fn() 包装函数
+const mockMigrate = jest.fn().mockImplementation(migrateFn);
 
 // 模拟迁移模块
 jest.mock('@/db/migrations', () => ({
