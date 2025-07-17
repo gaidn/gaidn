@@ -46,7 +46,7 @@ export default [
 
       // 禁止空函数、空 catch
       "@typescript-eslint/no-empty-function": "error",
-      "@typescript-eslint/no-empty": ["error", { allowEmptyCatch: false }],
+      "no-empty": ["error", { allowEmptyCatch: false }],
     },
     // 忽略文件和目录
     ignores: [
