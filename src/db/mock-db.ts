@@ -189,6 +189,39 @@ export const mockDB = {
                       case 'github_id':
                         mockUsers[index].github_id = params[paramIndex] as string;
                         break;
+                      case 'login':
+                        mockUsers[index].login = params[paramIndex] as string;
+                        break;
+                      case 'bio':
+                        mockUsers[index].bio = params[paramIndex] as string;
+                        break;
+                      case 'company':
+                        mockUsers[index].company = params[paramIndex] as string;
+                        break;
+                      case 'location':
+                        mockUsers[index].location = params[paramIndex] as string;
+                        break;
+                      case 'blog':
+                        mockUsers[index].blog = params[paramIndex] as string;
+                        break;
+                      case 'public_repos':
+                        mockUsers[index].public_repos = params[paramIndex] as number;
+                        break;
+                      case 'public_gists':
+                        mockUsers[index].public_gists = params[paramIndex] as number;
+                        break;
+                      case 'followers':
+                        mockUsers[index].followers = params[paramIndex] as number;
+                        break;
+                      case 'following':
+                        mockUsers[index].following = params[paramIndex] as number;
+                        break;
+                      case 'github_created_at':
+                        mockUsers[index].github_created_at = params[paramIndex] as string;
+                        break;
+                      case 'github_updated_at':
+                        mockUsers[index].github_updated_at = params[paramIndex] as string;
+                        break;
                     }
                     paramIndex++;
                   }
@@ -203,4 +236,31 @@ export const mockDB = {
           },
           
           all() {
-            return Promise.resolve({ results: [], success: true
+            return Promise.resolve({ results: [], success: true });
+          }
+        };
+      },
+      
+      first() {
+        if (sql.includes('SELECT COUNT(*) as count FROM _migrations')) {
+          return Promise.resolve({ count: mockMigrations.length });
+        }
+        return Promise.resolve(null);
+      },
+      
+      run() {
+        if (sql.includes('CREATE TABLE')) {
+          console.log('Mock: 创建表');
+          return Promise.resolve({ success: true });
+        }
+        return Promise.resolve({ success: true });
+      }
+    };
+  },
+  
+  // 添加 exec 方法模拟
+  exec(sql: string) {
+    console.log('Mock SQL exec:', sql);
+    return Promise.resolve({ success: true });
+  }
+} as unknown as D1Database; 

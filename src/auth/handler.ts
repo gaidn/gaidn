@@ -27,8 +27,6 @@ export async function handleSignInUser(
         id: account.providerAccountId
       };
 
-      console.log("处理 GitHub 登录:", profile.email);
-      
       // 调用服务层处理用户
       const result = await userService.upsertUserByGithub(profile);
       
@@ -36,8 +34,6 @@ export async function handleSignInUser(
         console.error("GitHub 用户处理失败:", result.error);
         throw new Error(result.error || "GitHub 用户处理失败");
       }
-      
-      console.log("用户登录成功:", result.data.email);
       
       // 将数据库用户转换为 NextAuth 用户
       const authUser: User = {

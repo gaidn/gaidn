@@ -22,6 +22,16 @@ export async function getDB(): Promise<D1Database> {
       console.log('📝 开发环境 - 使用模拟数据库');
       currentDBType = 'mock';
       db = mockDB;
+      
+      // 在开发环境中也执行迁移
+      try {
+        console.log('🔄 开发环境 - 开始执行数据库迁移...');
+        const { migrationManager } = await import('@/db/migrations');
+        await migrationManager.migrate(db);
+        console.log('✅ 开发环境 - 数据库迁移完成');
+      } catch (error) {
+        console.error('❌ 开发环境 - 数据库迁移失败:', error);
+      }
     } else {
       // 生产/预览环境：使用真实的 D1 数据库
       try {
