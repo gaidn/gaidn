@@ -153,17 +153,27 @@ export const authOptions: NextAuthConfig = {
             if (account.provider === 'github' && account.access_token) {
               token.accessToken = account.access_token;
               console.log(`🔑 已保存 GitHub access_token 到 token 中`);
+              console.log('🔍 Token 详细信息:', {
+                tokenPrefix: account.access_token.substring(0, 10) + '...',
+                tokenLength: account.access_token.length,
+                tokenType: account.token_type || 'Bearer',
+                fullToken: process.env.NODE_ENV === 'development' ? account.access_token : '[HIDDEN]'
+              });
               
-              // 【临时注释掉同步数据收集，避免登录流程阻塞】
-              // TODO: 稍后改为异步触发
-              /*
+              // 异步收集 GitHub 数据（不阻塞登录流程）
               try {
                 if (!userInfo.id) {
                   console.warn('⚠️  用户 ID 不存在，跳过 GitHub 数据收集');
                 } else {
-                  const { userService } = await import('@/services/user.service');
-                  console.log(`🚀 开始为用户 ${userInfo.id} 同步收集 GitHub 数据...`);
+                  console.log(`🚀 开始为用户 ${userInfo.id} 异步收集 GitHub 数据...`);
+                  console.log('🔍 使用的 Access Token:', {
+                    tokenPrefix: account.access_token.substring(0, 10) + '...',
+                    tokenLength: account.access_token.length,
+                    userId: userInfo.id
+                  });
                   
+                  // 异步执行数据收集，不阻塞登录流程
+                  const { userService } = await import('@/services/user.service');
                   const result = await userService.collectAndSaveGitHubData(
                     userInfo.id.toString(),
                     account.access_token!
@@ -171,14 +181,18 @@ export const authOptions: NextAuthConfig = {
                   
                   if (result.success) {
                     console.log(`✅ 用户 ${userInfo.id} 的 GitHub 数据收集完成`);
+                    console.log('📊 收集结果:', result.data);
                   } else {
                     console.error(`❌ 用户 ${userInfo.id} 的 GitHub 数据收集失败:`, result.error);
                   }
                 }
               } catch (error) {
                 console.error(`💥 用户 ${userInfo.id} 的 GitHub 数据收集异常:`, error);
+                if (error instanceof Error) {
+                  console.error('错误详情:', error.message);
+                  console.error('错误堆栈:', error.stack);
+                }
               }
-              */
             }
           }
         }

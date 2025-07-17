@@ -48,8 +48,8 @@ export default function Settings(): JSX.Element {
           </div>
         </div>
 
-        {/* 账户设置 */}
-        <div className="bg-card border rounded-lg p-8">
+        {/* 账户设置 - 暂时隐藏 */}
+        {/* <div className="bg-card border rounded-lg p-8">
           <h2 className="text-2xl font-bold mb-6">账户设置</h2>
           <div className="space-y-6">
             <div className="flex items-center justify-between">
@@ -71,10 +71,10 @@ export default function Settings(): JSX.Element {
               </button>
             </div>
           </div>
-        </div>
+        </div> */}
 
-        {/* 隐私设置 */}
-        <div className="bg-card border rounded-lg p-8">
+        {/* 隐私设置 - 暂时隐藏 */}
+        {/* <div className="bg-card border rounded-lg p-8">
           <h2 className="text-2xl font-bold mb-6">隐私设置</h2>
           <div className="space-y-4">
             <div className="flex items-center justify-between">
@@ -96,7 +96,7 @@ export default function Settings(): JSX.Element {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </PageLayout>
   );

@@ -119,10 +119,12 @@ export class UserModel {
    * 用于 GitHub OAuth 登录
    */
   async upsertUserByGithub(profile: GitHubUserProfile): Promise<User> {
+    console.log(`🔍 正在查找 GitHub 用户: ${profile.login} (ID: ${profile.id})`);
     // 查找是否已存在该 GitHub 用户
     const existingUser = await this.getUserByGithubId(profile.id.toString());
     
     if (existingUser) {
+      console.log(`📝 找到现有用户，正在更新用户信息: ${existingUser.name} (数据库 ID: ${existingUser.id})`);
       // 更新用户信息
       const updated = await this.updateUser(existingUser.id, {
         name: profile.name || existingUser.name,
@@ -140,10 +142,12 @@ export class UserModel {
         github_created_at: profile.created_at,
         github_updated_at: profile.updated_at
       });
+      console.log(`✅ 用户信息更新完成: ${updated?.name}`);
       return updated as User;
     } else {
+      console.log(`👤 GitHub 用户不存在，正在创建新用户: ${profile.login} (${profile.name})`);
       // 创建新用户
-      return this.createUser({
+      const newUser = await this.createUser({
         name: profile.name,
         email: profile.email,
         image: profile.avatar_url,
@@ -160,6 +164,8 @@ export class UserModel {
         github_created_at: profile.created_at,
         github_updated_at: profile.updated_at
       });
+      console.log(`✅ 新用户创建成功: ${newUser.name} (数据库 ID: ${newUser.id})`);
+      return newUser;
     }
   }
 
@@ -167,9 +173,12 @@ export class UserModel {
    * 保存用户仓库信息
    */
   async saveUserRepositories(userId: number, repositories: UserRepository[]): Promise<void> {
+    console.log(`🗑️  正在删除用户 ${userId} 的现有仓库记录...`);
     // 先删除用户的现有仓库记录
     await this.db.prepare('DELETE FROM user_repositories WHERE user_id = ?').bind(userId).run();
+    console.log(`✅ 现有仓库记录删除完成`);
     
+    console.log(`💾 开始批量插入 ${repositories.length} 个仓库记录...`);
     // 批量插入新的仓库记录
     for (const repo of repositories) {
       await this.db.prepare(`
@@ -183,6 +192,7 @@ export class UserModel {
         repo.created_at, repo.updated_at, repo.pushed_at || null
       ).run();
     }
+    console.log(`✅ 仓库记录批量插入完成 (${repositories.length} 个)`);
   }
 
   /**
@@ -197,9 +207,12 @@ export class UserModel {
    * 保存用户语言统计
    */
   async saveUserLanguages(userId: number, languages: UserLanguage[]): Promise<void> {
+    console.log(`🗑️  正在删除用户 ${userId} 的现有语言统计...`);
     // 先删除用户的现有语言统计
     await this.db.prepare('DELETE FROM user_languages WHERE user_id = ?').bind(userId).run();
+    console.log(`✅ 现有语言统计删除完成`);
     
+    console.log(`💾 开始批量插入 ${languages.length} 个语言统计记录...`);
     // 批量插入新的语言统计
     for (const lang of languages) {
       await this.db.prepare(`
@@ -207,6 +220,7 @@ export class UserModel {
         VALUES (?, ?, ?, ?, ?)
       `).bind(userId, lang.language, lang.bytes, lang.percentage, lang.last_updated || new Date().toISOString()).run();
     }
+    console.log(`✅ 语言统计批量插入完成 (${languages.length} 个)`);
   }
 
   /**
@@ -221,9 +235,12 @@ export class UserModel {
    * 保存用户组织信息
    */
   async saveUserOrganizations(userId: number, organizations: UserOrganization[]): Promise<void> {
+    console.log(`🗑️  正在删除用户 ${userId} 的现有组织记录...`);
     // 先删除用户的现有组织记录
     await this.db.prepare('DELETE FROM user_organizations WHERE user_id = ?').bind(userId).run();
+    console.log(`✅ 现有组织记录删除完成`);
     
+    console.log(`💾 开始批量插入 ${organizations.length} 个组织记录...`);
     // 批量插入新的组织记录
     for (const org of organizations) {
       await this.db.prepare(`
@@ -231,6 +248,7 @@ export class UserModel {
         VALUES (?, ?, ?, ?, ?, ?, ?)
       `).bind(userId, org.org_id, org.login, org.name || null, org.avatar_url || null, org.description || null, org.created_at || new Date().toISOString()).run();
     }
+    console.log(`✅ 组织记录批量插入完成 (${organizations.length} 个)`);
   }
 
   /**

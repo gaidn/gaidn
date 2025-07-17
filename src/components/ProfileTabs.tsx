@@ -9,7 +9,6 @@ import { UserAvatar } from "@/components/ui/user-avatar"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Switch } from "@/components/ui/switch"
 import { User, Settings, Github, Mail, Calendar, MapPin, Link as LinkIcon, Save } from "lucide-react"
 
 interface ProfileTabsProps {
@@ -223,8 +222,8 @@ export default function ProfileTabs({ user, isOwnProfile = false }: ProfileTabsP
                 </CardContent>
               </Card>
 
-              {/* 账户设置 */}
-              <Card>
+              {/* 账户设置 - 暂时隐藏 */}
+              {/* <Card>
                 <CardHeader>
                   <CardTitle>账户设置</CardTitle>
                   <CardDescription>
@@ -256,10 +255,10 @@ export default function ProfileTabs({ user, isOwnProfile = false }: ProfileTabsP
                     </Button>
                   </div>
                 </CardContent>
-              </Card>
+              </Card> */}
 
-              {/* 隐私设置 */}
-              <Card>
+              {/* 隐私设置 - 暂时隐藏 */}
+              {/* <Card>
                 <CardHeader>
                   <CardTitle>隐私设置</CardTitle>
                   <CardDescription>
@@ -297,7 +296,7 @@ export default function ProfileTabs({ user, isOwnProfile = false }: ProfileTabsP
                     <Switch defaultChecked />
                   </div>
                 </CardContent>
-              </Card>
+              </Card> */}
             </div>
           </TabsContent>
         )}
