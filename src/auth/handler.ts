@@ -1,6 +1,5 @@
 import type { AdapterUser } from "next-auth/adapters";
 import type { Account, User } from "next-auth";
-import { User as UserType } from "@/types/user";
 import { userService } from "@/services/user.service";
 
 /**

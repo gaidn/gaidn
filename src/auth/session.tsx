@@ -6,6 +6,6 @@ export function NextAuthSessionProvider({
   children,
 }: {
   children: React.ReactNode;
-}) {
+}): JSX.Element {
   return <SessionProvider>{children}</SessionProvider>;
 } 

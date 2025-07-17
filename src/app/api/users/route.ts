@@ -11,7 +11,7 @@ import { currentDBType } from '@/lib/db';
 /**
  * GET /api/users - 获取用户列表
  */
-export async function GET(request: NextRequest) {
+export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
     // API 层职责：解析查询参数
     const { searchParams } = new URL(request.url);
@@ -63,7 +63,7 @@ export async function GET(request: NextRequest) {
 /**
  * POST /api/users - 创建新用户
  */
-export async function POST(request: NextRequest) {
+export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     // API 层职责：解析请求体
     const body: CreateUserRequest = await request.json();

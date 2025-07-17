@@ -1,7 +1,7 @@
 import PageLayout from "@/components/PageLayout";
 import Link from "next/link";
 
-export default function Leaderboard() {
+export default function Leaderboard(): JSX.Element {
   // 模拟数据
   const users = [
     {

@@ -1,11 +1,10 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { UserInfo } from "./UserInfo"
 import { usePathname } from "next/navigation"
 
-export default function Navbar() {
+export default function Navbar(): JSX.Element {
   const pathname = usePathname()
 
   const navItems = [

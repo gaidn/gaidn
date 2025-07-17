@@ -2,6 +2,8 @@ import GitHubProvider from "next-auth/providers/github";
 import type { NextAuthConfig } from "next-auth";
 import type { Provider } from "@auth/core/providers";
 import { handleSignInUser } from "@/auth/handler";
+import type { Session } from "next-auth";
+import type { JWT } from "next-auth/jwt";
 
 const providers: Provider[] = [];
 
@@ -78,7 +80,8 @@ export const authOptions: NextAuthConfig = {
     }
   },
   callbacks: {
-    async signIn({ user, account, profile }: any) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    async signIn(_params) {
       const isAllowedToSignIn = true;
       if (isAllowedToSignIn) {
         return true;
@@ -86,7 +89,7 @@ export const authOptions: NextAuthConfig = {
         return false;
       }
     },
-    async redirect({ url, baseUrl }: any) {
+    async redirect({ url, baseUrl }) {
       // 允许相对回调 URL
       if (url.startsWith("/")) {
         const redirectUrl = `${baseUrl}${url}`;
@@ -98,13 +101,15 @@ export const authOptions: NextAuthConfig = {
       }
       return baseUrl;
     },
-    async session({ session, token }: any) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    async session({ session, token }: { session: Session; token: JWT & { user?: any } }) {
       if (token && token.user) {
         session.user = token.user;
       }
       return session;
     },
-    async jwt({ token, user, account }: any) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    async jwt({ token, user, account }) {
       // 登录后立即将 OAuth access_token 和/或用户 ID 保存到 token 中
       try {
         if (!user || !account) {
@@ -116,14 +121,15 @@ export const authOptions: NextAuthConfig = {
           throw new Error("保存用户失败");
         }
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         token.user = {
-          id: userInfo.id,
-          name: userInfo.name,
-          email: userInfo.email,
-          image: userInfo.image,
+          id: userInfo.id ?? 0,
+          name: userInfo.name ?? '',
+          email: userInfo.email ?? '',
+          image: userInfo.image ?? undefined,
           github_id: userInfo.github_id,
-          created_at: userInfo.created_at,
-        };
+          created_at: userInfo.created_at ?? '',
+        } as any;
 
         // 保存 access_token 用于后续的 GitHub API 调用
         if (account.provider === 'github' && account.access_token) {

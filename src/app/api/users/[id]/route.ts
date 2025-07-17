@@ -13,7 +13,7 @@ import type { CreateUserRequest, ApiResponse } from '@/types/user';
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
-) {
+): Promise<NextResponse> {
   try {
     // API 层职责：参数解析和验证
     const resolvedParams = await params;
@@ -71,7 +71,7 @@ export async function GET(
 export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
-) {
+): Promise<NextResponse> {
   try {
     // API 层职责：参数解析和验证
     const resolvedParams = await params;
@@ -125,7 +125,7 @@ export async function PUT(
 export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
-) {
+): Promise<NextResponse> {
   try {
     // API 层职责：参数解析和验证
     const resolvedParams = await params;

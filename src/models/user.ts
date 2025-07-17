@@ -79,7 +79,7 @@ export class UserModel {
     
     // 构建动态 SQL
     const updates: string[] = [];
-    const values: any[] = [];
+    const values: unknown[] = [];
     
     const fields = {
       name, email, image, github_id, login, bio, company, location, blog,

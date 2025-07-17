@@ -1,6 +1,6 @@
 import PageLayout from "@/components/PageLayout";
 
-export default function Settings() {
+export default function Settings(): JSX.Element {
   return (
     <PageLayout>
       <div className="max-w-2xl mx-auto space-y-8">

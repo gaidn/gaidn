@@ -7,7 +7,7 @@ interface PageLayoutProps {
   className?: string;
 }
 
-export default function PageLayout({ children, className = "" }: PageLayoutProps) {
+export default function PageLayout({ children, className = "" }: PageLayoutProps): JSX.Element {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Navbar />

@@ -4,7 +4,7 @@ import { useSession, signOut } from "next-auth/react";
 import { Button } from "./ui/button";
 import { Github, LogOut } from "lucide-react";
 
-export function UserInfo() {
+export function UserInfo(): JSX.Element {
   const { data: session, status } = useSession();
 
   if (status === "loading") {

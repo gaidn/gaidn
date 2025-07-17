@@ -3,7 +3,7 @@
  * 封装与 GitHub API 的交互逻辑
  */
 
-import type { GitHubUserProfile, GitHubRepository, UserRepository, UserLanguage, UserOrganization } from '@/types/user';
+import type { GitHubUserProfile, GitHubRepository, GitHubOrganization, UserRepository, UserLanguage, UserOrganization } from '@/types/user';
 
 export class GitHubService {
   private baseUrl = 'https://api.github.com';
@@ -64,7 +64,7 @@ export class GitHubService {
   /**
    * 获取用户的组织信息
    */
-  async getUserOrganizations(accessToken: string): Promise<any[]> {
+  async getUserOrganizations(accessToken: string): Promise<GitHubOrganization[]> {
     const response = await fetch(`${this.baseUrl}/user/orgs`, {
       headers: {
         'Authorization': `token ${accessToken}`,
@@ -160,7 +160,7 @@ export class GitHubService {
   /**
    * 将 GitHub 组织转换为用户组织格式
    */
-  convertToUserOrganizations(userId: number, githubOrgs: any[]): UserOrganization[] {
+  convertToUserOrganizations(userId: number, githubOrgs: GitHubOrganization[]): UserOrganization[] {
     return githubOrgs.map(org => ({
       id: 0, // 这会在数据库中自动分配
       user_id: userId,
@@ -179,7 +179,7 @@ export class GitHubService {
   async collectUserData(accessToken: string): Promise<{
     profile: GitHubUserProfile;
     repositories: GitHubRepository[];
-    organizations: any[];
+    organizations: GitHubOrganization[];
     languages: UserLanguage[];
   }> {
     try {

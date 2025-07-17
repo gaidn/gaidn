@@ -7,7 +7,7 @@ import { type NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import { userService } from '@/services/user.service';
 
-export async function POST(request: NextRequest) {
+export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     // 验证用户是否已登录
     const session = await auth();
@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
 
     // 收集并保存 GitHub 数据
     const result = await userService.collectAndSaveGitHubData(
-      session.user.id,
+      session.user.id.toString(),
       accessToken
     );
 
@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
 }
 
 // 获取用户的 GitHub 数据统计
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest): Promise<NextResponse> {
   try {
     // 验证用户是否已登录
     const session = await auth();
@@ -78,7 +78,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const userId = session.user.id;
+    const _userId = session.user.id;
 
     // 获取用户的 GitHub 数据统计
     const user = await userService.getUserByEmail(session.user.email!);

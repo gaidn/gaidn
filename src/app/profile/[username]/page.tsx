@@ -6,7 +6,7 @@ interface ProfilePageProps {
   }>;
 }
 
-export default async function ProfilePage({ params }: ProfilePageProps) {
+export default async function ProfilePage({ params }: ProfilePageProps): Promise<JSX.Element> {
   const { username } = await params;
   
   // 模拟用户数据

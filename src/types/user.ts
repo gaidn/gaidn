@@ -144,4 +144,18 @@ export interface GitHubRepository {
   created_at: string;
   updated_at: string;
   pushed_at?: string;
+}
+
+// GitHub 组织类型
+export interface GitHubOrganization {
+  id: number;
+  login: string;
+  name?: string;
+  avatar_url?: string;
+  description?: string;
+  url: string;
+  html_url: string;
+  public_repos: number;
+  created_at: string;
+  updated_at: string;
 } 

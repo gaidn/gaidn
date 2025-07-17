@@ -1,4 +1,7 @@
 import type { User as CustomUser } from './types/user';
+import type { Provider } from '@auth/core/providers';
+import type { Profile } from 'next-auth';
+import type { JWT } from 'next-auth/jwt';
 
 declare module "next-auth" {
   interface Session {
@@ -30,15 +33,36 @@ declare module "next-auth" {
   }
 
   export interface NextAuthConfig {
-    providers: any[]
+    providers: Provider[]
     pages?: {
       signIn?: string
     }
     callbacks?: {
-      signIn?: (params: any) => Promise<boolean | string>
-      redirect?: (params: any) => Promise<string>
-      session?: (params: any) => Promise<any>
-      jwt?: (params: any) => Promise<any>
+      signIn?: (params: {
+        user: User
+        account: Account | null
+        profile?: Profile
+        email?: { verificationRequest?: boolean }
+        credentials?: Record<string, unknown>
+      }) => Promise<boolean | string>
+      redirect?: (params: {
+        url: string
+        baseUrl: string
+      }) => Promise<string>
+      session?: (params: {
+        session: Session
+        token: JWT
+        user: User
+      }) => Promise<Session>
+      jwt?: (params: {
+        token: JWT
+        user?: User
+        account?: Account | null
+        profile?: Profile
+        trigger?: 'signIn' | 'signUp' | 'update'
+        isNewUser?: boolean
+        session?: unknown
+      }) => Promise<JWT>
     }
     debug?: boolean
   }

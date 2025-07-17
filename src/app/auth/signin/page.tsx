@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { signIn } from "next-auth/react";
 import { Github } from "lucide-react";
 
-export default function SignInPage() {
+export default function SignInPage(): JSX.Element {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
