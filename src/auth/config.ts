@@ -131,6 +131,28 @@ export const authOptions: NextAuthConfig = {
         // 保存 access_token 用于后续的 GitHub API 调用
         if (account.provider === 'github' && account.access_token) {
           token.accessToken = account.access_token;
+          
+          // 每次登录时异步收集完整的 GitHub 数据
+          // 使用 setTimeout 避免阻塞登录流程
+          setTimeout(async () => {
+            try {
+              const { userService } = await import('@/services/user.service');
+              console.log(`开始为用户 ${userInfo.id} 收集 GitHub 数据...`);
+              
+              const result = await userService.collectAndSaveGitHubData(
+                userInfo.id.toString(),
+                account.access_token!
+              );
+              
+              if (result.success) {
+                console.log(`用户 ${userInfo.id} 的 GitHub 数据收集完成`);
+              } else {
+                console.error(`用户 ${userInfo.id} 的 GitHub 数据收集失败:`, result.error);
+              }
+            } catch (error) {
+              console.error('异步收集 GitHub 数据失败:', error);
+            }
+          }, 1000); // 1秒后执行，确保用户会话已建立
         }
 
         return token;

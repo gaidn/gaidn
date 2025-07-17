@@ -20,7 +20,13 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     // 获取请求体
     const body = await request.json() as { accessToken?: string };
-    const { accessToken } = body;
+    let { accessToken } = body;
+
+    // 如果没有提供 accessToken，尝试从 session 中获取
+    if (!accessToken || accessToken === 'from-session') {
+      const sessionWithToken = session as any;
+      accessToken = sessionWithToken.accessToken;
+    }
 
     if (!accessToken) {
       return NextResponse.json(
