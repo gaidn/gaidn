@@ -1,7 +1,6 @@
 import GitHubProvider from "next-auth/providers/github";
 import { NextAuthConfig } from "next-auth";
 import { Provider } from "@auth/core/providers";
-import { User } from "@/types/user";
 import { handleSignInUser } from "@/auth/handler";
 
 const providers: Provider[] = [];
@@ -128,15 +127,15 @@ export const authOptions: NextAuthConfig = {
         if (!userInfo) {
           throw new Error("保存用户失败");
         }
-        console.log("用户信息保存成功:", userInfo.uuid);
+        console.log("用户信息保存成功:", userInfo.id);
 
         token.user = {
-          uuid: userInfo.uuid,
+          id: userInfo.id,
+          name: userInfo.name,
           email: userInfo.email,
-          nickname: userInfo.nickname,
-          avatar_url: userInfo.avatar_url,
+          image: userInfo.image,
+          github_id: userInfo.github_id,
           created_at: userInfo.created_at,
-          githubUsername: account.provider === 'github' ? (user.name || undefined) : undefined
         };
 
         return token;

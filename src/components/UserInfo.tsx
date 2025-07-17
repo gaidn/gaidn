@@ -37,9 +37,9 @@ export function UserInfo() {
         <div>
           <h2 className="text-xl font-bold">{session.user?.name || "用户"}</h2>
           <p className="text-sm text-gray-500">{session.user?.email}</p>
-          {session.user?.githubUsername && (
+          {session.user?.github_id && (
             <p className="text-sm text-gray-500">
-              GitHub: {session.user.githubUsername}
+              GitHub ID: {session.user.github_id}
             </p>
           )}
         </div>

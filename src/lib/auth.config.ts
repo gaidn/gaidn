@@ -69,8 +69,11 @@ export const authConfig: AuthConfig = {
   },
   callbacks: {
     async session({ session, token }: { session: Session; token: JWT }) {
-      if (token.githubUsername) {
-        session.user.githubUsername = token.githubUsername as string
+      if (token.user) {
+        session.user = {
+          ...session.user,
+          ...token.user
+        };
       }
       return session
     },
@@ -80,7 +83,8 @@ export const authConfig: AuthConfig = {
       profile?: GitHubProfile 
     }) {
       if (account?.provider === 'github' && profile) {
-        token.githubUsername = profile.login
+        token.githubId = profile.id.toString();
+        token.githubLogin = profile.login;
       }
       return token
     },

@@ -6,15 +6,16 @@ declare module "next-auth" {
       name?: string | null
       email?: string | null
       image?: string | null
-      githubUsername?: string
     }
   }
 
   interface User {
+    id?: number
     name?: string | null
     email?: string | null
     image?: string | null
-    githubUsername?: string
+    github_id?: string
+    created_at?: string
   }
 
   export interface Account {
@@ -45,7 +46,13 @@ declare module "next-auth" {
 
 declare module "next-auth/jwt" {
   interface JWT {
-    user?: CustomUser
-    githubUsername?: string
+    user?: {
+      id: number
+      name: string
+      email: string
+      image?: string
+      github_id?: string
+      created_at: string
+    }
   }
 } 
