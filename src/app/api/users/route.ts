@@ -3,9 +3,9 @@
  * 遵循架构原则：只处理 HTTP 相关逻辑，业务逻辑委托给服务层
  */
 
-import { NextRequest, NextResponse } from 'next/server';
+import { type NextRequest, NextResponse } from 'next/server';
 import { userService } from '@/services/user.service';
-import { CreateUserRequest, ApiResponse } from '@/types/user';
+import type { CreateUserRequest, ApiResponse } from '@/types/user';
 import { currentDBType } from '@/lib/db';
 
 /**
@@ -15,8 +15,8 @@ export async function GET(request: NextRequest) {
   try {
     // API 层职责：解析查询参数
     const { searchParams } = new URL(request.url);
-    const page = parseInt(searchParams.get('page') || '1');
-    const limit = parseInt(searchParams.get('limit') || '10');
+    const page = Number.parseInt(searchParams.get('page') || '1');
+    const limit = Number.parseInt(searchParams.get('limit') || '10');
     
     // 基础参数验证（API层职责）
     if (page < 1 || limit < 1 || limit > 100) {

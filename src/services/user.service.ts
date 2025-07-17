@@ -3,9 +3,10 @@
  * 封装用户相关业务逻辑，处理复杂业务规则
  */
 
-import { User, CreateUserRequest, UserServiceResponse } from '@/types/user';
+import type { User, CreateUserRequest, UserServiceResponse, GitHubUserProfile } from '@/types/user';
 import { UserModel } from '@/models/user';
 import { getDB } from '@/lib/db';
+import { githubService } from './github.service';
 
 export class UserService {
   private userModel: UserModel | null = null;
@@ -236,7 +237,26 @@ export class UserService {
         };
       }
       
-      const user = await this.userModel!.upsertUserByGithub(profile);
+      // 构造临时的 GitHubUserProfile
+      const githubProfile: GitHubUserProfile = {
+        id: Number.parseInt(profile.id),
+        login: profile.name,
+        name: profile.name,
+        email: profile.email,
+        avatar_url: profile.image || '',
+        bio: undefined,
+        company: undefined,
+        location: undefined,
+        blog: undefined,
+        public_repos: 0,
+        public_gists: 0,
+        followers: 0,
+        following: 0,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      };
+      
+      const user = await this.userModel!.upsertUserByGithub(githubProfile);
       
       return {
         success: true,
@@ -247,6 +267,70 @@ export class UserService {
       return {
         success: false,
         error: 'GitHub 账户处理失败'
+      };
+    }
+  }
+
+  /**
+   * 通过 GitHub 完整档案创建或更新用户
+   */
+  async upsertUserByGithubProfile(profile: GitHubUserProfile): Promise<UserServiceResponse<User>> {
+    try {
+      await this.init();
+      
+      const user = await this.userModel!.upsertUserByGithub(profile);
+      
+      return {
+        success: true,
+        data: user
+      };
+    } catch (error) {
+      console.error('GitHub 完整档案处理失败:', error);
+      return {
+        success: false,
+        error: 'GitHub 完整档案处理失败'
+      };
+    }
+  }
+
+  /**
+   * 收集并保存用户的完整 GitHub 数据
+   */
+  async collectAndSaveGitHubData(userId: string, accessToken: string): Promise<UserServiceResponse<boolean>> {
+    try {
+      await this.init();
+      
+      console.log(`开始收集用户 ${userId} 的 GitHub 数据...`);
+      
+      // 获取完整的 GitHub 数据
+      const githubData = await githubService.collectUserData(accessToken);
+      
+      // 更新用户基本信息
+      await this.userModel!.upsertUserByGithub(githubData.profile);
+      
+      // 保存仓库信息
+      const userRepositories = githubService.convertToUserRepositories(Number.parseInt(userId), githubData.repositories);
+      await this.userModel!.saveUserRepositories(Number.parseInt(userId), userRepositories);
+      
+      // 保存语言统计
+      const userLanguages = githubData.languages.map(lang => ({ ...lang, user_id: Number.parseInt(userId) }));
+      await this.userModel!.saveUserLanguages(Number.parseInt(userId), userLanguages);
+      
+      // 保存组织信息
+      const userOrganizations = githubService.convertToUserOrganizations(Number.parseInt(userId), githubData.organizations);
+      await this.userModel!.saveUserOrganizations(Number.parseInt(userId), userOrganizations);
+      
+      console.log(`用户 ${userId} 的 GitHub 数据收集完成`);
+      
+      return {
+        success: true,
+        data: true
+      };
+    } catch (error) {
+      console.error('收集和保存 GitHub 数据失败:', error);
+      return {
+        success: false,
+        error: '收集和保存 GitHub 数据失败'
       };
     }
   }

@@ -3,7 +3,7 @@
  * 用于测试环境中模拟D1数据库行为
  */
 
-import { User } from '@/types/user';
+import type { User } from '@/types/user';
 
 // 模拟用户数据
 export const mockUsers: User[] = [

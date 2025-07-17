@@ -3,7 +3,7 @@
  */
 
 import { UserModel } from '@/models/user';
-import { CreateUserRequest } from '@/types/user';
+import type { CreateUserRequest } from '@/types/user';
 import { testDB, resetTestData } from '../../setup/mocks/db-mock';
 
 describe('用户模型层测试', () => {

@@ -3,7 +3,7 @@
  * 定义用户表结构，支持 GitHub 登录
  */
 
-import { Migration } from './index';
+import type { Migration } from './index';
 
 export const migration001: Migration = {
   id: '001',

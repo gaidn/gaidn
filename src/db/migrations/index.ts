@@ -4,6 +4,7 @@
 
 // 导入迁移文件
 import { migration001 } from './001_create_users_table';
+import { migration002 } from './002_extend_users_table';
 
 // 定义迁移接口
 export interface Migration {
@@ -16,6 +17,7 @@ export interface Migration {
 // 迁移注册中心
 const migrations: Migration[] = [
   migration001,
+  migration002,
   // 添加新迁移时在这里注册
 ];
 
@@ -84,7 +86,7 @@ export class DefaultMigrationManager implements MigrationManager {
     }
   }
   
-  async rollback(db: D1Database, steps: number = 1): Promise<void> {
+  async rollback(db: D1Database, steps = 1): Promise<void> {
     try {
       console.log(`🔄 开始回滚最近的 ${steps} 个迁移...`);
       

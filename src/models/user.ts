@@ -3,7 +3,7 @@
  * 封装用户表的 CRUD 操作
  */
 
-import { User, CreateUserRequest } from '@/types/user';
+import type { User, CreateUserRequest, UserRepository, UserLanguage, UserOrganization, GitHubUserProfile } from '@/types/user';
 
 export class UserModel {
   private db: D1Database;
@@ -24,11 +24,22 @@ export class UserModel {
    * 创建用户
    */
   async createUser(userData: CreateUserRequest): Promise<User> {
-    const { name, email, image, github_id } = userData;
+    const { 
+      name, email, image, github_id, login, bio, company, location, blog,
+      public_repos, public_gists, followers, following, github_created_at, github_updated_at
+    } = userData;
     
     const result = await this.db.prepare(
-      'INSERT INTO users (name, email, image, github_id) VALUES (?, ?, ?, ?) RETURNING *'
-    ).bind(name, email, image || null, github_id || null).first();
+      `INSERT INTO users (
+        name, email, image, github_id, login, bio, company, location, blog,
+        public_repos, public_gists, followers, following, github_created_at, github_updated_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING *`
+    ).bind(
+      name, email, image || null, github_id || null, login || null, bio || null,
+      company || null, location || null, blog || null, public_repos || 0,
+      public_gists || 0, followers || 0, following || 0, 
+      github_created_at || null, github_updated_at || null
+    ).first();
     
     return result as unknown as User;
   }
@@ -61,30 +72,25 @@ export class UserModel {
    * 更新用户信息
    */
   async updateUser(id: number, userData: Partial<CreateUserRequest>): Promise<User | null> {
-    const { name, email, image, github_id } = userData;
+    const { 
+      name, email, image, github_id, login, bio, company, location, blog,
+      public_repos, public_gists, followers, following, github_created_at, github_updated_at
+    } = userData;
     
     // 构建动态 SQL
     const updates: string[] = [];
     const values: any[] = [];
     
-    if (name !== undefined) {
-      updates.push('name = ?');
-      values.push(name);
-    }
+    const fields = {
+      name, email, image, github_id, login, bio, company, location, blog,
+      public_repos, public_gists, followers, following, github_created_at, github_updated_at
+    };
     
-    if (email !== undefined) {
-      updates.push('email = ?');
-      values.push(email);
-    }
-    
-    if (image !== undefined) {
-      updates.push('image = ?');
-      values.push(image);
-    }
-    
-    if (github_id !== undefined) {
-      updates.push('github_id = ?');
-      values.push(github_id);
+    for (const [key, value] of Object.entries(fields)) {
+      if (value !== undefined) {
+        updates.push(`${key} = ?`);
+        values.push(value);
+      }
     }
     
     if (updates.length === 0) {
@@ -112,16 +118,27 @@ export class UserModel {
    * 通过 GitHub 账户信息创建或更新用户
    * 用于 GitHub OAuth 登录
    */
-  async upsertUserByGithub(profile: { name: string; email: string; image?: string; id: string }): Promise<User> {
+  async upsertUserByGithub(profile: GitHubUserProfile): Promise<User> {
     // 查找是否已存在该 GitHub 用户
-    const existingUser = await this.getUserByGithubId(profile.id);
+    const existingUser = await this.getUserByGithubId(profile.id.toString());
     
     if (existingUser) {
       // 更新用户信息
       const updated = await this.updateUser(existingUser.id, {
         name: profile.name || existingUser.name,
         email: profile.email || existingUser.email,
-        image: profile.image || existingUser.image
+        image: profile.avatar_url || existingUser.image,
+        login: profile.login,
+        bio: profile.bio,
+        company: profile.company,
+        location: profile.location,
+        blog: profile.blog,
+        public_repos: profile.public_repos,
+        public_gists: profile.public_gists,
+        followers: profile.followers,
+        following: profile.following,
+        github_created_at: profile.created_at,
+        github_updated_at: profile.updated_at
       });
       return updated as User;
     } else {
@@ -129,9 +146,98 @@ export class UserModel {
       return this.createUser({
         name: profile.name,
         email: profile.email,
-        image: profile.image,
-        github_id: profile.id
+        image: profile.avatar_url,
+        github_id: profile.id.toString(),
+        login: profile.login,
+        bio: profile.bio,
+        company: profile.company,
+        location: profile.location,
+        blog: profile.blog,
+        public_repos: profile.public_repos,
+        public_gists: profile.public_gists,
+        followers: profile.followers,
+        following: profile.following,
+        github_created_at: profile.created_at,
+        github_updated_at: profile.updated_at
       });
     }
+  }
+
+  /**
+   * 保存用户仓库信息
+   */
+  async saveUserRepositories(userId: number, repositories: UserRepository[]): Promise<void> {
+    // 先删除用户的现有仓库记录
+    await this.db.prepare('DELETE FROM user_repositories WHERE user_id = ?').bind(userId).run();
+    
+    // 批量插入新的仓库记录
+    for (const repo of repositories) {
+      await this.db.prepare(`
+        INSERT INTO user_repositories (
+          user_id, repo_id, name, full_name, description, language, 
+          stars, forks, is_private, created_at, updated_at, pushed_at
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `).bind(
+        userId, repo.repo_id, repo.name, repo.full_name, repo.description || null,
+        repo.language || null, repo.stars, repo.forks, repo.is_private,
+        repo.created_at, repo.updated_at, repo.pushed_at || null
+      ).run();
+    }
+  }
+
+  /**
+   * 获取用户仓库信息
+   */
+  async getUserRepositories(userId: number): Promise<UserRepository[]> {
+    const result = await this.db.prepare('SELECT * FROM user_repositories WHERE user_id = ? ORDER BY stars DESC').bind(userId).all();
+    return result.results as unknown as UserRepository[];
+  }
+
+  /**
+   * 保存用户语言统计
+   */
+  async saveUserLanguages(userId: number, languages: UserLanguage[]): Promise<void> {
+    // 先删除用户的现有语言统计
+    await this.db.prepare('DELETE FROM user_languages WHERE user_id = ?').bind(userId).run();
+    
+    // 批量插入新的语言统计
+    for (const lang of languages) {
+      await this.db.prepare(`
+        INSERT INTO user_languages (user_id, language, bytes, percentage)
+        VALUES (?, ?, ?, ?)
+      `).bind(userId, lang.language, lang.bytes, lang.percentage).run();
+    }
+  }
+
+  /**
+   * 获取用户语言统计
+   */
+  async getUserLanguages(userId: number): Promise<UserLanguage[]> {
+    const result = await this.db.prepare('SELECT * FROM user_languages WHERE user_id = ? ORDER BY percentage DESC').bind(userId).all();
+    return result.results as unknown as UserLanguage[];
+  }
+
+  /**
+   * 保存用户组织信息
+   */
+  async saveUserOrganizations(userId: number, organizations: UserOrganization[]): Promise<void> {
+    // 先删除用户的现有组织记录
+    await this.db.prepare('DELETE FROM user_organizations WHERE user_id = ?').bind(userId).run();
+    
+    // 批量插入新的组织记录
+    for (const org of organizations) {
+      await this.db.prepare(`
+        INSERT INTO user_organizations (user_id, org_id, login, name, avatar_url, description)
+        VALUES (?, ?, ?, ?, ?, ?)
+      `).bind(userId, org.org_id, org.login, org.name || null, org.avatar_url || null, org.description || null).run();
+    }
+  }
+
+  /**
+   * 获取用户组织信息
+   */
+  async getUserOrganizations(userId: number): Promise<UserOrganization[]> {
+    const result = await this.db.prepare('SELECT * FROM user_organizations WHERE user_id = ?').bind(userId).all();
+    return result.results as unknown as UserOrganization[];
   }
 } 

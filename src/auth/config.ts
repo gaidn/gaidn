@@ -1,6 +1,6 @@
 import GitHubProvider from "next-auth/providers/github";
-import { NextAuthConfig } from "next-auth";
-import { Provider } from "@auth/core/providers";
+import type { NextAuthConfig } from "next-auth";
+import type { Provider } from "@auth/core/providers";
 import { handleSignInUser } from "@/auth/handler";
 
 const providers: Provider[] = [];
@@ -17,7 +17,7 @@ if (
       clientSecret: process.env.GITHUB_SECRET,
       authorization: {
         params: {
-          scope: 'read:user user:email',
+          scope: 'read:user user:email public_repo read:org',
         },
       },
     })
@@ -137,6 +137,12 @@ export const authOptions: NextAuthConfig = {
           github_id: userInfo.github_id,
           created_at: userInfo.created_at,
         };
+
+        // 保存 access_token 用于后续的 GitHub API 调用
+        if (account.provider === 'github' && account.access_token) {
+          token.accessToken = account.access_token;
+          console.log("GitHub access_token 已保存到 token 中");
+        }
 
         return token;
       } catch (e) {

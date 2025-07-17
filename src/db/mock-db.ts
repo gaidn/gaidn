@@ -3,7 +3,7 @@
  * 用于开发环境快速迭代，模拟 D1 数据库接口
  */
 
-import { User } from '@/types/user';
+import type { User } from '@/types/user';
 
 // 模拟数据存储
 const mockUsers: User[] = [
@@ -13,6 +13,17 @@ const mockUsers: User[] = [
     email: 'zhangsan@example.com',
     image: 'https://avatars.githubusercontent.com/u/1234567?v=4',
     github_id: '1234567',
+    login: 'zhangsan',
+    bio: null,
+    company: null,
+    location: null,
+    blog: null,
+    public_repos: 0,
+    public_gists: 0,
+    followers: 0,
+    following: 0,
+    github_created_at: null,
+    github_updated_at: null,
     created_at: new Date().toISOString()
   },
   {
@@ -21,6 +32,17 @@ const mockUsers: User[] = [
     email: 'lisi@example.com',
     image: 'https://avatars.githubusercontent.com/u/7654321?v=4',
     github_id: '7654321',
+    login: 'lisi',
+    bio: null,
+    company: null,
+    location: null,
+    blog: null,
+    public_repos: 0,
+    public_gists: 0,
+    followers: 0,
+    following: 0,
+    github_created_at: null,
+    github_updated_at: null,
     created_at: new Date().toISOString()
   }
 ];
@@ -93,6 +115,17 @@ export const mockDB = {
                 email: params[1] as string,
                 image: params[2] as string | undefined,
                 github_id: params[3] as string | undefined,
+                login: params[4] as string | undefined,
+                bio: params[5] as string | undefined,
+                company: params[6] as string | undefined,
+                location: params[7] as string | undefined,
+                blog: params[8] as string | undefined,
+                public_repos: params[9] as number | undefined || 0,
+                public_gists: params[10] as number | undefined || 0,
+                followers: params[11] as number | undefined || 0,
+                following: params[12] as number | undefined || 0,
+                github_created_at: params[13] as string | undefined,
+                github_updated_at: params[14] as string | undefined,
                 created_at: new Date().toISOString()
               };
               mockUsers.push(newUser);
@@ -170,31 +203,4 @@ export const mockDB = {
           },
           
           all() {
-            return Promise.resolve({ results: [], success: true });
-          }
-        };
-      },
-      
-      first() {
-        if (sql.includes('SELECT COUNT(*) as count FROM _migrations')) {
-          return Promise.resolve({ count: mockMigrations.length });
-        }
-        return Promise.resolve(null);
-      },
-      
-      run() {
-        if (sql.includes('CREATE TABLE')) {
-          console.log('Mock: 创建表');
-          return Promise.resolve({ success: true });
-        }
-        return Promise.resolve({ success: true });
-      }
-    };
-  },
-  
-  // 添加 exec 方法模拟
-  exec(sql: string) {
-    console.log('Mock SQL exec:', sql);
-    return Promise.resolve({ success: true });
-  }
-} as unknown as D1Database; 
+            return Promise.resolve({ results: [], success: true

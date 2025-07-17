@@ -3,9 +3,9 @@
  * 遵循架构原则：只处理 HTTP 相关逻辑，业务逻辑委托给服务层
  */
 
-import { NextRequest, NextResponse } from 'next/server';
+import { type NextRequest, NextResponse } from 'next/server';
 import { userService } from '@/services/user.service';
-import { CreateUserRequest, ApiResponse } from '@/types/user';
+import type { CreateUserRequest, ApiResponse } from '@/types/user';
 
 /**
  * GET /api/users/[id] - 获取指定用户信息
@@ -17,7 +17,7 @@ export async function GET(
   try {
     // API 层职责：参数解析和验证
     const resolvedParams = await params;
-    const id = parseInt(resolvedParams.id);
+    const id = Number.parseInt(resolvedParams.id);
     
     if (isNaN(id) || id <= 0) {
       const response: ApiResponse = {
@@ -75,7 +75,7 @@ export async function PUT(
   try {
     // API 层职责：参数解析和验证
     const resolvedParams = await params;
-    const id = parseInt(resolvedParams.id);
+    const id = Number.parseInt(resolvedParams.id);
     
     if (isNaN(id) || id <= 0) {
       const response: ApiResponse = {
@@ -129,7 +129,7 @@ export async function DELETE(
   try {
     // API 层职责：参数解析和验证
     const resolvedParams = await params;
-    const id = parseInt(resolvedParams.id);
+    const id = Number.parseInt(resolvedParams.id);
     
     if (isNaN(id) || id <= 0) {
       const response: ApiResponse = {

@@ -1,4 +1,4 @@
-import { User as CustomUser } from './types/user';
+import type { User as CustomUser } from './types/user';
 
 declare module "next-auth" {
   interface Session {

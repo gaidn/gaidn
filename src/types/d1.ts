@@ -25,5 +25,3 @@ declare global {
     batch<T = unknown>(statements: D1PreparedStatement[]): Promise<D1Result<T>[]>;
   }
 }
-
-export {}; 

@@ -2,7 +2,7 @@
  * 用户服务层测试
  */
 
-import { CreateUserRequest } from '@/types/user';
+import type { CreateUserRequest } from '@/types/user';
 import { testDB, resetTestData } from '../../setup/mocks/db-mock';
 
 // 模拟getDB函数，返回测试数据库
