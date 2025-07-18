@@ -4,6 +4,7 @@ import ClientBody from "./ClientBody";
 import { SessionProvider } from "@/components/SessionProvider";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "sonner";
+import GoogleAnalytics from "@/components/GoogleAnalytics";
 
 export const metadata: Metadata = {
   title: "GAIDN - Global AI Developer Network",
@@ -18,6 +19,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body suppressHydrationWarning className="antialiased">
+        <GoogleAnalytics />
         <ThemeProvider defaultTheme="system" storageKey="gaidn-theme">
           <SessionProvider>
             <ClientBody>{children}</ClientBody>
