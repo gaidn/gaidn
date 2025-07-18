@@ -21,6 +21,7 @@ export interface User {
   github_created_at?: string;
   github_updated_at?: string;
   created_at: string;
+  updated_at?: string;
 }
 
 // 创建用户请求

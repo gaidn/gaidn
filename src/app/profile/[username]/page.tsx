@@ -2,7 +2,7 @@ import PageLayout from "@/components/PageLayout";
 import ProfileTabs from "@/components/ProfileTabs";
 import { PageHeader } from "@/components/ui/page-header";
 import { auth } from "@/auth";
-import { redirect } from "next/navigation";
+import { redirect, notFound } from "next/navigation";
 import { getDB } from "@/lib/db";
 import { UserModel } from "@/models/user";
 
@@ -28,25 +28,25 @@ export default async function ProfilePage({ params, searchParams }: ProfilePageP
   const db = await getDB();
   const userModel = new UserModel(db);
   
-  // 根据用户名查找用户（这里简化处理，实际应该通过 login 字段查找）
-  const user = await userModel.getUserById(session.user.id);
+  // 根据 URL 中的 username 参数查找目标用户
+  const targetUser = await userModel.getUserByUsernameOrId(username);
   
-  if (!user) {
-    redirect('/auth/signin');
+  if (!targetUser) {
+    notFound();
   }
   
   // 检查是否是用户自己的资料页面
-  const isOwnProfile = user.login === username || user.name === username;
+  const isOwnProfile = targetUser.id === session.user.id;
 
   return (
     <PageLayout>
       <PageHeader
-        title={isOwnProfile ? '我的资料' : `${user.name} 的资料`}
-        description={isOwnProfile ? '查看和管理您的个人资料信息' : `查看 ${user.name} 的个人资料信息`}
+        title={isOwnProfile ? '我的资料' : `${targetUser.name} 的资料`}
+        description={isOwnProfile ? '查看和管理您的个人资料信息' : `查看 ${targetUser.name} 的个人资料信息`}
       />
       
       {/* 使用新的 ProfileTabs 组件 */}
-      <ProfileTabs user={user} isOwnProfile={isOwnProfile} />
+      <ProfileTabs user={targetUser} isOwnProfile={isOwnProfile} />
     </PageLayout>
   );
 } 

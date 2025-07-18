@@ -7,7 +7,7 @@ import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: "GAIDN - Global AI Developer Network",
-  description: "以GitHub身份为基础的AI开发者网络平台，致力于建立一个去中心化、自由协作、公开透明的开发者生态系统。",
+  description: "以GitHub身份为基础的AI开发者网络平台，致力于建立一个自由协作、公开透明的开发者生态系统。",
 };
 
 export default function RootLayout({

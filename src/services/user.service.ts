@@ -492,6 +492,60 @@ export class UserService {
   }
 
   /**
+   * 通过用户名或 ID 获取用户的公开资料
+   * 返回脱敏后的用户信息，适合公开查看
+   */
+  async getUserPublicProfile(identifier: string): Promise<UserServiceResponse<User>> {
+    try {
+      await this.init();
+      
+      // 使用新的 getUserByUsernameOrId 方法查找用户
+      const user = await this.userModel!.getUserByUsernameOrId(identifier);
+      
+      if (!user) {
+        return {
+          success: false,
+          error: '用户不存在'
+        };
+      }
+      
+      // 业务逻辑：返回公开信息，对敏感信息进行脱敏处理
+      const publicProfile: User = {
+        ...user,
+        email: this.maskEmail(user.email), // 脱敏邮箱
+        // 保留公开的字段
+        id: user.id,
+        name: user.name,
+        login: user.login,
+        image: user.image,
+        bio: user.bio,
+        company: user.company,
+        location: user.location,
+        blog: user.blog,
+        public_repos: user.public_repos,
+        public_gists: user.public_gists,
+        followers: user.followers,
+        following: user.following,
+        github_created_at: user.github_created_at,
+        github_updated_at: user.github_updated_at,
+        created_at: user.created_at,
+        updated_at: user.updated_at
+      };
+      
+      return {
+        success: true,
+        data: publicProfile
+      };
+    } catch (error) {
+      console.error('获取用户公开资料失败:', error);
+      return {
+        success: false,
+        error: '获取用户公开资料失败'
+      };
+    }
+  }
+
+  /**
    * 私有方法：邮箱脱敏处理
    */
   private maskEmail(email: string): string {

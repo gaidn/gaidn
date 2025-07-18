@@ -258,4 +258,32 @@ export class UserModel {
     const result = await this.db.prepare('SELECT * FROM user_organizations WHERE user_id = ?').bind(userId).all();
     return result.results as unknown as UserOrganization[];
   }
+
+  /**
+   * 通过 GitHub 用户名获取用户
+   */
+  async getUserByLogin(login: string): Promise<User | null> {
+    const result = await this.db.prepare('SELECT * FROM users WHERE login = ?').bind(login).first();
+    return result as unknown as User | null;
+  }
+
+  /**
+   * 通过用户名或 ID 获取用户
+   * 支持通过 GitHub 用户名(login)或数据库 ID 查找用户
+   */
+  async getUserByUsernameOrId(identifier: string): Promise<User | null> {
+    // 首先尝试通过 login 字段查找
+    const userByLogin = await this.getUserByLogin(identifier);
+    if (userByLogin) {
+      return userByLogin;
+    }
+    
+    // 如果是数字，尝试通过 ID 查找
+    const numericId = parseInt(identifier, 10);
+    if (!isNaN(numericId)) {
+      return await this.getUserById(numericId);
+    }
+    
+    return null;
+  }
 } 

@@ -21,8 +21,8 @@ export default function Home(): JSX.Element {
       icon: Trophy,
     },
     {
-      title: "去中心化网络",
-      description: "建立去中心化的开发者网络，不受单一平台控制，保障数据自由。",
+      title: "开发者网络",
+      description: "建立开发者网络，不受单一平台控制，保障数据自由。",
       icon: Globe,
     },
     {
@@ -42,7 +42,7 @@ export default function Home(): JSX.Element {
       <HeroSection
         title="GAIDN"
         subtitle="Global AI Developer Network"
-        description="以 GitHub 身份为基础的 AI 开发者网络平台，致力于建立一个去中心化、自由协作、公开透明的开发者生态系统。连接全球 AI 开发者，共同推动技术进步与创新。"
+        description="以 GitHub 身份为基础的 AI 开发者网络平台，致力于建立一个自由协作、公开透明的开发者生态系统。连接全球 AI 开发者，共同推动技术进步与创新。"
       />
 
       <ChineseIntroSection />
@@ -61,7 +61,7 @@ export default function Home(): JSX.Element {
 
       <CTASection
         title="加入 GAIDN 社区"
-        description="立即加入我们的去中心化开发者网络，与全球 AI 开发者建立联系，共同推动技术创新的未来。"
+        description="立即加入我们的开发者网络，与全球 AI 开发者建立联系，共同推动技术创新的未来。"
         loginButtonText="GitHub 登录，加入榜单"
         leaderboardButtonText="查看榜单"
       />

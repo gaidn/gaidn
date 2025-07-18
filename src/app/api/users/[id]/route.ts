@@ -9,6 +9,7 @@ import type { CreateUserRequest, ApiResponse } from '@/types/user';
 
 /**
  * GET /api/users/[id] - 获取指定用户信息
+ * 支持通过数字 ID 或 GitHub 用户名查找用户
  */
 export async function GET(
   request: NextRequest,
@@ -17,8 +18,41 @@ export async function GET(
   try {
     // API 层职责：参数解析和验证
     const resolvedParams = await params;
-    const id = Number.parseInt(resolvedParams.id);
+    const identifier = resolvedParams.id;
     
+    if (!identifier || identifier.trim() === '') {
+      const response: ApiResponse = {
+        success: false,
+        error: '用户标识符不能为空'
+      };
+      return NextResponse.json(response, { status: 400 });
+    }
+    
+    // 检查 URL 参数，如果包含查询参数 public=true，则返回公开资料
+    const url = new URL(request.url);
+    const isPublicRequest = url.searchParams.get('public') === 'true';
+    
+    if (isPublicRequest) {
+      const result = await userService.getUserPublicProfile(identifier);
+      
+      if (!result.success) {
+        const statusCode = result.error?.includes('不存在') ? 404 : 500;
+        const response: ApiResponse = {
+          success: false,
+          error: result.error || '获取用户失败'
+        };
+        return NextResponse.json(response, { status: statusCode });
+      }
+      
+      const response: ApiResponse = {
+        success: true,
+        data: result.data
+      };
+      return NextResponse.json(response);
+    }
+    
+    // 保持原有逻辑：通过数字 ID 查找
+    const id = Number.parseInt(identifier);
     if (isNaN(id) || id <= 0) {
       const response: ApiResponse = {
         success: false,
@@ -27,8 +61,8 @@ export async function GET(
       return NextResponse.json(response, { status: 400 });
     }
     
-    // 调用服务层
-    const result = await userService.getAllUsers(); // 先获取所有用户，然后过滤
+    // 调用服务层获取所有用户
+    const result = await userService.getAllUsers();
     
     if (!result.success || !result.data) {
       const response: ApiResponse = {
