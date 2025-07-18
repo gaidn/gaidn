@@ -1,5 +1,5 @@
 import PageLayout from "@/components/PageLayout";
-import { HeroSection, FeaturesSection, CTASection } from "@/components/blocks";
+import { HeroSection, FeaturesSection, LeaderboardSection, CTASection } from "@/components/blocks";
 import { Github, Users, Trophy, Shield, Globe, Code } from "lucide-react";
 import { FeatureItem } from "@/types/blocks";
 
@@ -49,6 +49,12 @@ export default function Home(): JSX.Element {
         title="核心特性"
         description="GAIDN 通过先进的技术架构和开放的理念，为全球 AI 开发者提供一个可信、透明、自由的协作平台。"
         features={features}
+      />
+
+      <LeaderboardSection
+        title="GAIDN 开发者榜单"
+        description="基于 GitHub 数据的多维度评估系统，展示全球 AI 开发者的技术实力和社区贡献。透明公开的排名算法，让每个开发者都能获得公正的认可。"
+        buttonText="查看开发者榜单"
       />
 
       <CTASection

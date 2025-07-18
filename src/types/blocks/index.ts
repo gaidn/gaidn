@@ -26,6 +26,13 @@ export interface CTASectionProps {
   className?: string;
 }
 
+export interface LeaderboardSectionProps {
+  title: string;
+  description: string;
+  buttonText: string;
+  className?: string;
+}
+
 export interface BlockComponentProps {
   children?: React.ReactNode;
   className?: string;
