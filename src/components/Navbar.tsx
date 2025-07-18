@@ -36,7 +36,7 @@ export default function Navbar(): JSX.Element {
             
             {/* Desktop Navigation */}
             <div className="hidden md:block ml-10">
-              <div className="flex items-center space-x-1">
+              <div className="flex items-center space-x-3">
                 {navItems.map((item) => {
                   const Icon = item.icon
                   const isActive = pathname === item.href
@@ -46,10 +46,10 @@ export default function Navbar(): JSX.Element {
                       key={item.href}
                       href={item.href}
                       className={`
-                        inline-flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200
+                        inline-flex items-center gap-2 px-4 py-2.5 rounded-md text-sm font-medium transition-all duration-200
                         ${isActive 
-                          ? "bg-accent text-accent-foreground shadow-sm" 
-                          : "text-muted-foreground hover:bg-accent/50 hover:text-accent-foreground"
+                          ? "bg-accent/80 text-accent-foreground shadow-md backdrop-blur-sm" 
+                          : "text-muted-foreground hover:bg-accent/40 hover:text-accent-foreground hover:shadow-sm hover:scale-[1.02] hover:-translate-y-0.5"
                         }
                       `}
                     >

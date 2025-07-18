@@ -25,13 +25,17 @@ export function LeaderboardSection({
           </h2>
         </div>
         
-        <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-          {description}
-        </p>
+        <div className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto space-y-2 leading-relaxed">
+          {description.split('。').filter(sentence => sentence.trim()).map((sentence, index, array) => (
+            <p key={index} className="leading-7">
+              {sentence.trim()}{index < array.length - 1 ? '。' : ''}
+            </p>
+          ))}
+        </div>
 
         <Button
           size="lg"
-          className="flex items-center gap-2 px-8 py-6 text-lg font-medium hover:scale-105 transition-all duration-300"
+          className="flex items-center gap-2 px-6 py-3 text-base font-medium hover:scale-102 transition-all duration-300 shadow-lg hover:shadow-xl -mt-2"
           asChild
         >
           <Link href="/leaderboard">
