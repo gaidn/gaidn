@@ -8,6 +8,8 @@ import type { ProfileUpdateRequest, ProfileUpdateResponse, ProfileValidationErro
 import { UserModel } from '@/models/user';
 import { getDB } from '@/lib/db';
 import { githubService } from './github.service';
+import { statsService } from './stats.service';
+import { scoreService } from './score.service';
 
 export class UserService {
   private userModel: UserModel | null = null;
@@ -449,6 +451,24 @@ export class UserService {
       const userOrganizations = githubService.convertToUserOrganizations(userIdNum, githubData.organizations);
       await this.userModel!.saveUserOrganizations(userIdNum, userOrganizations);
       console.log(`✅ 组织信息保存完成`);
+      
+      // 步骤 6: 计算统计数据
+      console.log(`📊 正在计算用户统计数据...`);
+      const statsResult = await statsService.calculateAndSaveUserStats(userIdNum);
+      if (statsResult.success) {
+        console.log(`✅ 用户统计数据计算完成`);
+      } else {
+        console.error(`⚠️  用户统计数据计算失败: ${statsResult.error}`);
+      }
+      
+      // 步骤 7: 计算评分
+      console.log(`🎯 正在计算用户评分...`);
+      const scoreResult = await scoreService.calculateAndSaveUserScore(userIdNum);
+      if (scoreResult.success) {
+        console.log(`✅ 用户评分计算完成: ${scoreResult.data?.score.toFixed(2)} 分`);
+      } else {
+        console.error(`⚠️  用户评分计算失败: ${scoreResult.error}`);
+      }
       
       const endTime = Date.now();
       const duration = endTime - startTime;
