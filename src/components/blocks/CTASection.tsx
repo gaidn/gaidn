@@ -62,8 +62,7 @@ export function CTASection({
           {isLoggedIn ? (
             <Button
               size="lg"
-              variant="secondary"
-              className="flex items-center gap-2 px-8 py-6 text-lg font-medium hover:scale-105 transition-all duration-300"
+              className="flex items-center gap-2 px-8 py-6 text-lg font-medium hover:scale-105 transition-all duration-300 bg-primary text-primary-foreground hover:bg-primary/90"
               asChild
             >
               <Link href="/profile">
@@ -74,7 +73,7 @@ export function CTASection({
           ) : (
             <Button
               size="lg"
-              className="flex items-center gap-2 px-8 py-6 text-lg font-medium hover:scale-105 transition-all duration-300"
+              className="flex items-center gap-2 px-8 py-6 text-lg font-medium hover:scale-105 transition-all duration-300 bg-primary text-primary-foreground hover:bg-primary/90"
               onClick={() => window.location.href = "/auth/signin"}
             >
               <Github className="h-5 w-5" />
@@ -84,8 +83,7 @@ export function CTASection({
 
           <Button
             size="lg"
-            variant="outline"
-            className="flex items-center gap-2 px-8 py-6 text-lg font-medium hover:scale-105 transition-all duration-300"
+            className="flex items-center gap-2 px-8 py-6 text-lg font-medium hover:scale-105 transition-all duration-300 bg-accent text-accent-foreground hover:bg-accent/90"
             asChild
           >
             <Link href="/leaderboard">

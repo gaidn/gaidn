@@ -119,7 +119,7 @@ export function RankingList({ initialPage = 1, initialLimit = 10 }: RankingListP
       <Alert>
         <AlertDescription className="flex items-center justify-between">
           <span>加载排行榜数据时出错: {error}</span>
-          <Button onClick={handleRefresh} size="sm">
+          <Button onClick={handleRefresh} size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90">
             重试
           </Button>
         </AlertDescription>
@@ -147,7 +147,7 @@ export function RankingList({ initialPage = 1, initialLimit = 10 }: RankingListP
             共 {total} 名开发者 | 算法版本: {algorithmVersion}
           </span>
         </div>
-        <Button onClick={handleRefresh} size="sm" variant="outline">
+        <Button onClick={handleRefresh} size="sm" className="bg-secondary text-secondary-foreground hover:bg-secondary/80">
           刷新
         </Button>
       </div>
@@ -238,8 +238,8 @@ export function RankingList({ initialPage = 1, initialLimit = 10 }: RankingListP
           <Button
             onClick={() => handlePageChange(page - 1)}
             disabled={page <= 1}
-            variant="outline"
             size="sm"
+            className="bg-secondary text-secondary-foreground hover:bg-secondary/80 disabled:opacity-50"
           >
             上一页
           </Button>
@@ -251,9 +251,8 @@ export function RankingList({ initialPage = 1, initialLimit = 10 }: RankingListP
                 <Button
                   key={pageNumber}
                   onClick={() => handlePageChange(pageNumber)}
-                  variant={page === pageNumber ? "default" : "ghost"}
                   size="sm"
-                  className="w-8 h-8"
+                  className={`w-8 h-8 ${page === pageNumber ? 'bg-primary text-primary-foreground hover:bg-primary/90' : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'}`}
                 >
                   {pageNumber}
                 </Button>
@@ -264,8 +263,8 @@ export function RankingList({ initialPage = 1, initialLimit = 10 }: RankingListP
           <Button
             onClick={() => handlePageChange(page + 1)}
             disabled={page >= totalPages}
-            variant="outline"
             size="sm"
+            className="bg-secondary text-secondary-foreground hover:bg-secondary/80 disabled:opacity-50"
           >
             下一页
           </Button>

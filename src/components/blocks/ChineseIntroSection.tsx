@@ -28,24 +28,35 @@ export function ChineseIntroSection({ className }: BlockComponentProps): JSX.Ele
         <div className="flex flex-col md:flex-row items-center justify-center gap-16 md:gap-32">
           {/* 左侧：中文名称解释（竖排） */}
           {/* 中文名称解释：一行一个成语，横向四字排列 */}
-          <div className="flex flex-col items-start gap-6 text-xl md:text-2xl font-semibold text-slate-700 dark:text-slate-200">
-            <div className="flex gap-4 tracking-wider">
-              <span>盖</span>
-              <span>世</span>
-              <span>英</span>
-              <span>雄</span>
+          <div className="flex flex-col items-center md:items-start gap-8 text-xl md:text-2xl font-semibold ml-8 md:ml-16">
+            {/* 盖世英雄 */}
+            <div className="flex items-center gap-6 group transition-all duration-300 hover:scale-105">
+              <span className="text-2xl md:text-3xl font-semibold text-slate-700 dark:text-slate-200">盖</span>
+              <div className="flex gap-2 tracking-wide">
+                <span className="text-slate-600 dark:text-slate-300">世</span>
+                <span className="text-slate-600 dark:text-slate-300">英</span>
+                <span className="text-slate-600 dark:text-slate-300">雄</span>
+              </div>
             </div>
-            <div className="flex gap-4 tracking-wider">
-              <span>德</span>
-              <span>才</span>
-              <span>兼</span>
-              <span>备</span>
+            
+            {/* 德才兼备 */}
+            <div className="flex items-center gap-6 group transition-all duration-300 hover:scale-105">
+              <span className="text-2xl md:text-3xl font-semibold text-slate-700 dark:text-slate-200">德</span>
+              <div className="flex gap-2 tracking-wide">
+                <span className="text-slate-600 dark:text-slate-300">才</span>
+                <span className="text-slate-600 dark:text-slate-300">兼</span>
+                <span className="text-slate-600 dark:text-slate-300">备</span>
+              </div>
             </div>
-            <div className="flex gap-4 tracking-wider">
-              <span>恩</span>
-              <span>泽</span>
-              <span>天</span>
-              <span>下</span>
+            
+            {/* 恩泽天下 */}
+            <div className="flex items-center gap-6 group transition-all duration-300 hover:scale-105">
+              <span className="text-2xl md:text-3xl font-semibold text-slate-700 dark:text-slate-200">恩</span>
+              <div className="flex gap-2 tracking-wide">
+                <span className="text-slate-600 dark:text-slate-300">泽</span>
+                <span className="text-slate-600 dark:text-slate-300">天</span>
+                <span className="text-slate-600 dark:text-slate-300">下</span>
+              </div>
             </div>
           </div>
 
