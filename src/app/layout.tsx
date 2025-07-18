@@ -3,6 +3,7 @@ import "./globals.css";
 import ClientBody from "./ClientBody";
 import { SessionProvider } from "@/components/SessionProvider";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: "GAIDN - Global AI Developer Network",
@@ -21,6 +22,7 @@ export default function RootLayout({
           <SessionProvider>
             <ClientBody>{children}</ClientBody>
           </SessionProvider>
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>

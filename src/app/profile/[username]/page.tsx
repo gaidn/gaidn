@@ -39,7 +39,7 @@ export default async function ProfilePage({ params, searchParams }: ProfilePageP
   const isOwnProfile = user.login === username || user.name === username;
 
   return (
-    <PageLayout pattern="dots">
+    <PageLayout>
       <PageHeader
         title={isOwnProfile ? '我的资料' : `${user.name} 的资料`}
         description={isOwnProfile ? '查看和管理您的个人资料信息' : `查看 ${user.name} 的个人资料信息`}

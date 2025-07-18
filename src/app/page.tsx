@@ -38,7 +38,7 @@ export default function Home(): JSX.Element {
   ];
 
   return (
-    <PageLayout pattern="grid">
+    <PageLayout>
       <HeroSection
         title="GAIDN"
         subtitle="Global AI Developer Network"

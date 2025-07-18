@@ -2,25 +2,9 @@
 
 import Navbar from "@/components/Navbar";
 import { PageContainer } from "@/components/ui/page-container";
-import { cva, type VariantProps } from "class-variance-authority";
+import { cn } from "@/lib/utils";
 
-const pageLayoutVariants = cva(
-  "min-h-screen bg-background flex flex-col",
-  {
-    variants: {
-      pattern: {
-        none: "",
-        dots: "bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]",
-        grid: "bg-[linear-gradient(to_right,#f3f4f6_1px,transparent_1px),linear-gradient(to_bottom,#f3f4f6_1px,transparent_1px)] [background-size:16px_16px]",
-      },
-    },
-    defaultVariants: {
-      pattern: "none",
-    },
-  }
-);
-
-interface PageLayoutProps extends VariantProps<typeof pageLayoutVariants> {
+interface PageLayoutProps {
   children: React.ReactNode;
   className?: string;
   containerSize?: "sm" | "md" | "lg" | "xl" | "full";
@@ -29,11 +13,17 @@ interface PageLayoutProps extends VariantProps<typeof pageLayoutVariants> {
 export default function PageLayout({ 
   children, 
   className = "", 
-  pattern,
   containerSize = "lg"
 }: PageLayoutProps): JSX.Element {
   return (
-    <div className={pageLayoutVariants({ pattern, className })}>
+    <div className={cn(
+      "min-h-screen flex flex-col",
+      // 温暖渐变背景 - 浅色模式
+      "bg-gradient-to-br from-orange-50 via-rose-50 to-purple-50",
+      // 深色模式的柔和渐变
+      "dark:bg-gradient-to-br dark:from-slate-900 dark:via-purple-900/20 dark:to-indigo-900/30",
+      className
+    )}>
       <Navbar />
       <main className="flex-1 relative">
         <PageContainer size={containerSize} className="relative z-10">

@@ -9,7 +9,9 @@ import { UserAvatar } from "@/components/ui/user-avatar"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { User, Settings, Github, Mail, Calendar, MapPin, Link as LinkIcon, Save } from "lucide-react"
+import { User, Settings, Github, Mail, Calendar, MapPin, Link as LinkIcon, Save, Loader2 } from "lucide-react"
+import { toast } from "sonner"
+import type { ProfileUpdateRequest, ProfileApiResponse } from "@/types/profile"
 
 interface ProfileTabsProps {
   user: {
@@ -31,6 +33,8 @@ interface ProfileTabsProps {
 
 export default function ProfileTabs({ user, isOwnProfile = false }: ProfileTabsProps): JSX.Element {
   const [isEditing, setIsEditing] = React.useState(false)
+  const [isSaving, setIsSaving] = React.useState(false)
+  const [currentUser, setCurrentUser] = React.useState(user)
   const [formData, setFormData] = React.useState({
     name: user.name,
     bio: user.bio || "",
@@ -41,10 +45,67 @@ export default function ProfileTabs({ user, isOwnProfile = false }: ProfileTabsP
   const handleInputChange = (field: string, value: string): void => {
     setFormData(prev => ({ ...prev, [field]: value }))
   }
-
-  const handleSave = (): void => {
-    // TODO: 实现保存逻辑
+  
+  const handleCancel = (): void => {
+    // 重置表单数据到当前用户数据
+    setFormData({
+      name: currentUser.name,
+      bio: currentUser.bio || "",
+      location: currentUser.location || "",
+      blog: currentUser.blog || "",
+    })
     setIsEditing(false)
+  }
+
+  const handleSave = async (): Promise<void> => {
+    try {
+      setIsSaving(true)
+      
+      // 准备请求数据
+      const profileData: ProfileUpdateRequest = {
+        name: formData.name.trim(),
+        bio: formData.bio.trim() || undefined,
+        location: formData.location.trim() || undefined,
+        blog: formData.blog.trim() || undefined,
+      }
+      
+      // 调用个人资料更新API
+      const response = await fetch('/api/profile', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(profileData),
+      })
+      
+      const result: ProfileApiResponse = await response.json()
+      
+      if (!result.success) {
+        throw new Error(result.error || '保存失败')
+      }
+      
+      // 更新本地用户数据
+      const updatedUserData = {
+        ...currentUser,
+        name: profileData.name,
+        bio: profileData.bio,
+        location: profileData.location,
+        blog: profileData.blog,
+      }
+      
+      setCurrentUser(updatedUserData)
+      setIsEditing(false)
+      
+      // 显示成功提示
+      toast.success('个人资料更新成功！')
+      
+    } catch (error) {
+      console.error('保存个人资料失败:', error)
+      const errorMessage = error instanceof Error ? error.message : '保存失败，请重试'
+      toast.error(errorMessage)
+    } finally {
+      setIsSaving(false)
+    }
   }
 
   return (
@@ -70,16 +131,16 @@ export default function ProfileTabs({ user, isOwnProfile = false }: ProfileTabsP
               <CardHeader>
                 <div className="flex items-center gap-4">
                   <UserAvatar
-                    src={user.image || ''}
-                    alt={user.name}
-                    fallback={user.name.charAt(0)}
+                    src={currentUser.image || ''}
+                    alt={currentUser.name}
+                    fallback={currentUser.name.charAt(0)}
                     size="xl"
                   />
                   <div className="flex-1">
-                    <CardTitle className="text-2xl">{user.name}</CardTitle>
-                    <CardDescription className="text-lg">@{user.login || 'unknown'}</CardDescription>
-                    {user.bio && (
-                      <p className="mt-2 text-muted-foreground">{user.bio}</p>
+                    <CardTitle className="text-2xl">{currentUser.name}</CardTitle>
+                    <CardDescription className="text-lg">@{currentUser.login || 'unknown'}</CardDescription>
+                    {currentUser.bio && (
+                      <p className="mt-2 text-muted-foreground">{currentUser.bio}</p>
                     )}
                   </div>
                 </div>
@@ -87,40 +148,40 @@ export default function ProfileTabs({ user, isOwnProfile = false }: ProfileTabsP
               <CardContent>
                 <div className="grid gap-4">
                   <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
-                    {user.location && (
+                    {currentUser.location && (
                       <div className="flex items-center gap-1">
                         <MapPin className="h-4 w-4" />
-                        {user.location}
+                        {currentUser.location}
                       </div>
                     )}
-                    {user.blog && (
+                    {currentUser.blog && (
                       <div className="flex items-center gap-1">
                         <LinkIcon className="h-4 w-4" />
-                        <a href={user.blog} target="_blank" rel="noopener noreferrer" className="hover:underline">
-                          {user.blog}
+                        <a href={currentUser.blog} target="_blank" rel="noopener noreferrer" className="hover:underline">
+                          {currentUser.blog}
                         </a>
                       </div>
                     )}
                     <div className="flex items-center gap-1">
                       <Mail className="h-4 w-4" />
-                      {user.email}
+                      {currentUser.email}
                     </div>
                     <div className="flex items-center gap-1">
                       <Calendar className="h-4 w-4" />
-                      加入于 {new Date(user.created_at).toLocaleDateString('zh-CN')}
+                      加入于 {new Date(currentUser.created_at).toLocaleDateString('zh-CN')}
                     </div>
                   </div>
                   
                   <div className="flex gap-4">
                     <Badge variant="secondary" className="px-3 py-1">
                       <Github className="h-4 w-4 mr-1" />
-                      {user.public_repos || 0} 个仓库
+                      {currentUser.public_repos || 0} 个仓库
                     </Badge>
                     <Badge variant="secondary" className="px-3 py-1">
-                      {user.followers || 0} 关注者
+                      {currentUser.followers || 0} 关注者
                     </Badge>
                     <Badge variant="secondary" className="px-3 py-1">
-                      {user.following || 0} 正在关注
+                      {currentUser.following || 0} 正在关注
                     </Badge>
                   </div>
                 </div>
@@ -162,9 +223,9 @@ export default function ProfileTabs({ user, isOwnProfile = false }: ProfileTabsP
                       <Label htmlFor="name">显示名称</Label>
                       <Input
                         id="name"
-                        value={isEditing ? formData.name : user.name}
+                        value={isEditing ? formData.name : currentUser.name}
                         onChange={(e) => handleInputChange('name', e.target.value)}
-                        disabled={!isEditing}
+                        disabled={!isEditing || isSaving}
                       />
                     </div>
                     
@@ -172,9 +233,9 @@ export default function ProfileTabs({ user, isOwnProfile = false }: ProfileTabsP
                       <Label htmlFor="bio">个人简介</Label>
                       <Textarea
                         id="bio"
-                        value={isEditing ? formData.bio : user.bio || ""}
+                        value={isEditing ? formData.bio : currentUser.bio || ""}
                         onChange={(e) => handleInputChange('bio', e.target.value)}
-                        disabled={!isEditing}
+                        disabled={!isEditing || isSaving}
                         rows={3}
                       />
                     </div>
@@ -183,9 +244,9 @@ export default function ProfileTabs({ user, isOwnProfile = false }: ProfileTabsP
                       <Label htmlFor="location">位置</Label>
                       <Input
                         id="location"
-                        value={isEditing ? formData.location : user.location || ""}
+                        value={isEditing ? formData.location : currentUser.location || ""}
                         onChange={(e) => handleInputChange('location', e.target.value)}
-                        disabled={!isEditing}
+                        disabled={!isEditing || isSaving}
                       />
                     </div>
                     
@@ -193,9 +254,9 @@ export default function ProfileTabs({ user, isOwnProfile = false }: ProfileTabsP
                       <Label htmlFor="blog">网站</Label>
                       <Input
                         id="blog"
-                        value={isEditing ? formData.blog : user.blog || ""}
+                        value={isEditing ? formData.blog : currentUser.blog || ""}
                         onChange={(e) => handleInputChange('blog', e.target.value)}
-                        disabled={!isEditing}
+                        disabled={!isEditing || isSaving}
                       />
                     </div>
                   </div>
@@ -203,11 +264,23 @@ export default function ProfileTabs({ user, isOwnProfile = false }: ProfileTabsP
                   <div className="flex gap-2">
                     {isEditing ? (
                       <>
-                        <Button onClick={handleSave} className="flex items-center gap-2">
-                          <Save className="h-4 w-4" />
-                          保存更改
+                        <Button 
+                          onClick={handleSave} 
+                          className="flex items-center gap-2"
+                          disabled={isSaving}
+                        >
+                          {isSaving ? (
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                          ) : (
+                            <Save className="h-4 w-4" />
+                          )}
+                          {isSaving ? '保存中...' : '保存更改'}
                         </Button>
-                        <Button variant="outline" onClick={() => setIsEditing(false)}>
+                        <Button 
+                          variant="outline" 
+                          onClick={handleCancel}
+                          disabled={isSaving}
+                        >
                           取消
                         </Button>
                       </>

@@ -4,6 +4,7 @@
  */
 
 import type { User, CreateUserRequest, UserServiceResponse, GitHubUserProfile } from '@/types/user';
+import type { ProfileUpdateRequest, ProfileUpdateResponse, ProfileValidationError } from '@/types/profile';
 import { UserModel } from '@/models/user';
 import { getDB } from '@/lib/db';
 import { githubService } from './github.service';
@@ -220,6 +221,122 @@ export class UserService {
       return {
         success: false,
         error: '查找用户失败'
+      };
+    }
+  }
+
+  /**
+   * 更新当前用户的个人资料
+   * 专门用于个人资料编辑功能
+   */
+  async updateCurrentUserProfile(userId: number, profileData: ProfileUpdateRequest): Promise<ProfileUpdateResponse> {
+    try {
+      await this.init();
+      
+      // 业务逻辑：验证必要字段
+      const validationErrors: ProfileValidationError[] = [];
+      
+      // 姓名验证
+      if (!profileData.name || profileData.name.trim().length === 0) {
+        validationErrors.push({
+          field: 'name',
+          message: '显示名称不能为空'
+        });
+      } else if (profileData.name.length < 2 || profileData.name.length > 50) {
+        validationErrors.push({
+          field: 'name',
+          message: '显示名称长度必须在2-50个字符之间'
+        });
+      }
+      
+      // 个人简介验证
+      if (profileData.bio && profileData.bio.length > 500) {
+        validationErrors.push({
+          field: 'bio',
+          message: '个人简介不能超过500个字符'
+        });
+      }
+      
+      // 位置验证
+      if (profileData.location && profileData.location.length > 100) {
+        validationErrors.push({
+          field: 'location',
+          message: '位置信息不能超过100个字符'
+        });
+      }
+      
+      // 网站验证
+      if (profileData.blog && profileData.blog.length > 200) {
+        validationErrors.push({
+          field: 'blog',
+          message: '网站地址不能超过200个字符'
+        });
+      }
+      
+      // 网站URL格式验证（简单验证）
+      if (profileData.blog && profileData.blog.trim() !== '') {
+        const urlPattern = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
+        if (!urlPattern.test(profileData.blog)) {
+          validationErrors.push({
+            field: 'blog',
+            message: '请输入有效的网站地址'
+          });
+        }
+      }
+      
+      // 如果有验证错误，返回错误信息
+      if (validationErrors.length > 0) {
+        return {
+          success: false,
+          error: validationErrors.map(e => e.message).join('; ')
+        };
+      }
+      
+      // 业务逻辑：检查用户是否存在
+      const existingUser = await this.userModel!.getUserById(userId);
+      if (!existingUser) {
+        return {
+          success: false,
+          error: '用户不存在'
+        };
+      }
+      
+      // 准备更新数据（清理空字符串）
+      const updateData: Partial<CreateUserRequest> = {
+        name: profileData.name.trim(),
+        bio: profileData.bio?.trim() || undefined,
+        location: profileData.location?.trim() || undefined,
+        blog: profileData.blog?.trim() || undefined,
+        company: profileData.company?.trim() || undefined
+      };
+      
+      // 更新用户信息
+      const updatedUser = await this.userModel!.updateUser(userId, updateData);
+      
+      if (!updatedUser) {
+        return {
+          success: false,
+          error: '更新个人资料失败'
+        };
+      }
+      
+      // 返回更新后的个人资料数据
+      return {
+        success: true,
+        data: {
+          id: updatedUser.id,
+          name: updatedUser.name,
+          bio: updatedUser.bio,
+          location: updatedUser.location,
+          blog: updatedUser.blog,
+          company: updatedUser.company
+        }
+      };
+    } catch (error) {
+      console.error('更新个人资料失败:', error);
+      return {
+        success: false,
+        error: '更新个人资料时发生错误'
       };
     }
   }
