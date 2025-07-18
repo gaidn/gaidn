@@ -205,16 +205,19 @@ export class ScoreService {
         algorithm_version = 'V1'
       } = query;
 
-      console.log(`📊 获取排行榜数据: 页面 ${page}, 限制 ${limit}, 算法版本 ${algorithm_version}`);
+      console.log(`📊 [服务层] 获取排行榜数据: 页面 ${page}, 限制 ${limit}, 算法版本 ${algorithm_version}`);
 
       // 1. 获取评分数据
+      console.log(`🔍 [服务层] 开始查询评分数据...`);
       const scoreResult = await this.userScoresModel!.getRankings(
         algorithm_version,
         page,
         limit
       );
+      console.log(`📊 [服务层] 评分数据查询完成: 总数=${scoreResult.total}, 记录数=${scoreResult.scores.length}`);
 
       if (scoreResult.scores.length === 0) {
+        console.log(`⚠️ [服务层] 没有找到评分数据, 返回空结果`);
         return {
           success: true,
           data: {
@@ -230,18 +233,28 @@ export class ScoreService {
       }
 
       // 2. 获取用户详细信息和统计数据
+      console.log(`🔍 [服务层] 开始获取用户详细信息...`);
       const rankingUsers: RankingUser[] = [];
       
       for (let i = 0; i < scoreResult.scores.length; i++) {
         const scoreData = scoreResult.scores[i];
+        console.log(`🔍 [服务层] 处理用户 ${i + 1}/${scoreResult.scores.length}: 用户ID=${scoreData.user_id}, 分数=${scoreData.score}`);
         
         // 获取用户基本信息
         const user = await this.userModel!.getUserById(scoreData.user_id);
-        if (!user) continue;
+        if (!user) {
+          console.log(`⚠️ [服务层] 用户 ${scoreData.user_id} 基本信息不存在，跳过`);
+          continue;
+        }
+        console.log(`✅ [服务层] 用户 ${scoreData.user_id} 基本信息获取成功: ${user.name} (@${user.login})`);
 
         // 获取用户统计数据
         const userStats = await this.userStatsModel!.getUserStats(scoreData.user_id);
-        if (!userStats) continue;
+        if (!userStats) {
+          console.log(`⚠️ [服务层] 用户 ${scoreData.user_id} 统计数据不存在，跳过`);
+          continue;
+        }
+        console.log(`✅ [服务层] 用户 ${scoreData.user_id} 统计数据获取成功: ${userStats.total_repos} 个仓库, ${userStats.ai_repos} 个AI项目`);
 
         // 解析语言分布
         const languageDistribution = this.userStatsModel!.parseLanguageDistribution(userStats.language_distribution);
@@ -249,6 +262,7 @@ export class ScoreService {
 
         // 计算排名
         const rank = (page - 1) * limit + i + 1;
+        console.log(`📊 [服务层] 用户 ${scoreData.user_id} 排名计算: 第 ${rank} 名`);
 
         rankingUsers.push({
           id: user.id,
@@ -268,7 +282,13 @@ export class ScoreService {
         });
       }
 
-      return {
+      console.log(`✅ [服务层] 排行榜数据构建完成: ${rankingUsers.length} 个用户`);
+      
+      if (rankingUsers.length > 0) {
+        console.log(`📊 [服务层] 第一名用户: ${rankingUsers[0].name} (${rankingUsers[0].score.toFixed(2)} 分)`);
+      }
+
+      const result = {
         success: true,
         data: {
           users: rankingUsers,
@@ -280,8 +300,12 @@ export class ScoreService {
           }
         }
       };
+
+      console.log(`🎉 [服务层] 排行榜数据返回: 成功=${result.success}, 用户数=${result.data.users.length}, 分页信息=${JSON.stringify(result.data.pagination)}`);
+      
+      return result;
     } catch (error) {
-      console.error('获取排行榜数据失败:', error);
+      console.error('❌ [服务层] 获取排行榜数据失败:', error);
       return {
         success: false,
         error: error instanceof Error ? error.message : '获取排行榜数据失败'

@@ -54,14 +54,14 @@ export default function Home(): JSX.Element {
       <LeaderboardSection
         title="GAIDN 开发者榜单"
         description="基于 GitHub 数据的多维度评估系统，展示全球 AI 开发者的技术实力和社区贡献。透明公开的排名算法，让每个开发者都能获得公正的认可。"
-        buttonText="查看开发者榜单"
+        buttonText="查看榜单"
       />
 
       <CTASection
         title="加入 GAIDN 社区"
         description="立即加入我们的去中心化开发者网络，与全球 AI 开发者建立联系，共同推动技术创新的未来。"
         loginButtonText="GitHub 登录，加入榜单"
-        leaderboardButtonText="查看开发者榜单"
+        leaderboardButtonText="查看榜单"
       />
     </PageLayout>
   );

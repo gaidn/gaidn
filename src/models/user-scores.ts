@@ -86,27 +86,47 @@ export class UserScoresModel {
   }> {
     const offset = (page - 1) * limit;
 
-    // 获取总数
-    const countResult = await this.db.prepare(
-      'SELECT COUNT(*) as count FROM user_scores WHERE algorithm_version = ?'
-    ).bind(algorithmVersion).first();
-    const total = (countResult as { count: number }).count;
+    console.log(`🔍 [数据库查询] 获取排行榜数据: 算法版本=${algorithmVersion}, 页面=${page}, 限制=${limit}, 偏移=${offset}`);
 
-    // 获取分页数据
-    const result = await this.db.prepare(`
-      SELECT * FROM user_scores 
-      WHERE algorithm_version = ? 
-      ORDER BY score DESC, calculated_at DESC 
-      LIMIT ? OFFSET ?
-    `).bind(algorithmVersion, limit, offset).all();
+    try {
+      // 获取总数
+      console.log(`🔍 [数据库查询] 查询总数: SELECT COUNT(*) as count FROM user_scores WHERE algorithm_version = '${algorithmVersion}'`);
+      const countResult = await this.db.prepare(
+        'SELECT COUNT(*) as count FROM user_scores WHERE algorithm_version = ?'
+      ).bind(algorithmVersion).first();
+      const total = (countResult as { count: number }).count;
+      console.log(`📊 [数据库结果] 总数查询结果: ${total}`);
 
-    return {
-      scores: result.results as unknown as UserScore[],
-      total,
-      page,
-      limit,
-      totalPages: Math.ceil(total / limit)
-    };
+      // 获取分页数据
+      console.log(`🔍 [数据库查询] 查询分页数据: 算法版本=${algorithmVersion}, 限制=${limit}, 偏移=${offset}`);
+      const result = await this.db.prepare(`
+        SELECT * FROM user_scores 
+        WHERE algorithm_version = ? 
+        ORDER BY score DESC, calculated_at DESC 
+        LIMIT ? OFFSET ?
+      `).bind(algorithmVersion, limit, offset).all();
+
+      console.log(`📊 [数据库结果] 分页数据查询结果: ${result.results.length} 条记录`);
+      
+      if (result.results.length > 0) {
+        const firstScore = result.results[0] as unknown as UserScore;
+        console.log(`📊 [数据库结果] 第一条记录: 用户ID=${firstScore.user_id}, 分数=${firstScore.score}, 算法版本=${firstScore.algorithm_version}`);
+      }
+
+      const totalPages = Math.ceil(total / limit);
+      console.log(`📊 [数据库结果] 返回数据: 总数=${total}, 当前页=${page}, 总页数=${totalPages}, 记录数=${result.results.length}`);
+
+      return {
+        scores: result.results as unknown as UserScore[],
+        total,
+        page,
+        limit,
+        totalPages
+      };
+    } catch (error) {
+      console.error(`❌ [数据库错误] getRankings 查询失败:`, error);
+      throw error;
+    }
   }
 
   /**

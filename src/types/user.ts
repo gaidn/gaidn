@@ -158,4 +158,42 @@ export interface GitHubOrganization {
   public_repos: number;
   created_at: string;
   updated_at: string;
+}
+
+// 排行榜用户类型
+export interface RankingUser {
+  id: number;
+  name: string;
+  login?: string;
+  email: string;
+  image?: string;
+  bio?: string;
+  location?: string;
+  blog?: string;
+  company?: string;
+  public_repos?: number;
+  followers?: number;
+  following?: number;
+  created_at: string;
+  score: number;
+  rank: number;
+  algorithm_version: string;
+  total_repos?: number;
+  ai_repos?: number;
+  stars_sum?: number;
+  forks_sum?: number;
+}
+
+// 排行榜API响应类型
+export interface RankingResponse {
+  success: boolean;
+  data?: {
+    users: RankingUser[];
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+    algorithm_version: string;
+  };
+  error?: string;
 } 

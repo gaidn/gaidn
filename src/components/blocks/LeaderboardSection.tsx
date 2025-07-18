@@ -35,6 +35,7 @@ export function LeaderboardSection({
 
         <Button
           size="lg"
+          variant="secondary"
           className="flex items-center gap-2 px-6 py-3 text-base font-medium hover:scale-102 transition-all duration-300 shadow-lg hover:shadow-xl -mt-2"
           asChild
         >

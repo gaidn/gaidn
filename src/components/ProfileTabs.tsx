@@ -188,21 +188,6 @@ export default function ProfileTabs({ user, isOwnProfile = false }: ProfileTabsP
               </CardContent>
             </Card>
 
-            {/* GitHub 活动统计 */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Github className="h-5 w-5" />
-                  GitHub 活动
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-center text-muted-foreground">
-                  <p>GitHub 活动数据加载中...</p>
-                  <p className="text-sm mt-2">此功能正在开发中</p>
-                </div>
-              </CardContent>
-            </Card>
           </div>
         </TabsContent>
 
