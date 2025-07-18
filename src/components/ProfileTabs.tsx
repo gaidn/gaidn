@@ -74,8 +74,6 @@ export default function ProfileTabs({ user, isOwnProfile = false }: ProfileTabsP
                     alt={user.name}
                     fallback={user.name.charAt(0)}
                     size="xl"
-                    showGithubBadge={true}
-                    isGithubConnected={true}
                   />
                   <div className="flex-1">
                     <CardTitle className="text-2xl">{user.name}</CardTitle>

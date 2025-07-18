@@ -51,8 +51,6 @@ export function UserInfo(): JSX.Element {
             alt={session.user?.name || "用户头像"}
             fallback={session.user?.name?.charAt(0) || "U"}
             size="sm"
-            showGithubBadge={true}
-            isGithubConnected={true}
           />
           <div className="hidden md:flex flex-col items-start">
             <span className="text-sm font-medium truncate max-w-[120px]">

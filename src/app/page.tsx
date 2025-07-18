@@ -1,48 +1,62 @@
-import { UserInfo } from "@/components/UserInfo";
-import { auth } from "@/auth";
 import PageLayout from "@/components/PageLayout";
-import { PageHeader } from "@/components/ui/page-header";
-import Link from "next/link";
+import { HeroSection, FeaturesSection, CTASection } from "@/components/blocks";
+import { Github, Users, Trophy, Shield, Globe, Code } from "lucide-react";
+import { FeatureItem } from "@/types/blocks";
 
-export default async function Home(): Promise<JSX.Element> {
-  const session = await auth();
+export default function Home(): JSX.Element {
+  const features: FeatureItem[] = [
+    {
+      title: "GitHub 身份认证",
+      description: "使用 GitHub 账号一键登录，基于真实的开发者身份建立可信的社区网络。",
+      icon: Github,
+    },
+    {
+      title: "开发者画像",
+      description: "展示基于 GitHub 数据的个人资料，包括项目贡献、技术栈和社区活跃度。",
+      icon: Code,
+    },
+    {
+      title: "社区排行榜",
+      description: "发现优秀的 AI 开发者，基于多维度评估的公开透明排名系统。",
+      icon: Trophy,
+    },
+    {
+      title: "去中心化网络",
+      description: "建立去中心化的开发者网络，不受单一平台控制，保障数据自由。",
+      icon: Globe,
+    },
+    {
+      title: "公开透明",
+      description: "所有数据和算法公开透明，社区治理民主化，让每个开发者都有发言权。",
+      icon: Shield,
+    },
+    {
+      title: "自由协作",
+      description: "促进开发者之间的自由协作，共同推动 AI 技术的发展和创新。",
+      icon: Users,
+    },
+  ];
 
   return (
     <PageLayout pattern="grid">
-      <PageHeader
-        title="欢迎来到 GAIDN"
-        description="Global AI Developer Network - 连接全球 AI 开发者的社区平台"
-      >
-        <div className="mt-6">
-          {session ? (
-            <div className="bg-card/50 backdrop-blur-sm p-6 rounded-lg border">
-              <h2 className="text-xl font-semibold mb-4">欢迎回来！</h2>
-              <div className="flex items-center justify-center">
-                <UserInfo />
-              </div>
-            </div>
-          ) : (
-            <div className="bg-card/50 backdrop-blur-sm p-6 rounded-lg border">
-              <h2 className="text-xl font-semibold mb-4">开始您的 AI 开发者之旅</h2>
-              <div className="flex items-center justify-center">
-                <UserInfo />
-              </div>
-            </div>
-          )}
-        </div>
-      </PageHeader>
+      <HeroSection
+        title="GAIDN"
+        subtitle="Global AI Developer Network"
+        description="以 GitHub 身份为基础的 AI 开发者网络平台，致力于建立一个去中心化、自由协作、公开透明的开发者生态系统。连接全球 AI 开发者，共同推动技术进步与创新。"
+      />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Link href="/profile" className="group block bg-card/50 backdrop-blur-sm p-6 rounded-lg border hover:shadow-md hover:border-primary/20 transition-all duration-300">
-          <h2 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">个人资料</h2>
-          <p className="text-muted-foreground">查看和管理您的个人资料信息。</p>
-        </Link>
+      <FeaturesSection
+        title="核心特性"
+        description="GAIDN 通过先进的技术架构和开放的理念，为全球 AI 开发者提供一个可信、透明、自由的协作平台。"
+        features={features}
+      />
 
-        <Link href="/leaderboard" className="group block bg-card/50 backdrop-blur-sm p-6 rounded-lg border hover:shadow-md hover:border-primary/20 transition-all duration-300">
-          <h2 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">排行榜</h2>
-          <p className="text-muted-foreground">查看开发者排名和贡献情况。</p>
-        </Link>
-      </div>
+      <CTASection
+        title="加入 GAIDN 社区"
+        description="立即加入我们的去中心化开发者网络，与全球 AI 开发者建立联系，共同推动技术创新的未来。"
+        loginButtonText="GitHub 登录，加入榜单"
+        leaderboardButtonText="查看开发者榜单"
+      />
     </PageLayout>
   );
 }
