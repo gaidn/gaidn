@@ -153,4 +153,14 @@
   .text-responsive-xl {
     font-size: clamp(1.875rem, 1.6rem + 1.2vw, 2.5rem);
   }
+  
+  /* 竖排文字 */
+  .writing-vertical {
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1.8;
+  }
 }

@@ -1,5 +1,5 @@
 import PageLayout from "@/components/PageLayout";
-import { HeroSection, FeaturesSection, LeaderboardSection, CTASection } from "@/components/blocks";
+import { HeroSection, FeaturesSection, LeaderboardSection, CTASection, ChineseIntroSection } from "@/components/blocks";
 import { Github, Users, Trophy, Shield, Globe, Code } from "lucide-react";
 import { FeatureItem } from "@/types/blocks";
 
@@ -44,6 +44,8 @@ export default function Home(): JSX.Element {
         subtitle="Global AI Developer Network"
         description="以 GitHub 身份为基础的 AI 开发者网络平台，致力于建立一个去中心化、自由协作、公开透明的开发者生态系统。连接全球 AI 开发者，共同推动技术进步与创新。"
       />
+
+      <ChineseIntroSection />
 
       <FeaturesSection
         title="核心特性"

@@ -12,10 +12,11 @@ const AI_PROJECT_RULES: AIProjectRule[] = [
   {
     type: 'name',
     patterns: [
-      'ai', 'artificial-intelligence', 'machine-learning', 'ml', 'deep-learning', 
+      'ai', 'artificial-intelligence', 'machine-learning', 'ml', 'deep-learning',
       'neural-network', 'tensorflow', 'pytorch', 'opencv', 'nlp', 'computer-vision',
       'chatbot', 'gpt', 'llm', 'transformer', 'bert', 'neural', 'algorithm',
-      'face-recognition', 'speech-recognition', 'recommendation', 'classification'
+      'face-recognition', 'speech-recognition', 'recommendation', 'classification',
+      'chat','claude','gemini','grok','cursor'
     ],
     weight: 1.0
   },
@@ -26,14 +27,15 @@ const AI_PROJECT_RULES: AIProjectRule[] = [
       'computer vision', 'natural language processing', 'data science', 'predictive',
       'classification', 'regression', 'clustering', 'recommendation system',
       'chatbot', 'conversational ai', 'speech recognition', 'image recognition',
-      'face detection', 'object detection', 'sentiment analysis', 'text mining'
+      'face detection', 'object detection', 'sentiment analysis', 'text mining','chatgpt','gpt',
+      'claude','gemini','grok','cursor'
     ],
     weight: 0.8
   },
   {
     type: 'language',
     patterns: ['python', 'jupyter notebook', 'r'],
-    weight: 0.3
+    weight: 0.1
   }
 ];
 
@@ -75,7 +77,7 @@ export function detectAIProject(repo: RepoScoreData): boolean {
  */
 function checkNamePatterns(name: string, patterns: string[]): boolean {
   const normalizedName = name.toLowerCase().replace(/[-_]/g, '');
-  
+
   return patterns.some(pattern => {
     const normalizedPattern = pattern.toLowerCase().replace(/[-_]/g, '');
     return normalizedName.includes(normalizedPattern);
@@ -87,10 +89,10 @@ function checkNamePatterns(name: string, patterns: string[]): boolean {
  */
 function checkDescriptionPatterns(description: string | null, patterns: string[]): boolean {
   if (!description) return false;
-  
+
   const normalizedDescription = description.toLowerCase();
-  
-  return patterns.some(pattern => 
+
+  return patterns.some(pattern =>
     normalizedDescription.includes(pattern.toLowerCase())
   );
 }
@@ -100,10 +102,10 @@ function checkDescriptionPatterns(description: string | null, patterns: string[]
  */
 function checkLanguagePatterns(language: string | null, patterns: string[]): boolean {
   if (!language) return false;
-  
+
   const normalizedLanguage = language.toLowerCase();
-  
-  return patterns.some(pattern => 
+
+  return patterns.some(pattern =>
     normalizedLanguage.includes(pattern.toLowerCase())
   );
 }

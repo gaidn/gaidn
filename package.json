@@ -8,7 +8,7 @@
     "check": "npm run build && tsc",
     "preview": "npx @opennextjs/cloudflare build && npx @opennextjs/cloudflare preview",
     "deploy": "npx @opennextjs/cloudflare build && npx @opennextjs/cloudflare deploy",
-    "dev": "wrangler dev --persist-to .wrangler/state",
+    "dev": "next dev",
     "dev:mock": "USE_MOCK_DB=true next dev",
     "dev:port": "next dev -p",
     "kill-port": "powershell -Command \"$port = if ($env:PORT) { $env:PORT } else { 3000 }; Get-NetTCPConnection -LocalPort $port -ErrorAction SilentlyContinue | ForEach-Object { Stop-Process -Id $_.OwningProcess -Force -ErrorAction SilentlyContinue } ; Write-Host \\\"Port $port cleared\\\"\"",
