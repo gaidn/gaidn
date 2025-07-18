@@ -2,7 +2,7 @@
 
 import Script from 'next/script';
 
-export default function GoogleAnalytics() {
+export default function GoogleAnalytics(): JSX.Element {
   return (
     <>
       <Script

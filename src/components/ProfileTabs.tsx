@@ -111,7 +111,7 @@ export default function ProfileTabs({ user, isOwnProfile = false }: ProfileTabsP
   return (
     <div className="w-full max-w-4xl mx-auto">
       <Tabs defaultValue="profile" className="w-full">
-        <TabsList className="grid w-full grid-cols-2">
+        <TabsList className={`grid w-full ${isOwnProfile ? 'grid-cols-2' : 'grid-cols-1'}`}>
           <TabsTrigger value="profile" className="flex items-center gap-2">
             <User className="h-4 w-4" />
             个人资料

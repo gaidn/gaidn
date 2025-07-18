@@ -2,7 +2,7 @@ import PageLayout from "@/components/PageLayout";
 import ProfileTabs from "@/components/ProfileTabs";
 import { PageHeader } from "@/components/ui/page-header";
 import { auth } from "@/auth";
-import { redirect, notFound } from "next/navigation";
+import { notFound } from "next/navigation";
 import { getDB } from "@/lib/db";
 import { UserModel } from "@/models/user";
 
@@ -20,10 +20,6 @@ export default async function ProfilePage({ params, searchParams }: ProfilePageP
   const { tab: _tab } = await searchParams;
   const session = await auth();
   
-  if (!session?.user) {
-    redirect('/auth/signin');
-  }
-  
   // 获取完整的用户信息
   const db = await getDB();
   const userModel = new UserModel(db);
@@ -35,8 +31,8 @@ export default async function ProfilePage({ params, searchParams }: ProfilePageP
     notFound();
   }
   
-  // 检查是否是用户自己的资料页面
-  const isOwnProfile = targetUser.id === session.user.id;
+  // 检查是否是用户自己的资料页面（只有登录用户才能判断）
+  const isOwnProfile = session?.user ? targetUser.id === session.user.id : false;
 
   return (
     <PageLayout>
