@@ -3,7 +3,7 @@
 import { CTASectionProps } from "@/types/blocks";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Github, Trophy, User } from "lucide-react";
+import { Github, Trophy, User, Sparkles, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 
@@ -20,21 +20,23 @@ export function CTASection({
   if (status === "loading") {
     return (
       <section className={cn(
-        "py-20 px-4",
+        "py-32 px-4 relative overflow-hidden",
         className
       )}>
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">
-            {title}
-          </h2>
-          
-          <p className="text-lg text-muted-foreground mb-10 max-w-2xl mx-auto">
-            {description}
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <div className="h-14 w-48 bg-muted animate-pulse rounded-md" />
-            <div className="h-14 w-48 bg-muted animate-pulse rounded-md" />
+        {/* 加载状态背景 */}
+        <div className="absolute inset-0 -z-10">
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-accent/5"></div>
+        </div>
+        
+        <div className="max-w-5xl mx-auto text-center">
+          <div className="animate-pulse space-y-8">
+            <div className="h-16 bg-muted/50 rounded-lg mx-auto max-w-2xl"></div>
+            <div className="h-6 bg-muted/30 rounded mx-auto max-w-3xl"></div>
+            <div className="h-6 bg-muted/30 rounded mx-auto max-w-xl"></div>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <div className="h-14 w-48 bg-muted/50 rounded-xl" />
+              <div className="h-14 w-48 bg-muted/50 rounded-xl" />
+            </div>
           </div>
         </div>
       </section>
@@ -46,52 +48,112 @@ export function CTASection({
 
   return (
     <section className={cn(
-      "py-20 px-4",
+      "py-32 px-4 relative overflow-hidden",
       className
     )}>
-      <div className="max-w-4xl mx-auto text-center">
-        <h2 className="text-3xl md:text-4xl font-bold mb-6">
-          {title}
-        </h2>
+      {/* 增强渐变背景 */}
+      <div className="absolute inset-0 -z-10">
+        {/* 主渐变背景 */}
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/12 via-background/98 to-accent/12"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-muted/30 to-transparent"></div>
         
-        <p className="text-lg text-muted-foreground mb-10 max-w-2xl mx-auto">
-          {description}
-        </p>
+        {/* 动态装饰元素 */}
+        <div className="absolute top-1/6 left-1/8 w-80 h-80 bg-gradient-to-br from-primary/10 to-accent/8 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-1/6 right-1/8 w-96 h-96 bg-gradient-to-bl from-accent/10 to-primary/8 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-primary/6 rounded-full blur-2xl animate-pulse delay-2000"></div>
+        
+        {/* 装饰性光线 */}
+        <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-px h-32 bg-gradient-to-b from-primary/30 to-transparent"></div>
+        <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-px h-32 bg-gradient-to-t from-accent/30 to-transparent"></div>
+      </div>
 
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-          {isLoggedIn ? (
-            <Button
-              size="lg"
-              className="flex items-center gap-2 px-8 py-6 text-lg font-medium hover:scale-105 transition-all duration-300 bg-primary text-primary-foreground hover:bg-primary/90"
-              asChild
-            >
-              <Link href="/profile">
-                <User className="h-5 w-5" />
-                查看我的资料
-              </Link>
-            </Button>
-          ) : (
-            <Button
-              size="lg"
-              className="flex items-center gap-2 px-8 py-6 text-lg font-medium hover:scale-105 transition-all duration-300 bg-primary text-primary-foreground hover:bg-primary/90"
-              onClick={() => window.location.href = "/auth/signin"}
-            >
-              <Github className="h-5 w-5" />
-              {loginButtonText}
-            </Button>
-          )}
-
-          <Button
-            size="lg"
-            className="flex items-center gap-2 px-8 py-6 text-lg font-medium hover:scale-105 transition-all duration-300 bg-accent text-accent-foreground hover:bg-accent/90"
-            asChild
-          >
-            <Link href="/leaderboard">
-              <Trophy className="h-5 w-5" />
-              {leaderboardButtonText}
-            </Link>
-          </Button>
+      <div className="max-w-6xl mx-auto text-center">
+        {/* 标题区域 */}
+        <div className="mb-16 animate-fadeInUp">
+          {/* 装饰性图标 */}
+          <div className="relative inline-block mb-8">
+            <Sparkles className="h-12 w-12 text-primary mx-auto animate-pulse" />
+            <div className="absolute inset-0 h-12 w-12 text-primary/20 blur-lg animate-pulse"></div>
+          </div>
+          
+          <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-8 tracking-tight">
+            <span className="bg-gradient-to-r from-foreground via-primary to-accent bg-clip-text text-transparent">
+              {title}
+            </span>
+          </h2>
+          
+          {/* 描述文字卡片 */}
+          <div className="max-w-4xl mx-auto">
+            <div className="relative backdrop-blur-sm bg-card/40 border border-border/20 rounded-2xl p-8">
+              <div className="relative z-10">
+                <p className="text-xl md:text-2xl leading-relaxed text-foreground/80">
+                  {description}
+                </p>
+              </div>
+              
+              {/* 卡片装饰 */}
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/8 via-transparent to-accent/8 rounded-2xl"></div>
+              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-border/30 to-transparent"></div>
+            </div>
+          </div>
         </div>
+
+        {/* 按钮区域 */}
+        <div className="animate-fadeInUp delay-200">
+          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+            {/* 主要操作按钮 */}
+            <div className="relative group">
+              {isLoggedIn ? (
+                <Button
+                  size="lg"
+                  className="enhanced-gradient-button flex items-center gap-3 px-10 py-6 text-lg font-semibold text-white"
+                  asChild
+                >
+                  <Link href="/profile">
+                    <User className="h-6 w-6 group-hover:scale-110 transition-transform duration-300" />
+                    <span>查看我的资料</span>
+                    <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
+                  </Link>
+                </Button>
+              ) : (
+                <Button
+                  size="lg"
+                  className="enhanced-gradient-button flex items-center gap-3 px-10 py-6 text-lg font-semibold text-white"
+                  onClick={() => window.location.href = "/auth/signin"}
+                >
+                  <Github className="h-6 w-6 group-hover:rotate-12 transition-transform duration-300" />
+                  <span>{loginButtonText}</span>
+                  <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
+                </Button>
+              )}
+            </div>
+
+            {/* 次要操作按钮 */}
+            <div className="relative group">
+              <Button
+                size="lg"
+                className="enhanced-gradient-button-secondary flex items-center gap-3 px-10 py-6 text-lg font-semibold text-white"
+                asChild
+              >
+                <Link href="/leaderboard">
+                  <Trophy className="h-6 w-6 group-hover:rotate-12 transition-transform duration-300" />
+                  <span>{leaderboardButtonText}</span>
+                  <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
+                </Link>
+              </Button>
+            </div>
+          </div>
+
+          {/* 底部装饰性提示 */}
+          <div className="mt-12 animate-fadeInUp delay-400">
+            <p className="text-sm text-muted-foreground/60 max-w-md mx-auto">
+              加入我们，与全球顶尖 AI 开发者一起构建未来
+            </p>
+          </div>
+        </div>
+
+        {/* 底部装饰渐变 */}
+        <div className="absolute -bottom-20 left-1/2 transform -translate-x-1/2 w-full max-w-5xl h-32 bg-gradient-to-t from-background/80 to-transparent pointer-events-none"></div>
       </div>
     </section>
   );
