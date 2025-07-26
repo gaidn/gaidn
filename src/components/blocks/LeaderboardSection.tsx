@@ -14,7 +14,7 @@ export function LeaderboardSection({
 }: LeaderboardSectionProps): JSX.Element {
   return (
     <section className={cn(
-      "py-28 px-4 relative overflow-hidden",
+      "py-24 px-4 relative overflow-hidden",
       className
     )}>
       {/* 增强背景装饰 */}
@@ -112,8 +112,6 @@ export function LeaderboardSection({
           </div>
         </div>
 
-        {/* 底部装饰渐变 */}
-        <div className="absolute -bottom-20 left-1/2 transform -translate-x-1/2 w-full max-w-4xl h-32 bg-gradient-to-t from-background/80 to-transparent pointer-events-none"></div>
       </div>
     </section>
   );

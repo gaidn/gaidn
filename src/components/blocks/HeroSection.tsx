@@ -9,7 +9,7 @@ export function HeroSection({
 }: HeroSectionProps): JSX.Element {
   return (
     <section className={cn(
-      "relative py-32 px-4 text-center overflow-hidden",
+      "relative py-24 px-4 text-center overflow-hidden",
       className
     )}>
       {/* 动态背景装饰 */}
@@ -66,8 +66,6 @@ export function HeroSection({
           </div>
         </div>
 
-        {/* 装饰性底部渐变 */}
-        <div className="absolute -bottom-24 left-1/2 transform -translate-x-1/2 w-full max-w-4xl h-32 bg-gradient-to-t from-background/80 to-transparent pointer-events-none"></div>
       </div>
     </section>
   );

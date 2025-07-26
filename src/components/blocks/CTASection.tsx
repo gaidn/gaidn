@@ -20,7 +20,7 @@ export function CTASection({
   if (status === "loading") {
     return (
       <section className={cn(
-        "py-32 px-4 relative overflow-hidden",
+        "py-24 px-4 relative overflow-hidden",
         className
       )}>
         {/* 加载状态背景 */}
@@ -48,7 +48,7 @@ export function CTASection({
 
   return (
     <section className={cn(
-      "py-32 px-4 relative overflow-hidden",
+      "py-24 px-4 relative overflow-hidden",
       className
     )}>
       {/* 增强渐变背景 */}
@@ -152,8 +152,6 @@ export function CTASection({
           </div>
         </div>
 
-        {/* 底部装饰渐变 */}
-        <div className="absolute -bottom-20 left-1/2 transform -translate-x-1/2 w-full max-w-5xl h-32 bg-gradient-to-t from-background/80 to-transparent pointer-events-none"></div>
       </div>
     </section>
   );

@@ -18,10 +18,8 @@ export default function PageLayout({
   return (
     <div className={cn(
       "min-h-screen flex flex-col",
-      // 温暖渐变背景 - 浅色模式
-      "bg-gradient-to-br from-orange-50 via-rose-50 to-purple-50",
-      // 深色模式的柔和渐变
-      "dark:bg-gradient-to-br dark:from-slate-900 dark:via-purple-900/20 dark:to-indigo-900/30",
+      // 基于主题色系的温暖渐变背景
+      "bg-gradient-to-br from-background via-muted/20 to-background/95",
       className
     )}>
       <Navbar />

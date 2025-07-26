@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 export function ChineseIntroSection({ className }: BlockComponentProps): JSX.Element {
   return (
     <section className={cn(
-      "relative py-32 px-4 overflow-hidden",
+      "relative py-24 px-4 overflow-hidden",
       className
     )}>
       {/* 增强背景装饰 */}
@@ -163,8 +163,6 @@ export function ChineseIntroSection({ className }: BlockComponentProps): JSX.Ele
           </div>
         </div>
 
-        {/* 底部装饰 */}
-        <div className="absolute -bottom-20 left-1/2 transform -translate-x-1/2 w-full max-w-6xl h-32 bg-gradient-to-t from-background/80 to-transparent pointer-events-none"></div>
       </div>
     </section>
   );

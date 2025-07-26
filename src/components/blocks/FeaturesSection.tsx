@@ -103,8 +103,6 @@ export function FeaturesSection({
           })}
         </div>
 
-        {/* 底部装饰渐变 */}
-        <div className="absolute -bottom-24 left-1/2 transform -translate-x-1/2 w-full max-w-6xl h-32 bg-gradient-to-t from-background/60 to-transparent pointer-events-none"></div>
       </div>
     </section>
   );
