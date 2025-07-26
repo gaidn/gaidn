@@ -50,7 +50,7 @@ export function ChineseIntroSection({ className }: BlockComponentProps): JSX.Ele
               <div className="flex items-center gap-8 transition-all duration-500 group-hover:scale-110">
                 {/* 主字 */}
                 <div className="relative">
-                  <span className="text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-br from-primary to-primary/70 bg-clip-text text-transparent">
+                  <span className="text-4xl md:text-5xl lg:text-6xl font-bold text-primary">
                     盖
                   </span>
                   {/* 字体后发光 */}
@@ -83,7 +83,7 @@ export function ChineseIntroSection({ className }: BlockComponentProps): JSX.Ele
             <div className="group relative cursor-pointer">
               <div className="flex items-center gap-8 transition-all duration-500 group-hover:scale-110">
                 <div className="relative">
-                  <span className="text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-br from-accent to-accent/70 bg-clip-text text-transparent">
+                  <span className="text-4xl md:text-5xl lg:text-6xl font-bold text-accent">
                     德
                   </span>
                   <div className="absolute inset-0 text-4xl md:text-5xl lg:text-6xl font-bold text-accent/20 blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500">
@@ -113,10 +113,10 @@ export function ChineseIntroSection({ className }: BlockComponentProps): JSX.Ele
             <div className="group relative cursor-pointer">
               <div className="flex items-center gap-8 transition-all duration-500 group-hover:scale-110">
                 <div className="relative">
-                  <span className="text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-br from-primary/80 to-accent/80 bg-clip-text text-transparent">
+                  <span className="text-4xl md:text-5xl lg:text-6xl font-bold text-secondary-foreground">
                     恩
                   </span>
-                  <div className="absolute inset-0 text-4xl md:text-5xl lg:text-6xl font-bold text-primary/15 blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                  <div className="absolute inset-0 text-4xl md:text-5xl lg:text-6xl font-bold text-secondary-foreground/20 blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                     恩
                   </div>
                 </div>
