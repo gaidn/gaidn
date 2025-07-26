@@ -1,63 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@layer base {
-  :root {
-    --background: 45 6% 93%;
-    --foreground: 3 13% 34%;
-    --card: 0 0% 97%;
-    --card-foreground: 3 13% 34%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 3 13% 34%;
-    --primary: 35 64% 74%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 29 20% 96%;
-    --secondary-foreground: 33 55% 56%;
-    --muted: 42 15% 95%;
-    --muted-foreground: 58 12% 55%;
-    --accent: 58 51% 83%;
-    --accent-foreground: 3 13% 34%;
-    --destructive: 22 81% 61%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 40 25% 88%;
-    --input: 40 25% 88%;
-    --ring: 35 64% 74%;
-    --radius: 0.625rem;
-    --chart-1: 35 64% 74%;
-    --chart-2: 58 51% 83%;
-    --chart-3: 55 34% 88%;
-    --chart-4: 41 47% 82%;
-    --chart-5: 32 57% 64%;
-  }
-
-  .dark {
-    --background: 352 17% 26%;
-    --foreground: 51 12% 94%;
-    --card: 341 18% 32%;
-    --card-foreground: 51 12% 94%;
-    --popover: 341 18% 32%;
-    --popover-foreground: 51 12% 94%;
-    --primary: 35 64% 74%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 342 20% 36%;
-    --secondary-foreground: 51 12% 94%;
-    --muted: 341 18% 32%;
-    --muted-foreground: 53 24% 84%;
-    --accent: 58 51% 83%;
-    --accent-foreground: 352 17% 26%;
-    --destructive: 22 81% 61%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 342 20% 36%;
-    --input: 342 20% 36%;
-    --ring: 35 64% 74%;
-    --chart-1: 35 64% 74%;
-    --chart-2: 58 51% 83%;
-    --chart-3: 55 34% 88%;
-    --chart-4: 41 47% 82%;
-    --chart-5: 32 57% 64%;
-  }
-}
+@import "./theme.css";
 
 @layer base {
   * {
