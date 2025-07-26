@@ -48,7 +48,7 @@ export class UserScoresModel {
   /**
    * 通过用户 ID 和算法版本获取评分
    */
-  async getUserScore(userId: number, algorithmVersion: string = 'V1'): Promise<UserScore | null> {
+  async getUserScore(userId: number, algorithmVersion = 'V1'): Promise<UserScore | null> {
     const result = await this.db.prepare(
       'SELECT * FROM user_scores WHERE user_id = ? AND algorithm_version = ?'
     ).bind(userId, algorithmVersion).first();
@@ -74,9 +74,9 @@ export class UserScoresModel {
    * 获取排行榜数据
    */
   async getRankings(
-    algorithmVersion: string = 'V1',
-    page: number = 1,
-    limit: number = 10
+    algorithmVersion = 'V1',
+    page = 1,
+    limit = 10
   ): Promise<{
     scores: UserScore[];
     total: number;
@@ -132,7 +132,7 @@ export class UserScoresModel {
   /**
    * 获取用户排名
    */
-  async getUserRank(userId: number, algorithmVersion: string = 'V1'): Promise<number | null> {
+  async getUserRank(userId: number, algorithmVersion = 'V1'): Promise<number | null> {
     const result = await this.db.prepare(`
       SELECT COUNT(*) + 1 as rank 
       FROM user_scores 
@@ -151,8 +151,8 @@ export class UserScoresModel {
    * 获取前 N 名用户
    */
   async getTopUsers(
-    count: number = 10,
-    algorithmVersion: string = 'V1'
+    count = 10,
+    algorithmVersion = 'V1'
   ): Promise<UserScore[]> {
     const result = await this.db.prepare(`
       SELECT * FROM user_scores 
@@ -251,7 +251,7 @@ export class UserScoresModel {
    */
   async getScoresForRecalculation(
     algorithmVersion: string,
-    hoursAgo: number = 24
+    hoursAgo = 24
   ): Promise<UserScore[]> {
     const cutoffTime = new Date(Date.now() - hoursAgo * 60 * 60 * 1000).toISOString();
     
@@ -267,7 +267,7 @@ export class UserScoresModel {
   /**
    * 检查用户是否有评分记录
    */
-  async hasUserScore(userId: number, algorithmVersion: string = 'V1'): Promise<boolean> {
+  async hasUserScore(userId: number, algorithmVersion = 'V1'): Promise<boolean> {
     const result = await this.db.prepare(
       'SELECT 1 FROM user_scores WHERE user_id = ? AND algorithm_version = ? LIMIT 1'
     ).bind(userId, algorithmVersion).first();

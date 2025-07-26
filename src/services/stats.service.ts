@@ -236,7 +236,7 @@ export class StatsService {
   /**
    * 获取需要更新的用户统计数据
    */
-  async getStatsForUpdate(hoursAgo: number = 24): Promise<ScoreServiceResponse<UserStats[]>> {
+  async getStatsForUpdate(hoursAgo = 24): Promise<ScoreServiceResponse<UserStats[]>> {
     try {
       await this.init();
 

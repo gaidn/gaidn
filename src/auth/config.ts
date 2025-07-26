@@ -4,7 +4,7 @@ import type { Provider } from "@auth/core/providers";
 import { handleSignInUser } from "@/auth/handler";
 import type { Session } from "next-auth";
 import type { JWT } from "next-auth/jwt";
-import { User } from "@/types/user";
+import type { User } from "@/types/user";
 
 const providers: Provider[] = [];
 

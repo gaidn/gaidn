@@ -1,4 +1,4 @@
-import { HeroSectionProps } from "@/types/blocks";
+import type { HeroSectionProps } from "@/types/blocks";
 import { cn } from "@/lib/utils";
 
 export function HeroSection({ 
@@ -35,7 +35,7 @@ export function HeroSection({
         {/* 主标题 - 入场动画 */}
         <div className="animate-fadeInUp">
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-8 tracking-tight">
-            <span className="bg-gradient-to-r from-primary via-primary/80 to-accent bg-clip-text text-transparent">
+            <span className="text-foreground">
               {title}
             </span>
           </h1>
@@ -43,7 +43,7 @@ export function HeroSection({
         
         {/* 副标题 - 延迟入场动画 */}
         <div className="animate-fadeInUp delay-200">
-          <p className="text-xl md:text-3xl lg:text-4xl text-foreground/80 mb-12 font-light tracking-wide">
+          <p className="text-xl md:text-3xl lg:text-4xl text-foreground/90 mb-12 font-light tracking-wide">
             {subtitle}
           </p>
         </div>
@@ -55,7 +55,7 @@ export function HeroSection({
               {/* 卡片内部光晕 */}
               <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5 rounded-2xl"></div>
               
-              <p className="text-lg md:text-xl text-foreground/70 leading-relaxed relative z-10">
+              <p className="text-lg md:text-xl text-card-foreground leading-relaxed relative z-10">
                 {description}
               </p>
               

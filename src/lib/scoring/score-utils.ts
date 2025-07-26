@@ -108,7 +108,7 @@ export function generateLanguageDistribution(repos: RepoScoreData[]): LanguageDi
 /**
  * 获取最常用的编程语言（前 N 个）
  */
-export function getTopLanguages(distribution: LanguageDistribution, count: number = 5): string[] {
+export function getTopLanguages(distribution: LanguageDistribution, count = 5): string[] {
   return Object.entries(distribution)
     .sort(([, a], [, b]) => b - a)
     .slice(0, count)
@@ -131,7 +131,7 @@ export function calculateTimeDecayFactor(dateString: string): number {
 /**
  * 标准化分数到 0-100 范围
  */
-export function normalizeScore(score: number, min: number = 0, max: number = 100): number {
+export function normalizeScore(score: number, min = 0, max = 100): number {
   return Math.max(min, Math.min(max, score));
 }
 

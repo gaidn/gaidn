@@ -3,7 +3,7 @@
  * GET /api/rankings - 获取排行榜数据
  */
 
-import { NextRequest, NextResponse } from 'next/server';
+import { type NextRequest, NextResponse } from 'next/server';
 import { scoreService } from '@/services/score.service';
 import type { RankingQuery } from '@/types/scoring';
 
@@ -13,8 +13,8 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     
     // 解析查询参数
     const query: RankingQuery = {
-      page: parseInt(searchParams.get('page') || '1'),
-      limit: parseInt(searchParams.get('limit') || '10'),
+      page: Number.parseInt(searchParams.get('page') || '1'),
+      limit: Number.parseInt(searchParams.get('limit') || '10'),
       algorithm_version: searchParams.get('algorithm_version') || 'V1'
     };
 

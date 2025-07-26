@@ -1,4 +1,4 @@
-import { FeaturesSectionProps } from "@/types/blocks";
+import type { FeaturesSectionProps } from "@/types/blocks";
 import { cn } from "@/lib/utils";
 
 export function FeaturesSection({ 
@@ -22,7 +22,7 @@ export function FeaturesSection({
         {/* 标题部分 */}
         <div className="text-center mb-20 animate-fadeInUp">
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-8 tracking-tight">
-            <span className="bg-gradient-to-r from-foreground via-foreground/80 to-foreground/60 bg-clip-text text-transparent">
+            <span className="text-foreground">
               {title}
             </span>
           </h2>
@@ -79,7 +79,7 @@ export function FeaturesSection({
                     </div>
                     
                     {/* 描述文字 */}
-                    <p className="text-muted-foreground leading-relaxed text-base md:text-lg group-hover:text-foreground/80 transition-colors duration-300">
+                    <p className="text-muted-foreground leading-relaxed text-base md:text-lg group-hover:text-card-foreground transition-colors duration-300">
                       {feature.description}
                     </p>
                   </div>

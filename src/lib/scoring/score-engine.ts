@@ -43,7 +43,7 @@ export class ScoreEngine {
    */
   async calculateScore(
     input: ScoreCalculationInput,
-    algorithmVersion: string = 'V1'
+    algorithmVersion = 'V1'
   ): Promise<number> {
     const algorithm = this.getAlgorithm(algorithmVersion);
     
@@ -63,7 +63,7 @@ export class ScoreEngine {
    */
   async calculateBatchScores(
     inputs: ScoreCalculationInput[],
-    algorithmVersion: string = 'V1'
+    algorithmVersion = 'V1'
   ): Promise<Map<number, number>> {
     const results = new Map<number, number>();
     

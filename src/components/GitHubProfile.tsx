@@ -13,7 +13,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
 import { GitFork, Star, Calendar, ExternalLink, RefreshCw } from 'lucide-react';
-import { type GitHubCollectApiResponse } from '@/types/api';
+import type { GitHubCollectApiResponse } from '@/types/api';
 
 interface GitHubStats {
   public_repos: number;

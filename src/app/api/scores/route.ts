@@ -4,7 +4,7 @@
  * POST /api/scores/calculate - 计算用户评分
  */
 
-import { NextRequest, NextResponse } from 'next/server';
+import { type NextRequest, NextResponse } from 'next/server';
 import { scoreService } from '@/services/score.service';
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
@@ -15,7 +15,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     const getRank = searchParams.get('getRank') === 'true';
 
     if (userId) {
-      const userIdNum = parseInt(userId);
+      const userIdNum = Number.parseInt(userId);
       if (isNaN(userIdNum)) {
         return NextResponse.json({
           success: false,
@@ -73,7 +73,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     if (userId) {
       // 计算单个用户的评分
-      const userIdNum = parseInt(userId);
+      const userIdNum = Number.parseInt(userId);
       if (isNaN(userIdNum)) {
         return NextResponse.json({
           success: false,
@@ -88,7 +88,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     } else if (userIds && Array.isArray(userIds)) {
       // 批量计算用户评分
-      const userIdNums = userIds.map(id => parseInt(id)).filter(id => !isNaN(id));
+      const userIdNums = userIds.map(id => Number.parseInt(id)).filter(id => !isNaN(id));
       if (userIdNums.length === 0) {
         return NextResponse.json({
           success: false,

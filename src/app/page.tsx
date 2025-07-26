@@ -1,7 +1,7 @@
 import PageLayout from "@/components/PageLayout";
 import { HeroSection, FeaturesSection, LeaderboardSection, CTASection, ChineseIntroSection } from "@/components/blocks";
 import { Github, Users, Trophy, Shield, Globe, Code } from "lucide-react";
-import { FeatureItem } from "@/types/blocks";
+import type { FeatureItem } from "@/types/blocks";
 
 export default function Home(): JSX.Element {
   const features: FeatureItem[] = [

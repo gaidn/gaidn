@@ -279,7 +279,7 @@ export class UserModel {
     }
     
     // 如果是数字，尝试通过 ID 查找
-    const numericId = parseInt(identifier, 10);
+    const numericId = Number.parseInt(identifier, 10);
     if (!isNaN(numericId)) {
       return await this.getUserById(numericId);
     }

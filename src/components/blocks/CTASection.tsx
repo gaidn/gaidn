@@ -1,6 +1,6 @@
 "use client";
 
-import { CTASectionProps } from "@/types/blocks";
+import type { CTASectionProps } from "@/types/blocks";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Github, Trophy, User, Sparkles, ArrowRight } from "lucide-react";
@@ -77,7 +77,7 @@ export function CTASection({
           </div>
           
           <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-8 tracking-tight">
-            <span className="bg-gradient-to-r from-foreground via-primary to-accent bg-clip-text text-transparent">
+            <span className="text-foreground">
               {title}
             </span>
           </h2>
@@ -86,7 +86,7 @@ export function CTASection({
           <div className="max-w-4xl mx-auto">
             <div className="relative backdrop-blur-sm bg-card/40 border border-border/20 rounded-2xl p-8">
               <div className="relative z-10">
-                <p className="text-xl md:text-2xl leading-relaxed text-foreground/80">
+                <p className="text-xl md:text-2xl leading-relaxed text-card-foreground">
                   {description}
                 </p>
               </div>

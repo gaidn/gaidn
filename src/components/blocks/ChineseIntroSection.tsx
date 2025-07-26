@@ -1,4 +1,4 @@
-import { BlockComponentProps } from "@/types/blocks";
+import type { BlockComponentProps } from "@/types/blocks";
 import { cn } from "@/lib/utils";
 
 export function ChineseIntroSection({ className }: BlockComponentProps): JSX.Element {
@@ -32,9 +32,9 @@ export function ChineseIntroSection({ className }: BlockComponentProps): JSX.Ele
         {/* 标题部分 */}
         <div className="text-center mb-20 animate-fadeInUp">
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-8 tracking-wide">
-            <span className="bg-gradient-to-r from-foreground via-primary to-accent bg-clip-text text-transparent">GAIDN</span>
+            <span className="text-foreground">GAIDN</span>
             <span className="mx-4 text-muted-foreground">·</span>
-            <span className="bg-gradient-to-r from-accent via-primary to-foreground bg-clip-text text-transparent">盖德恩</span>
+            <span className="text-foreground">盖德恩</span>
           </h2>
           <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             Global AI Developer Network，全球AI开发者网络
@@ -65,7 +65,7 @@ export function ChineseIntroSection({ className }: BlockComponentProps): JSX.Ele
                     <span 
                       key={index}
                       className={cn(
-                        "text-foreground/70 group-hover:text-primary transition-all duration-300",
+                        "text-foreground group-hover:text-primary transition-all duration-300",
                         `delay-[${index * 100}ms]`
                       )}
                     >
@@ -96,7 +96,7 @@ export function ChineseIntroSection({ className }: BlockComponentProps): JSX.Ele
                     <span 
                       key={index}
                       className={cn(
-                        "text-foreground/70 group-hover:text-accent transition-all duration-300",
+                        "text-foreground group-hover:text-accent transition-all duration-300",
                         `delay-[${index * 100}ms]`
                       )}
                     >
@@ -126,7 +126,7 @@ export function ChineseIntroSection({ className }: BlockComponentProps): JSX.Ele
                     <span 
                       key={index}
                       className={cn(
-                        "text-foreground/70 group-hover:text-primary transition-all duration-300",
+                        "text-foreground group-hover:text-primary transition-all duration-300",
                         `delay-[${index * 100}ms]`
                       )}
                     >
@@ -145,10 +145,10 @@ export function ChineseIntroSection({ className }: BlockComponentProps): JSX.Ele
             <div className="relative backdrop-blur-sm bg-card/40 border border-border/20 rounded-2xl p-8">
               {/* 卡片内容 */}
               <div className="relative z-10">
-                <h3 className="text-2xl md:text-3xl font-bold mb-6 bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text text-transparent">
+                <h3 className="text-2xl md:text-3xl font-bold mb-6 text-card-foreground">
                   开放协作理念
                 </h3>
-                <p className="text-lg md:text-xl leading-relaxed text-foreground/80 mb-6">
+                <p className="text-lg md:text-xl leading-relaxed text-card-foreground mb-6">
                   我们相信，通过开放透明的协作方式，能够激发更多创新，推动 AI 技术的健康发展。
                 </p>
                 <p className="text-base md:text-lg leading-relaxed text-muted-foreground">

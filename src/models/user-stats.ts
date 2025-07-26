@@ -123,8 +123,8 @@ export class UserStatsModel {
    * 获取分页的用户统计数据
    */
   async getUserStatsWithPagination(
-    page: number = 1,
-    limit: number = 10
+    page = 1,
+    limit = 10
   ): Promise<{
     stats: UserStats[];
     total: number;
@@ -182,7 +182,7 @@ export class UserStatsModel {
    * 获取需要更新的用户统计数据
    * 根据最后更新时间筛选
    */
-  async getStatsForUpdate(hoursAgo: number = 24): Promise<UserStats[]> {
+  async getStatsForUpdate(hoursAgo = 24): Promise<UserStats[]> {
     const cutoffTime = new Date(Date.now() - hoursAgo * 60 * 60 * 1000).toISOString();
     
     const result = await this.db.prepare(`

@@ -50,7 +50,7 @@ export class ScoreService {
    */
   async calculateAndSaveUserScore(
     userId: number,
-    algorithmVersion: string = 'V1'
+    algorithmVersion = 'V1'
   ): Promise<ScoreServiceResponse<UserScore>> {
     try {
       await this.init();
@@ -135,7 +135,7 @@ export class ScoreService {
    */
   async getUserScore(
     userId: number,
-    algorithmVersion: string = 'V1'
+    algorithmVersion = 'V1'
   ): Promise<ScoreServiceResponse<UserScore>> {
     try {
       await this.init();
@@ -166,7 +166,7 @@ export class ScoreService {
    */
   async getUserRank(
     userId: number,
-    algorithmVersion: string = 'V1'
+    algorithmVersion = 'V1'
   ): Promise<ScoreServiceResponse<number>> {
     try {
       await this.init();
@@ -317,8 +317,8 @@ export class ScoreService {
    * 获取前 N 名用户
    */
   async getTopUsers(
-    count: number = 10,
-    algorithmVersion: string = 'V1'
+    count = 10,
+    algorithmVersion = 'V1'
   ): Promise<ScoreServiceResponse<RankingUser[]>> {
     try {
       const result = await this.getRankings({
@@ -351,7 +351,7 @@ export class ScoreService {
    */
   async batchCalculateUserScores(
     userIds: number[],
-    algorithmVersion: string = 'V1'
+    algorithmVersion = 'V1'
   ): Promise<ScoreServiceResponse<{
     success: number;
     failed: number;
@@ -416,7 +416,7 @@ export class ScoreService {
    * 重新计算所有用户评分
    */
   async recalculateAllScores(
-    algorithmVersion: string = 'V1'
+    algorithmVersion = 'V1'
   ): Promise<ScoreServiceResponse<{ updated: number; failed: number }>> {
     try {
       await this.init();
@@ -461,7 +461,7 @@ export class ScoreService {
   /**
    * 获取算法统计信息
    */
-  async getAlgorithmStats(algorithmVersion: string = 'V1'): Promise<ScoreServiceResponse<{
+  async getAlgorithmStats(algorithmVersion = 'V1'): Promise<ScoreServiceResponse<{
     total: number;
     avgScore: number;
     maxScore: number;
@@ -489,7 +489,7 @@ export class ScoreService {
    */
   async deleteUserScore(
     userId: number,
-    algorithmVersion: string = 'V1'
+    algorithmVersion = 'V1'
   ): Promise<ScoreServiceResponse<boolean>> {
     try {
       await this.init();

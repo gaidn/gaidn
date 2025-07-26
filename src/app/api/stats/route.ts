@@ -4,7 +4,7 @@
  * POST /api/stats/calculate - 计算用户统计数据
  */
 
-import { NextRequest, NextResponse } from 'next/server';
+import { type NextRequest, NextResponse } from 'next/server';
 import { statsService } from '@/services/stats.service';
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
@@ -14,7 +14,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
     if (userId) {
       // 获取特定用户的统计数据
-      const userIdNum = parseInt(userId);
+      const userIdNum = Number.parseInt(userId);
       if (isNaN(userIdNum)) {
         return NextResponse.json({
           success: false,
@@ -53,7 +53,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     if (userId) {
       // 计算单个用户的统计数据
-      const userIdNum = parseInt(userId);
+      const userIdNum = Number.parseInt(userId);
       if (isNaN(userIdNum)) {
         return NextResponse.json({
           success: false,
@@ -68,7 +68,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     } else if (userIds && Array.isArray(userIds)) {
       // 批量计算用户统计数据
-      const userIdNums = userIds.map(id => parseInt(id)).filter(id => !isNaN(id));
+      const userIdNums = userIds.map(id => Number.parseInt(id)).filter(id => !isNaN(id));
       if (userIdNums.length === 0) {
         return NextResponse.json({
           success: false,
