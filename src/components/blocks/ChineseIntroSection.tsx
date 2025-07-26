@@ -53,10 +53,6 @@ export function ChineseIntroSection({ className }: BlockComponentProps): JSX.Ele
                   <span className="text-4xl md:text-5xl lg:text-6xl font-bold text-primary">
                     盖
                   </span>
-                  {/* 字体后发光 */}
-                  <div className="absolute inset-0 text-4xl md:text-5xl lg:text-6xl font-bold text-primary/20 blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    盖
-                  </div>
                 </div>
                 
                 {/* 成语解释 */}
@@ -86,9 +82,6 @@ export function ChineseIntroSection({ className }: BlockComponentProps): JSX.Ele
                   <span className="text-4xl md:text-5xl lg:text-6xl font-bold text-accent">
                     德
                   </span>
-                  <div className="absolute inset-0 text-4xl md:text-5xl lg:text-6xl font-bold text-accent/20 blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    德
-                  </div>
                 </div>
                 
                 <div className="flex gap-3 text-2xl md:text-3xl font-medium tracking-wider">
@@ -116,9 +109,6 @@ export function ChineseIntroSection({ className }: BlockComponentProps): JSX.Ele
                   <span className="text-4xl md:text-5xl lg:text-6xl font-bold text-secondary-foreground">
                     恩
                   </span>
-                  <div className="absolute inset-0 text-4xl md:text-5xl lg:text-6xl font-bold text-secondary-foreground/20 blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    恩
-                  </div>
                 </div>
                 
                 <div className="flex gap-3 text-2xl md:text-3xl font-medium tracking-wider">
