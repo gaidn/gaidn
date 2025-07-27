@@ -5,19 +5,19 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "gaidn",
 //  生产环境的变量
-//  "vars": {
-//    "GITHUB_ID": "Ov23lid1sGmndBxKd4mO",
-//    "GITHUB_SECRET": "0d37a2dcefaed7866bfc8551588595aff1068e4c",
-//    "NEXTAUTH_SECRET": "oEhc9ylMKs1hUpKZeph34Y/wV8fwNfzFPFLZ/KdKRf8=",
-//    "NEXTAUTH_URL": "https://gaidn.org"
-//  },
-//  本地开发用 preview
   "vars": {
-    "GITHUB_ID": "Ov23lijwUHMF9bpG0KjS",
-    "GITHUB_SECRET": "c3082e93c0e8b81334ab6f798c553cbba9e72ee5",
+    "GITHUB_ID": "Ov23lid1sGmndBxKd4mO",
+    "GITHUB_SECRET": "0d37a2dcefaed7866bfc8551588595aff1068e4c",
     "NEXTAUTH_SECRET": "oEhc9ylMKs1hUpKZeph34Y/wV8fwNfzFPFLZ/KdKRf8=",
-    "NEXTAUTH_URL": "http://localhost:8787"
+    "NEXTAUTH_URL": "https://gaidn.org"
   },
+//  本地开发用 preview
+//  "vars": {
+//    "GITHUB_ID": "Ov23lijwUHMF9bpG0KjS",
+//    "GITHUB_SECRET": "c3082e93c0e8b81334ab6f798c553cbba9e72ee5",
+//    "NEXTAUTH_SECRET": "oEhc9ylMKs1hUpKZeph34Y/wV8fwNfzFPFLZ/KdKRf8=",
+//    "NEXTAUTH_URL": "http://localhost:8787"
+//  },
   "main": ".open-next/worker.js",
   "compatibility_date": "2025-04-01",
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
