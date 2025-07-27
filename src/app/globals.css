@@ -144,26 +144,30 @@
   /* 增强渐变按钮样式 */
   .enhanced-gradient-button {
     @apply relative transition-all duration-500;
-    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary)) 40%, hsl(var(--accent))) !important;
-    border: none !important;
+    background: linear-gradient(135deg, hsl(var(--foreground)), hsl(var(--foreground)) 70%, hsl(var(--foreground))/0.9) !important;
+    color: hsl(var(--background)) !important;
+    border: 2px solid hsl(var(--foreground))/0.8 !important;
     box-shadow: 
-      0 8px 32px rgba(var(--primary), 0.3),
-      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      0 8px 32px hsl(var(--foreground))/0.25,
+      0 4px 16px hsl(var(--foreground))/0.15,
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
   }
 
   .enhanced-gradient-button:hover {
     transform: translateY(-2px) scale(1.05);
+    background: linear-gradient(135deg, hsl(var(--foreground))/0.95, hsl(var(--foreground))/0.9, hsl(var(--foreground))/0.85) !important;
+    border-color: hsl(var(--foreground)) !important;
     box-shadow: 
-      0 12px 40px rgba(var(--primary), 0.4),
-      0 8px 20px rgba(0, 0, 0, 0.1),
-      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      0 12px 40px hsl(var(--foreground))/0.35,
+      0 8px 20px hsl(var(--foreground))/0.2,
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
   }
 
   .enhanced-gradient-button::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%);
+    background: linear-gradient(135deg, hsl(var(--foreground))/0.1 0%, hsl(var(--primary))/0.1 100%);
     border-radius: inherit;
     opacity: 0;
     transition: opacity 0.3s ease;
@@ -177,26 +181,30 @@
   /* 次要按钮样式 */
   .enhanced-gradient-button-secondary {
     @apply relative transition-all duration-500;
-    background: linear-gradient(135deg, hsl(var(--accent)), hsl(var(--accent)) 40%, hsl(var(--primary))) !important;
-    border: none !important;
+    background: linear-gradient(135deg, hsl(var(--destructive)), hsl(var(--destructive)) 70%, hsl(var(--destructive))/0.9) !important;
+    color: hsl(var(--background)) !important;
+    border: 2px solid hsl(var(--destructive))/0.8 !important;
     box-shadow: 
-      0 8px 32px rgba(var(--accent), 0.3),
-      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      0 8px 32px hsl(var(--destructive))/0.25,
+      0 4px 16px hsl(var(--destructive))/0.15,
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
   }
 
   .enhanced-gradient-button-secondary:hover {
     transform: translateY(-2px) scale(1.05);
+    background: linear-gradient(135deg, hsl(var(--destructive))/0.95, hsl(var(--destructive))/0.9, hsl(var(--destructive))/0.85) !important;
+    border-color: hsl(var(--destructive)) !important;
     box-shadow: 
-      0 12px 40px rgba(var(--accent), 0.4),
-      0 8px 20px rgba(0, 0, 0, 0.1),
-      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      0 12px 40px hsl(var(--destructive))/0.35,
+      0 8px 20px hsl(var(--destructive))/0.2,
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
   }
 
   .enhanced-gradient-button-secondary::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, hsl(var(--accent)) 0%, hsl(var(--primary)) 100%);
+    background: linear-gradient(135deg, hsl(var(--destructive))/0.1 0%, hsl(var(--primary))/0.1 100%);
     border-radius: inherit;
     opacity: 0;
     transition: opacity 0.3s ease;

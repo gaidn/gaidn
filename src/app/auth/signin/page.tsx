@@ -87,8 +87,8 @@ function SignInForm(): JSX.Element {
 
             <div className="mt-6 flex flex-col gap-4">
               <Button
-                variant="outline"
-                className="w-full flex items-center gap-2"
+                size="lg"
+                className="enhanced-gradient-button w-full flex items-center justify-center gap-3 px-8 py-6 text-lg font-semibold text-white"
                 onClick={handleGitHubSignIn}
                 disabled={isLoading}
               >
