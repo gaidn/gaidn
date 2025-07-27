@@ -1,0 +1,134 @@
+{
+  "metadata": {
+    "title": "GAIDN - Global AI Developer Network",
+    "description": "以 GitHub 身份为基础的 AI 开发者网络平台，致力于建立一个自由协作、公开透明的开发者生态系统。",
+    "keywords": "AI, 开发者, GitHub, 网络, 协作, 开源"
+  },
+  "navigation": {
+    "home": "首页",
+    "leaderboard": "排行榜",
+    "profile": "个人资料",
+    "settings": "设置",
+    "back_to_leaderboard": "返回排行榜",
+    "back_to_home": "返回首页"
+  },
+  "common": {
+    "loading": "加载中...",
+    "github_login": "GitHub 登录",
+    "view_profile": "查看资料",
+    "view_leaderboard": "查看榜单",
+    "join_with_github": "GitHub 登录，加入榜单",
+    "save": "保存",
+    "cancel": "取消",
+    "submit": "提交"
+  },
+  "user": {
+    "sign_in": "登录",
+    "sign_out": "退出登录",
+    "profile": "个人资料",
+    "view_my_profile": "查看我的资料",
+    "profile_not_found": "用户未找到",
+    "profile_not_found_description": "抱歉，您要查找的用户不存在或已被删除。"
+  },
+  "home": {
+    "hero": {
+      "title": "GAIDN",
+      "subtitle": "Global AI Developer Network",
+      "description": "以 GitHub 身份为基础的 AI 开发者网络平台，致力于建立一个自由协作、公开透明的开发者生态系统。连接全球 AI 开发者，共同推动技术进步与创新。"
+    },
+    "features": {
+      "title": "核心特性",
+      "description": "GAIDN 通过先进的技术架构和开放的理念，为全球 AI 开发者提供一个可信、透明、自由的协作平台。",
+      "github_auth": {
+        "title": "GitHub 身份认证",
+        "description": "使用 GitHub 账号一键登录，基于真实的开发者身份建立可信的社区网络。"
+      },
+      "developer_profile": {
+        "title": "开发者画像",
+        "description": "展示基于 GitHub 数据的个人资料，包括项目贡献、技术栈和社区活跃度。"
+      },
+      "community_leaderboard": {
+        "title": "社区排行榜",
+        "description": "发现优秀的 AI 开发者，基于多维度评估的公开透明排名系统。"
+      },
+      "developer_network": {
+        "title": "开发者网络",
+        "description": "建立开发者网络，不受单一平台控制，保障数据自由。"
+      },
+      "transparency": {
+        "title": "公开透明",
+        "description": "所有数据和算法公开透明，社区治理民主化，让每个开发者都有发言权。"
+      },
+      "free_collaboration": {
+        "title": "自由协作",
+        "description": "促进开发者之间的自由协作，共同推动 AI 技术的发展和创新。"
+      }
+    },
+    "leaderboard_section": {
+      "title": "GAIDN 开发者榜单",
+      "description": "基于 GitHub 数据的多维度评估系统，展示全球 AI 开发者的技术实力和社区贡献。透明公开的排名算法，让每个开发者都能获得公正的认可。",
+      "button_text": "查看榜单"
+    },
+    "cta": {
+      "title": "加入 GAIDN 社区",
+      "description": "立即加入我们的开发者网络，与全球 AI 开发者建立联系，共同推动技术创新的未来。",
+      "login_button_text": "GitHub 登录，加入榜单",
+      "leaderboard_button_text": "查看榜单",
+      "bottom_text": "加入我们，与全球顶尖 AI 开发者一起构建未来"
+    }
+  },
+  "leaderboard": {
+    "page": {
+      "title": "开发者排行榜",
+      "description": "发现优秀的 AI 开发者，按评分排序"
+    },
+    "stats": {
+      "total_developers": "名开发者",
+      "algorithm_version": "算法版本",
+      "last_updated": "最后更新",
+      "score": "评分",
+      "repositories": "仓库",
+      "ai_label": "AI"
+    },
+    "actions": {
+      "refresh": "刷新",
+      "retry": "重试",
+      "previous_page": "上一页",
+      "next_page": "下一页"
+    },
+    "messages": {
+      "loading_error": "加载排行榜数据时出错",
+      "fetch_failed": "获取排行榜数据失败",
+      "no_data": "暂无排行榜数据。请确保已有用户完成评分计算。",
+      "loading": "正在加载排行榜数据..."
+    }
+  },
+  "auth": {
+    "error": {
+      "configuration_error": {
+        "title": "配置错误",
+        "description": "认证服务配置有误，请联系系统管理员。"
+      },
+      "access_denied": {
+        "title": "访问被拒绝",
+        "description": "您没有权限访问此应用程序。"
+      },
+      "verification_failed": {
+        "title": "验证失败",
+        "description": "验证链接无效或已过期，请重新尝试。"
+      },
+      "login_failed": {
+        "title": "登录失败",
+        "description": "登录过程中发生错误，可能是数据库连接问题或服务器繁忙。请稍后重试。"
+      },
+      "unknown_error": {
+        "title": "未知错误",
+        "description": "发生了未知错误，请稍后重试或联系支持团队。"
+      },
+      "error_code": "错误代码",
+      "retry_login": "重新登录",
+      "back_to_home": "返回首页",
+      "contact_support": "如果问题持续存在，请联系技术支持"
+    }
+  }
+}
