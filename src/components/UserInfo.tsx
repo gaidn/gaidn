@@ -12,10 +12,12 @@ import {
   DropdownMenuTrigger 
 } from "./ui/dropdown-menu";
 import { Github, LogOut, User, Settings, ChevronDown } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 
 export function UserInfo(): JSX.Element {
   const { data: session, status } = useSession();
+  const t = useTranslations();
 
   if (status === "loading") {
     return (
@@ -34,7 +36,7 @@ export function UserInfo(): JSX.Element {
         onClick={() => window.location.href = "/auth/signin"}
       >
         <Github className="h-4 w-4" />
-        <span>登录</span>
+        <span>{t("user.sign_in")}</span>
       </Button>
     );
   }
@@ -48,13 +50,13 @@ export function UserInfo(): JSX.Element {
         >
           <UserAvatar
             src={session.user?.image}
-            alt={session.user?.name || "用户头像"}
+            alt={session.user?.name || t("user.profile")}
             fallback={session.user?.name?.charAt(0) || "U"}
             size="sm"
           />
           <div className="hidden md:flex flex-col items-start">
             <span className="text-sm font-medium truncate max-w-[120px]">
-              {session.user?.name || "用户"}
+              {session.user?.name || t("user.profile")}
             </span>
             <span className="text-xs text-muted-foreground truncate max-w-[120px]">
               {session.user?.email}
@@ -68,7 +70,7 @@ export function UserInfo(): JSX.Element {
         <DropdownMenuLabel>
           <div className="flex flex-col space-y-1">
             <p className="text-sm font-medium">
-              {session.user?.name || "用户"}
+              {session.user?.name || t("user.profile")}
             </p>
             <p className="text-xs text-muted-foreground">
               {session.user?.email}
@@ -81,14 +83,14 @@ export function UserInfo(): JSX.Element {
         <DropdownMenuItem asChild>
           <Link href="/profile" className="flex items-center gap-2 w-full">
             <User className="h-4 w-4" />
-            个人资料
+            {t("user.profile")}
           </Link>
         </DropdownMenuItem>
         
         <DropdownMenuItem asChild>
           <Link href="/profile?tab=settings" className="flex items-center gap-2 w-full">
             <Settings className="h-4 w-4" />
-            设置
+            {t("navigation.settings")}
           </Link>
         </DropdownMenuItem>
         
@@ -99,7 +101,7 @@ export function UserInfo(): JSX.Element {
           className="flex items-center gap-2 text-destructive focus:text-destructive"
         >
           <LogOut className="h-4 w-4" />
-          退出登录
+          {t("user.sign_out")}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

@@ -1,0 +1,134 @@
+{
+  "metadata": {
+    "title": "GAIDN - Global AI Developer Network",
+    "description": "A GitHub-based AI developer network platform dedicated to building a free, collaborative, and transparent developer ecosystem.",
+    "keywords": "AI, developers, GitHub, network, collaboration, open source"
+  },
+  "navigation": {
+    "home": "Home",
+    "leaderboard": "Leaderboard",
+    "profile": "Profile",
+    "settings": "Settings",
+    "back_to_leaderboard": "Back to Leaderboard",
+    "back_to_home": "Back to Home"
+  },
+  "common": {
+    "loading": "Loading...",
+    "github_login": "GitHub Login",
+    "view_profile": "View Profile",
+    "view_leaderboard": "View Leaderboard",
+    "join_with_github": "GitHub Login, Join Leaderboard",
+    "save": "Save",
+    "cancel": "Cancel",
+    "submit": "Submit"
+  },
+  "user": {
+    "sign_in": "Sign In",
+    "sign_out": "Sign Out",
+    "profile": "Profile",
+    "view_my_profile": "View My Profile",
+    "profile_not_found": "User Not Found",
+    "profile_not_found_description": "Sorry, the user you are looking for does not exist or has been deleted."
+  },
+  "home": {
+    "hero": {
+      "title": "GAIDN",
+      "subtitle": "Global AI Developer Network",
+      "description": "A GitHub-based AI developer network platform dedicated to building a free, collaborative, and transparent developer ecosystem. Connect global AI developers and drive technological progress and innovation together."
+    },
+    "features": {
+      "title": "Core Features",
+      "description": "GAIDN provides a trusted, transparent, and free collaboration platform for global AI developers through advanced technical architecture and open philosophy.",
+      "github_auth": {
+        "title": "GitHub Authentication",
+        "description": "One-click login with GitHub account, building a trusted community network based on real developer identity."
+      },
+      "developer_profile": {
+        "title": "Developer Profile",
+        "description": "Display personal data based on GitHub data, including project contributions, technology stack, and community activity."
+      },
+      "community_leaderboard": {
+        "title": "Community Leaderboard",
+        "description": "Discover outstanding AI developers with an open and transparent ranking system based on multi-dimensional evaluation."
+      },
+      "developer_network": {
+        "title": "Developer Network",
+        "description": "Build a developer network not controlled by a single platform, ensuring data freedom."
+      },
+      "transparency": {
+        "title": "Open and Transparent",
+        "description": "All data and algorithms are open and transparent, with democratic community governance, giving every developer a voice."
+      },
+      "free_collaboration": {
+        "title": "Free Collaboration",
+        "description": "Promote free collaboration among developers and jointly drive the development and innovation of AI technology."
+      }
+    },
+    "leaderboard_section": {
+      "title": "GAIDN Developer Leaderboard",
+      "description": "A multi-dimensional evaluation system based on GitHub data, showcasing the technical strength and community contributions of global AI developers. Transparent and open ranking algorithms ensure every developer receives fair recognition.",
+      "button_text": "View Leaderboard"
+    },
+    "cta": {
+      "title": "Join GAIDN Community",
+      "description": "Join our developer network immediately, connect with global AI developers, and jointly drive the future of technological innovation.",
+      "login_button_text": "GitHub Login, Join Leaderboard",
+      "leaderboard_button_text": "View Leaderboard",
+      "bottom_text": "Join us and build the future with the world's top AI developers"
+    }
+  },
+  "leaderboard": {
+    "page": {
+      "title": "Developer Leaderboard",
+      "description": "Discover outstanding AI developers, ranked by score"
+    },
+    "stats": {
+      "total_developers": "developers total",
+      "algorithm_version": "Algorithm Version",
+      "last_updated": "Last updated",
+      "score": "Score",
+      "repositories": "repos",
+      "ai_label": "AI"
+    },
+    "actions": {
+      "refresh": "Refresh",
+      "retry": "Retry",
+      "previous_page": "Previous",
+      "next_page": "Next"
+    },
+    "messages": {
+      "loading_error": "Error loading leaderboard data",
+      "fetch_failed": "Failed to fetch leaderboard data",
+      "no_data": "No leaderboard data available. Please ensure users have completed score calculation.",
+      "loading": "Loading leaderboard data..."
+    }
+  },
+  "auth": {
+    "error": {
+      "configuration_error": {
+        "title": "Configuration Error",
+        "description": "Authentication service configuration error, please contact the system administrator."
+      },
+      "access_denied": {
+        "title": "Access Denied",
+        "description": "You do not have permission to access this application."
+      },
+      "verification_failed": {
+        "title": "Verification Failed",
+        "description": "The verification link is invalid or expired, please try again."
+      },
+      "login_failed": {
+        "title": "Login Failed",
+        "description": "An error occurred during login, possibly due to database connection issues or server busy. Please try again later."
+      },
+      "unknown_error": {
+        "title": "Unknown Error",
+        "description": "An unknown error occurred, please try again later or contact the support team."
+      },
+      "error_code": "Error code",
+      "retry_login": "Retry Login",
+      "back_to_home": "Back to Home",
+      "contact_support": "If the problem persists, please contact technical support"
+    }
+  }
+}

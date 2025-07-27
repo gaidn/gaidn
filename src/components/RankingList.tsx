@@ -1,12 +1,13 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import Image from "next/image";
 import { Trophy, Star, GitFork, Calendar, Code } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useTranslations } from "next-intl";
 import type { RankingUser, RankingResponse } from "@/types/scoring";
 
 interface RankingListProps {
@@ -23,6 +24,7 @@ export function RankingList({ initialPage = 1, initialLimit = 10 }: RankingListP
   const [total, setTotal] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [algorithmVersion, _setAlgorithmVersion] = useState("V1");
+  const t = useTranslations("leaderboard");
 
   const fetchRankings = useCallback(async (currentPage: number): Promise<void> => {
     try {
@@ -50,7 +52,7 @@ export function RankingList({ initialPage = 1, initialLimit = 10 }: RankingListP
       console.log(`📊 [前端] 解析响应数据: 成功=${data.success}, 错误=${data.error || '无'}`);
 
       if (!data.success) {
-        throw new Error(data.error || '获取排行榜数据失败');
+        throw new Error(data.error || t("messages.fetch_failed"));
       }
 
       if (data.data) {
@@ -72,12 +74,12 @@ export function RankingList({ initialPage = 1, initialLimit = 10 }: RankingListP
       }
     } catch (err) {
       console.error('❌ [前端] 获取排行榜数据失败:', err);
-      setError(err instanceof Error ? err.message : '获取排行榜数据失败');
+      setError(err instanceof Error ? err.message : t("messages.fetch_failed"));
     } finally {
       setLoading(false);
       console.log(`🏁 [前端] 请求处理完成`);
     }
-  }, [limit, algorithmVersion]);
+  }, [limit, algorithmVersion, t]);
 
   const handlePageChange = (newPage: number): void => {
     setPage(newPage);
@@ -118,9 +120,9 @@ export function RankingList({ initialPage = 1, initialLimit = 10 }: RankingListP
     return (
       <Alert>
         <AlertDescription className="flex items-center justify-between">
-          <span>加载排行榜数据时出错: {error}</span>
+          <span>{t("messages.loading_error")}: {error}</span>
           <Button onClick={handleRefresh} size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90">
-            重试
+            {t("actions.retry")}
           </Button>
         </AlertDescription>
       </Alert>
@@ -131,7 +133,7 @@ export function RankingList({ initialPage = 1, initialLimit = 10 }: RankingListP
     return (
       <Alert>
         <AlertDescription>
-          暂无排行榜数据。请确保已有用户完成评分计算。
+          {t("messages.no_data")}
         </AlertDescription>
       </Alert>
     );
@@ -144,11 +146,11 @@ export function RankingList({ initialPage = 1, initialLimit = 10 }: RankingListP
         <div className="flex items-center gap-2">
           <Trophy className="h-5 w-5 text-yellow-500" />
           <span className="text-sm text-muted-foreground">
-            共 {total} 名开发者 | 算法版本: {algorithmVersion}
+            {total} {t("stats.total_developers")} | {t("stats.algorithm_version")}: {algorithmVersion}
           </span>
         </div>
         <Button onClick={handleRefresh} size="sm" className="bg-secondary text-secondary-foreground hover:bg-secondary/80">
-          刷新
+          {t("actions.refresh")}
         </Button>
       </div>
 
@@ -190,7 +192,7 @@ export function RankingList({ initialPage = 1, initialLimit = 10 }: RankingListP
                 <div className="flex items-center gap-4 mt-2 text-xs text-muted-foreground">
                   <div className="flex items-center gap-1">
                     <Calendar className="h-3 w-3" />
-                    最后更新: {user.stats.last_updated ? new Date(user.stats.last_updated).toLocaleDateString('zh-CN') : '未知'}
+                    {t("stats.last_updated")}: {user.stats.last_updated ? new Date(user.stats.last_updated).toLocaleDateString() : '—'}
                   </div>
                 </div>
               </div>
@@ -201,17 +203,17 @@ export function RankingList({ initialPage = 1, initialLimit = 10 }: RankingListP
               <div className="text-2xl font-bold text-primary">
                 {user.score.toFixed(1)}
               </div>
-              <div className="text-sm text-muted-foreground">评分</div>
+              <div className="text-sm text-muted-foreground">{t("stats.score")}</div>
               
               <div className="flex flex-col gap-1 mt-2">
                 <div className="flex items-center gap-2">
                   <Badge variant="secondary" className="text-xs">
                     <Code className="h-3 w-3 mr-1" />
-                    {user.stats.total_repos || 0} 仓库
+                    {user.stats.total_repos || 0} {t("stats.repositories")}
                   </Badge>
                   {user.stats.ai_repos !== undefined && user.stats.ai_repos > 0 && (
                     <Badge variant="outline" className="text-xs">
-                      🤖 {user.stats.ai_repos} AI
+                      🤖 {user.stats.ai_repos} {t("stats.ai_label")}
                     </Badge>
                   )}
                 </div>
@@ -241,7 +243,7 @@ export function RankingList({ initialPage = 1, initialLimit = 10 }: RankingListP
             size="sm"
             className="bg-secondary text-secondary-foreground hover:bg-secondary/80 disabled:opacity-50"
           >
-            上一页
+            {t("actions.previous_page")}
           </Button>
           
           <div className="flex items-center gap-1">
@@ -266,7 +268,7 @@ export function RankingList({ initialPage = 1, initialLimit = 10 }: RankingListP
             size="sm"
             className="bg-secondary text-secondary-foreground hover:bg-secondary/80 disabled:opacity-50"
           >
-            下一页
+            {t("actions.next_page")}
           </Button>
         </div>
       )}

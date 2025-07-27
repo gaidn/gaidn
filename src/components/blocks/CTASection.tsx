@@ -4,8 +4,9 @@ import type { CTASectionProps } from "@/types/blocks";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Github, Trophy, User, Sparkles, ArrowRight } from "lucide-react";
-import Link from "next/link";
 import { useSession } from "next-auth/react";
+import { Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 
 export function CTASection({ 
   title, 
@@ -15,6 +16,7 @@ export function CTASection({
   className 
 }: CTASectionProps): JSX.Element {
   const { data: session, status } = useSession();
+  const t = useTranslations();
 
   // 渲染加载状态，避免 hydration 不匹配
   if (status === "loading") {
@@ -111,7 +113,7 @@ export function CTASection({
                 >
                   <Link href="/profile">
                     <User className="h-6 w-6 group-hover:scale-110 transition-transform duration-300" />
-                    <span>查看我的资料</span>
+                    <span>{t("user.view_my_profile")}</span>
                     <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
                   </Link>
                 </Button>
@@ -147,7 +149,7 @@ export function CTASection({
           {/* 底部装饰性提示 */}
           <div className="mt-12 animate-fadeInUp delay-400">
             <p className="text-sm text-muted-foreground/60 max-w-md mx-auto">
-              加入我们，与全球顶尖 AI 开发者一起构建未来
+              {t("home.cta.bottom_text")}
             </p>
           </div>
         </div>

@@ -9,42 +9,44 @@ import { useSearchParams } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { AlertCircle, ArrowLeft, RefreshCw, Loader2 } from 'lucide-react';
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
+import { useTranslations } from 'next-intl';
 import { Suspense } from 'react';
 
 // 将使用 useSearchParams 的逻辑提取到单独的组件中
 function AuthErrorContent(): JSX.Element {
   const searchParams = useSearchParams();
   const error = searchParams.get('error');
+  const t = useTranslations('auth.error');
 
   // 根据错误类型提供友好的错误信息
   const getErrorMessage = (error: string | null): { title: string; description: string } => {
     switch (error) {
       case 'Configuration':
         return {
-          title: '配置错误',
-          description: '认证服务配置有误，请联系系统管理员。'
+          title: t('configuration_error.title'),
+          description: t('configuration_error.description')
         };
       case 'AccessDenied':
         return {
-          title: '访问被拒绝',
-          description: '您没有权限访问此应用程序。'
+          title: t('access_denied.title'),
+          description: t('access_denied.description')
         };
       case 'Verification':
         return {
-          title: '验证失败',
-          description: '验证链接无效或已过期，请重新尝试。'
+          title: t('verification_failed.title'),
+          description: t('verification_failed.description')
         };
       case 'Default':
       case 'CallbackRouteError':
         return {
-          title: '登录失败',
-          description: '登录过程中发生错误，可能是数据库连接问题或服务器繁忙。请稍后重试。'
+          title: t('login_failed.title'),
+          description: t('login_failed.description')
         };
       default:
         return {
-          title: '未知错误',
-          description: '发生了未知错误，请稍后重试或联系支持团队。'
+          title: t('unknown_error.title'),
+          description: t('unknown_error.description')
         };
     }
   };
@@ -66,7 +68,7 @@ function AuthErrorContent(): JSX.Element {
         {error && (
           <div className="mt-4 p-3 bg-gray-100 rounded-md">
             <p className="text-sm text-gray-600">
-              错误代码: <code className="font-mono text-red-600">{error}</code>
+              {t('error_code')}: <code className="font-mono text-red-600">{error}</code>
             </p>
           </div>
         )}
@@ -76,20 +78,20 @@ function AuthErrorContent(): JSX.Element {
           <Link href="/auth/signin" className="flex-1">
             <Button variant="default" className="w-full">
               <RefreshCw className="h-4 w-4 mr-2" />
-              重新登录
+              {t('retry_login')}
             </Button>
           </Link>
           <Link href="/" className="flex-1">
             <Button variant="outline" className="w-full">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              返回首页
+              {t('back_to_home')}
             </Button>
           </Link>
         </div>
         
         <div className="text-center">
           <p className="text-sm text-gray-500">
-            如果问题持续存在，请联系技术支持
+            {t('contact_support')}
           </p>
         </div>
       </CardContent>
@@ -106,10 +108,11 @@ function AuthErrorLoading(): JSX.Element {
           <Loader2 className="h-6 w-6 animate-spin text-gray-600" />
         </div>
         <CardTitle className="mt-4 text-2xl font-bold text-gray-900">
-          加载中...
+          {/* Loading text should use common translations */}
+          Loading...
         </CardTitle>
         <CardDescription className="mt-2 text-gray-600">
-          正在处理错误信息
+          Processing error information...
         </CardDescription>
       </CardHeader>
     </Card>

@@ -2,6 +2,8 @@ import PageLayout from "@/components/PageLayout";
 import { Suspense } from "react";
 import { RankingList } from "@/components/RankingList";
 import { Skeleton } from "@/components/ui/skeleton";
+import { getTranslations } from "next-intl/server";
+import type { Metadata } from "next";
 
 function RankingListSkeleton(): JSX.Element {
   return (
@@ -25,15 +27,25 @@ function RankingListSkeleton(): JSX.Element {
   );
 }
 
-export default function Leaderboard(): JSX.Element {
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("leaderboard.page");
+  
+  return {
+    title: t("title"),
+    description: t("description"),
+  };
+}
+
+export default async function Leaderboard(): Promise<JSX.Element> {
+  const t = await getTranslations("leaderboard.page");
 
   return (
     <PageLayout>
       <div className="space-y-8">
         <div className="text-center">
-          <h1 className="text-3xl md:text-4xl font-bold">开发者排行榜</h1>
+          <h1 className="text-3xl md:text-4xl font-bold">{t("title")}</h1>
           <p className="text-lg text-muted-foreground mt-2">
-            发现优秀的 AI 开发者，按评分排序
+            {t("description")}
           </p>
         </div>
 

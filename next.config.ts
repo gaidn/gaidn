@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import withNextIntl from 'next-intl/plugin';
 
 const nextConfig: NextConfig = {
   /* config options here */
@@ -13,7 +14,7 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+export default withNextIntl('./src/i18n/request.ts')(nextConfig);
 
 // added by create cloudflare to enable calling `getCloudflareContext()` in `next dev`
 import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";

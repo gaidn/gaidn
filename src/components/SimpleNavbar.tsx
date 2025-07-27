@@ -1,8 +1,11 @@
 "use client"
 
-import Link from "next/link"
+import { Link } from "@/i18n/navigation"
+import { useTranslations } from "next-intl"
 
 export default function SimpleNavbar(): JSX.Element {
+  const t = useTranslations();
+  
   return (
     <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between">
@@ -16,7 +19,7 @@ export default function SimpleNavbar(): JSX.Element {
 
           <div className="hidden md:flex items-center gap-4">
             <Link href="/leaderboard" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-              排行榜
+              {t("navigation.leaderboard")}
             </Link>
           </div>
         </div>
@@ -26,10 +29,10 @@ export default function SimpleNavbar(): JSX.Element {
             href="/settings"
             className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-8 rounded-md px-3 text-xs border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground"
           >
-            设置
+            {t("navigation.settings")}
           </Link>
           <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-8 rounded-md px-3 text-xs bg-primary text-primary-foreground shadow hover:bg-primary/90">
-            GitHub 登录
+            {t("common.github_login")}
           </button>
         </div>
       </div>

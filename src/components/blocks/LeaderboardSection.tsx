@@ -4,7 +4,7 @@ import type { LeaderboardSectionProps } from "@/types/blocks";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Trophy, Star, Crown } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 
 export function LeaderboardSection({ 
   title, 

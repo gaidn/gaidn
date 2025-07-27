@@ -1,9 +1,8 @@
 "use client"
 
-import Link from "next/link"
 import { UserInfo } from "./UserInfo"
 import { ThemeToggle } from "./ui/theme-toggle"
-import { usePathname } from "next/navigation"
+import { LocaleSwitcher } from "./ui/locale-switcher"
 import { Home, Trophy, Menu } from "lucide-react"
 import { Button } from "./ui/button"
 import { 
@@ -12,13 +11,16 @@ import {
   DropdownMenuItem, 
   DropdownMenuTrigger 
 } from "./ui/dropdown-menu"
+import { Link, usePathname } from "@/i18n/navigation"
+import { useTranslations } from "next-intl"
 
 export default function Navbar(): JSX.Element {
   const pathname = usePathname()
+  const t = useTranslations()
 
   const navItems = [
-    { name: "首页", href: "/", icon: Home },
-    { name: "排行榜", href: "/leaderboard", icon: Trophy },
+    { name: t("navigation.home"), href: "/" as const, icon: Home },
+    { name: t("navigation.leaderboard"), href: "/leaderboard" as const, icon: Trophy },
   ]
 
   return (
@@ -64,12 +66,14 @@ export default function Navbar(): JSX.Element {
           
           {/* Desktop User Info */}
           <div className="hidden md:flex items-center justify-center gap-3">
+            <LocaleSwitcher />
             <ThemeToggle />
             <UserInfo />
           </div>
           
           {/* Mobile Menu */}
           <div className="md:hidden flex items-center justify-center gap-3">
+            <LocaleSwitcher />
             <ThemeToggle />
             <UserInfo />
             <DropdownMenu>
