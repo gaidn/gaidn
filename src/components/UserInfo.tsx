@@ -107,7 +107,7 @@ export function UserInfo(): JSX.Element {
         <DropdownMenuSeparator />
         
         <DropdownMenuItem 
-          onClick={() => signOut({ callbackUrl: "/" })}
+          onClick={() => signOut({ callbackUrl: `/${locale}` })}
           className="flex items-center gap-2 text-destructive focus:text-destructive"
         >
           <LogOut className="h-4 w-4" />
