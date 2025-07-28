@@ -146,6 +146,26 @@
     }
   },
   "auth": {
+    "signin": {
+      "title": "登录账户",
+      "signInWith": "使用以下方式登录",
+      "githubButton": "使用 GitHub 账号登录",
+      "signingIn": "正在登录...",
+      "dataNotice": "登录后将自动收集您的 GitHub 数据",
+      "permissionNotice": "我们只读取公开信息，不会进行任何修改操作",
+      "errors": {
+        "OAuthSignin": "GitHub OAuth 配置错误，请联系管理员",
+        "OAuthCallback": "GitHub 登录回调失败，请重试",
+        "OAuthCreateAccount": "创建账户失败，请重试",
+        "EmailCreateAccount": "邮箱账户创建失败，请重试",
+        "Callback": "登录回调处理失败，请重试",
+        "OAuthAccountNotLinked": "该邮箱已被其他登录方式使用",
+        "EmailSignin": "邮箱登录失败，请重试",
+        "CredentialsSignin": "登录凭据无效，请重试",
+        "SessionRequired": "需要登录才能访问此页面",
+        "Default": "登录失败，请重试"
+      }
+    },
     "error": {
       "configuration_error": {
         "title": "配置错误",

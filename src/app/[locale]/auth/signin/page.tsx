@@ -5,6 +5,7 @@ import { signIn } from "next-auth/react";
 import { Github, AlertCircle, Loader2 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useState, Suspense } from "react";
+import { useTranslations } from "next-intl";
 
 // 将使用 useSearchParams 的逻辑提取到单独的组件中
 function SignInForm(): JSX.Element {
@@ -12,6 +13,7 @@ function SignInForm(): JSX.Element {
   const searchParams = useSearchParams();
   const error = searchParams.get('error');
   const callbackUrl = searchParams.get('callbackUrl') || '/';
+  const t = useTranslations('auth.signin');
 
   const handleGitHubSignIn = async (): Promise<void> => {
     setIsLoading(true);
@@ -27,29 +29,14 @@ function SignInForm(): JSX.Element {
 
   // 根据错误类型提供友好的错误信息
   const getErrorMessage = (error: string | null): string | null => {
-    switch (error) {
-      case 'OAuthSignin':
-        return 'GitHub OAuth 配置错误，请联系管理员';
-      case 'OAuthCallback':
-        return 'GitHub 登录回调失败，请重试';
-      case 'OAuthCreateAccount':
-        return '创建账户失败，请重试';
-      case 'EmailCreateAccount':
-        return '邮箱账户创建失败，请重试';
-      case 'Callback':
-        return '登录回调处理失败，请重试';
-      case 'OAuthAccountNotLinked':
-        return '该邮箱已被其他登录方式使用';
-      case 'EmailSignin':
-        return '邮箱登录失败，请重试';
-      case 'CredentialsSignin':
-        return '登录凭据无效，请重试';
-      case 'SessionRequired':
-        return '需要登录才能访问此页面';
-      case 'Default':
-        return '登录失败，请重试';
-      default:
-        return error ? `登录失败: ${error}` : null;
+    if (!error) return null;
+    
+    // 尝试获取对应的错误翻译
+    try {
+      return t(`errors.${error}`);
+    } catch {
+      // 如果没有对应的翻译，使用默认错误信息
+      return t('errors.Default');
     }
   };
 
@@ -59,7 +46,7 @@ function SignInForm(): JSX.Element {
     <>
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <h2 className="mt-6 text-center text-3xl font-bold tracking-tight">
-          登录账户
+          {t('title')}
         </h2>
         {errorMessage && (
           <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-md">
@@ -80,7 +67,7 @@ function SignInForm(): JSX.Element {
               </div>
               <div className="relative flex justify-center text-sm">
                 <span className="bg-white px-2 text-gray-500">
-                  使用以下方式登录
+                  {t('signInWith')}
                 </span>
               </div>
             </div>
@@ -98,17 +85,17 @@ function SignInForm(): JSX.Element {
                   <Github className="h-5 w-5" />
                 )}
                 <span>
-                  {isLoading ? '正在登录...' : '使用 GitHub 账号登录'}
+                  {isLoading ? t('signingIn') : t('githubButton')}
                 </span>
               </Button>
             </div>
             
             <div className="mt-6 text-center">
               <p className="text-sm text-gray-500">
-                登录后将自动收集您的 GitHub 数据
+                {t('dataNotice')}
               </p>
               <p className="text-xs text-gray-400 mt-1">
-                我们只读取公开信息，不会进行任何修改操作
+                {t('permissionNotice')}
               </p>
             </div>
           </div>
@@ -120,11 +107,13 @@ function SignInForm(): JSX.Element {
 
 // 加载状态组件
 function SignInLoading(): JSX.Element {
+  const t = useTranslations('auth.signin');
+  
   return (
     <div className="flex min-h-screen flex-col items-center justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <h2 className="mt-6 text-center text-3xl font-bold tracking-tight">
-          登录账户
+          {t('title')}
         </h2>
       </div>
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">

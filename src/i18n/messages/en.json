@@ -146,6 +146,26 @@
     }
   },
   "auth": {
+    "signin": {
+      "title": "Sign In to Account",
+      "signInWith": "Sign in with",
+      "githubButton": "Sign in with GitHub",
+      "signingIn": "Signing in...",
+      "dataNotice": "GitHub data will be collected after sign in",
+      "permissionNotice": "We only read public information, no modifications will be made",
+      "errors": {
+        "OAuthSignin": "GitHub OAuth configuration error, please contact administrator",
+        "OAuthCallback": "GitHub login callback failed, please retry",
+        "OAuthCreateAccount": "Failed to create account, please retry",
+        "EmailCreateAccount": "Failed to create email account, please retry",
+        "Callback": "Login callback processing failed, please retry",
+        "OAuthAccountNotLinked": "This email is already used by another login method",
+        "EmailSignin": "Email login failed, please retry",
+        "CredentialsSignin": "Invalid login credentials, please retry",
+        "SessionRequired": "Login required to access this page",
+        "Default": "Login failed, please retry"
+      }
+    },
     "error": {
       "configuration_error": {
         "title": "Configuration Error",
