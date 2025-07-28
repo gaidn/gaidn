@@ -5,14 +5,15 @@ import { signIn } from "next-auth/react";
 import { Github, AlertCircle, Loader2 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useState, Suspense } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
 // 将使用 useSearchParams 的逻辑提取到单独的组件中
 function SignInForm(): JSX.Element {
   const [isLoading, setIsLoading] = useState(false);
   const searchParams = useSearchParams();
   const error = searchParams.get('error');
-  const callbackUrl = searchParams.get('callbackUrl') || '/';
+  const locale = useLocale();
+  const callbackUrl = searchParams.get('callbackUrl') || `/${locale}`;
   const t = useTranslations('auth.signin');
 
   const handleGitHubSignIn = async (): Promise<void> => {
