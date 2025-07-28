@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { User, Settings, Github, Mail, Calendar, MapPin, Link as LinkIcon, Save, Loader2 } from "lucide-react"
 import { toast } from "sonner"
+import { useTranslations } from "next-intl"
 import type { ProfileUpdateRequest, ProfileApiResponse } from "@/types/profile"
 
 interface ProfileTabsProps {
@@ -32,6 +33,7 @@ interface ProfileTabsProps {
 }
 
 export default function ProfileTabs({ user, isOwnProfile = false }: ProfileTabsProps): JSX.Element {
+  const t = useTranslations()
   const [isEditing, setIsEditing] = React.useState(false)
   const [isSaving, setIsSaving] = React.useState(false)
   const [currentUser, setCurrentUser] = React.useState(user)
@@ -81,7 +83,7 @@ export default function ProfileTabs({ user, isOwnProfile = false }: ProfileTabsP
       const result: ProfileApiResponse = await response.json()
       
       if (!result.success) {
-        throw new Error(result.error || '保存失败')
+        throw new Error(result.error || t('profile.saveFailed'))
       }
       
       // 更新本地用户数据
@@ -97,11 +99,11 @@ export default function ProfileTabs({ user, isOwnProfile = false }: ProfileTabsP
       setIsEditing(false)
       
       // 显示成功提示
-      toast.success('个人资料更新成功！')
+      toast.success(t('profile.updateSuccess'))
       
     } catch (error) {
       console.error('保存个人资料失败:', error)
-      const errorMessage = error instanceof Error ? error.message : '保存失败，请重试'
+      const errorMessage = error instanceof Error ? error.message : t('profile.saveFailedRetry')
       toast.error(errorMessage)
     } finally {
       setIsSaving(false)
@@ -114,12 +116,12 @@ export default function ProfileTabs({ user, isOwnProfile = false }: ProfileTabsP
         <TabsList className={`grid w-full ${isOwnProfile ? 'grid-cols-2' : 'grid-cols-1'}`}>
           <TabsTrigger value="profile" className="flex items-center gap-2">
             <User className="h-4 w-4" />
-            个人资料
+            {t('profile.profile')}
           </TabsTrigger>
           {isOwnProfile && (
             <TabsTrigger value="settings" className="flex items-center gap-2">
               <Settings className="h-4 w-4" />
-              设置
+              {t('profile.settings')}
             </TabsTrigger>
           )}
         </TabsList>
@@ -168,20 +170,20 @@ export default function ProfileTabs({ user, isOwnProfile = false }: ProfileTabsP
                     </div>
                     <div className="flex items-center gap-1">
                       <Calendar className="h-4 w-4" />
-                      加入于 {new Date(currentUser.created_at).toLocaleDateString('zh-CN')}
+                      {t('profile.joinedOn', { date: new Date(currentUser.created_at).toLocaleDateString() })}
                     </div>
                   </div>
                   
                   <div className="flex gap-4">
                     <Badge variant="secondary" className="px-3 py-1">
                       <Github className="h-4 w-4 mr-1" />
-                      {currentUser.public_repos || 0} 个仓库
+                      {t('profile.repositories', { count: currentUser.public_repos || 0 })}
                     </Badge>
                     <Badge variant="secondary" className="px-3 py-1">
-                      {currentUser.followers || 0} 关注者
+                      {t('profile.followers', { count: currentUser.followers || 0 })}
                     </Badge>
                     <Badge variant="secondary" className="px-3 py-1">
-                      {currentUser.following || 0} 正在关注
+                      {t('profile.following', { count: currentUser.following || 0 })}
                     </Badge>
                   </div>
                 </div>
@@ -197,15 +199,15 @@ export default function ProfileTabs({ user, isOwnProfile = false }: ProfileTabsP
               {/* 个人资料设置 */}
               <Card>
                 <CardHeader>
-                  <CardTitle>个人资料设置</CardTitle>
+                  <CardTitle>{t('profile.profileSettings')}</CardTitle>
                   <CardDescription>
-                    编辑您的个人资料信息
+                    {t('profile.editProfileInfo')}
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <div className="space-y-4">
                     <div className="space-y-2">
-                      <Label htmlFor="name">显示名称</Label>
+                      <Label htmlFor="name">{t('profile.displayName')}</Label>
                       <Input
                         id="name"
                         value={isEditing ? formData.name : currentUser.name}
@@ -215,7 +217,7 @@ export default function ProfileTabs({ user, isOwnProfile = false }: ProfileTabsP
                     </div>
                     
                     <div className="space-y-2">
-                      <Label htmlFor="bio">个人简介</Label>
+                      <Label htmlFor="bio">{t('profile.bio')}</Label>
                       <Textarea
                         id="bio"
                         value={isEditing ? formData.bio : currentUser.bio || ""}
@@ -226,7 +228,7 @@ export default function ProfileTabs({ user, isOwnProfile = false }: ProfileTabsP
                     </div>
                     
                     <div className="space-y-2">
-                      <Label htmlFor="location">位置</Label>
+                      <Label htmlFor="location">{t('profile.location')}</Label>
                       <Input
                         id="location"
                         value={isEditing ? formData.location : currentUser.location || ""}
@@ -236,7 +238,7 @@ export default function ProfileTabs({ user, isOwnProfile = false }: ProfileTabsP
                     </div>
                     
                     <div className="space-y-2">
-                      <Label htmlFor="blog">网站</Label>
+                      <Label htmlFor="blog">{t('profile.website')}</Label>
                       <Input
                         id="blog"
                         value={isEditing ? formData.blog : currentUser.blog || ""}
@@ -259,19 +261,19 @@ export default function ProfileTabs({ user, isOwnProfile = false }: ProfileTabsP
                           ) : (
                             <Save className="h-4 w-4" />
                           )}
-                          {isSaving ? '保存中...' : '保存更改'}
+                          {isSaving ? t('profile.saving') : t('profile.saveChanges')}
                         </Button>
                         <Button 
                           variant="outline" 
                           onClick={handleCancel}
                           disabled={isSaving}
                         >
-                          取消
+                          {t('profile.cancel')}
                         </Button>
                       </>
                     ) : (
                       <Button onClick={() => setIsEditing(true)}>
-                        编辑资料
+                        {t('profile.editProfile')}
                       </Button>
                     )}
                   </div>

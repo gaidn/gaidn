@@ -5,6 +5,7 @@ import { auth } from "@/auth";
 import { notFound } from "next/navigation";
 import { getDB } from "@/lib/db";
 import { UserModel } from "@/models/user";
+import { getTranslations } from "next-intl/server";
 
 interface ProfilePageProps {
   params: Promise<{
@@ -19,6 +20,7 @@ export default async function ProfilePage({ params, searchParams }: ProfilePageP
   const { username } = await params;
   const { tab: _tab } = await searchParams;
   const session = await auth();
+  const t = await getTranslations();
   
   // 获取完整的用户信息
   const db = await getDB();
@@ -37,8 +39,8 @@ export default async function ProfilePage({ params, searchParams }: ProfilePageP
   return (
     <PageLayout>
       <PageHeader
-        title={isOwnProfile ? '我的资料' : `${targetUser.name} 的资料`}
-        description={isOwnProfile ? '查看和管理您的个人资料信息' : `查看 ${targetUser.name} 的个人资料信息`}
+        title={isOwnProfile ? t('profile.myProfile') : t('profile.userProfile', { name: targetUser.name })}
+        description={isOwnProfile ? t('profile.myProfileDescription') : t('profile.userProfileDescription', { name: targetUser.name })}
       />
       
       {/* 使用新的 ProfileTabs 组件 */}

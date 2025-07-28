@@ -8,7 +8,7 @@ export const localeNames: Record<string, string> = {
 };
 
 // 默认语言
-export const defaultLocale = "en" as const;
+export const defaultLocale = "zh" as const;
 
 // 路径前缀策略
 // "as-needed": 默认语言不显示前缀，其他语言显示

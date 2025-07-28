@@ -1,49 +1,51 @@
 import PageLayout from "@/components/PageLayout";
+import { getTranslations } from "next-intl/server";
 
-export default function Settings(): JSX.Element {
+export default async function Settings(): Promise<JSX.Element> {
+  const t = await getTranslations();
   return (
     <PageLayout>
       <div className="max-w-2xl mx-auto space-y-8">
         <div className="text-center">
-          <h1 className="text-3xl md:text-4xl font-bold">设置</h1>
+          <h1 className="text-3xl md:text-4xl font-bold">{t('settings.title')}</h1>
           <p className="text-lg text-muted-foreground mt-2">
-            管理您的个人资料和账户设置
+            {t('settings.description')}
           </p>
         </div>
 
         {/* 个人资料设置 */}
         <div className="bg-card border rounded-lg p-8">
-          <h2 className="text-2xl font-bold mb-6">个人资料</h2>
+          <h2 className="text-2xl font-bold mb-6">{t('settings.profile.title')}</h2>
           <div className="space-y-6">
             <div>
-              <label className="block text-sm font-medium mb-2">显示名称</label>
+              <label className="block text-sm font-medium mb-2">{t('settings.profile.displayName')}</label>
               <input
                 type="text"
-                placeholder="输入您的显示名称"
+                placeholder={t('settings.profile.displayNamePlaceholder')}
                 className="w-full px-3 py-2 border border-input rounded-md bg-background focus:outline-none focus:ring-2 focus:ring-ring"
-                defaultValue="张三"
+                defaultValue={t('settings.profile.displayNameDefault')}
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">个人标语</label>
+              <label className="block text-sm font-medium mb-2">{t('settings.profile.tagline')}</label>
               <input
                 type="text"
-                placeholder="输入您的个人标语"
+                placeholder={t('settings.profile.taglinePlaceholder')}
                 className="w-full px-3 py-2 border border-input rounded-md bg-background focus:outline-none focus:ring-2 focus:ring-ring"
-                defaultValue="全栈开发者，专注于AI和Web技术"
+                defaultValue={t('settings.profile.taglineDefault')}
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">个人简介</label>
+              <label className="block text-sm font-medium mb-2">{t('settings.profile.bio')}</label>
               <textarea
-                placeholder="输入您的个人简介"
+                placeholder={t('settings.profile.bioPlaceholder')}
                 rows={4}
                 className="w-full px-3 py-2 border border-input rounded-md bg-background focus:outline-none focus:ring-2 focus:ring-ring"
-                defaultValue="热爱编程，专注于人工智能和Web开发。喜欢开源项目，致力于构建更好的开发者社区。"
+                defaultValue={t('settings.profile.bioDefault')}
               />
             </div>
             <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-9 px-4 py-2 bg-primary text-primary-foreground shadow hover:bg-primary/90">
-              保存更改
+              {t('settings.profile.saveChanges')}
             </button>
           </div>
         </div>

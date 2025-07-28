@@ -12,12 +12,14 @@ import {
   DropdownMenuTrigger 
 } from "./ui/dropdown-menu";
 import { Github, LogOut, User, Settings, ChevronDown } from "lucide-react";
-import { Link } from "@/i18n/navigation";
-import { useTranslations } from "next-intl";
+import { Link, useRouter } from "@/i18n/navigation";
+import { useTranslations, useLocale } from "next-intl";
 
 export function UserInfo(): JSX.Element {
   const { data: session, status } = useSession();
   const t = useTranslations();
+  const router = useRouter();
+  const locale = useLocale();
 
   if (status === "loading") {
     return (
@@ -33,7 +35,7 @@ export function UserInfo(): JSX.Element {
         variant="outline"
         size="sm"
         className="flex items-center gap-2 hover:bg-accent transition-colors"
-        onClick={() => window.location.href = "/auth/signin"}
+        onClick={() => router.push("/auth/signin")}
       >
         <Github className="h-4 w-4" />
         <span>{t("user.sign_in")}</span>
@@ -81,14 +83,22 @@ export function UserInfo(): JSX.Element {
         <DropdownMenuSeparator />
         
         <DropdownMenuItem asChild>
-          <Link href="/profile" className="flex items-center gap-2 w-full">
+          <Link 
+            href="/profile" 
+            className="flex items-center gap-2 w-full"
+            locale={locale}
+          >
             <User className="h-4 w-4" />
             {t("user.profile")}
           </Link>
         </DropdownMenuItem>
         
         <DropdownMenuItem asChild>
-          <Link href="/profile?tab=settings" className="flex items-center gap-2 w-full">
+          <Link 
+            href="/profile?tab=settings" 
+            className="flex items-center gap-2 w-full"
+            locale={locale}
+          >
             <Settings className="h-4 w-4" />
             {t("navigation.settings")}
           </Link>

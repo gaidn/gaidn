@@ -103,6 +103,48 @@
       "loading": "正在加载排行榜数据..."
     }
   },
+  "profile": {
+    "myProfile": "我的资料",
+    "userProfile": "{name} 的资料",
+    "myProfileDescription": "查看和管理您的个人资料信息",
+    "userProfileDescription": "查看 {name} 的个人资料信息",
+    "profile": "个人资料",
+    "settings": "设置",
+    "joinedOn": "加入于 {date}",
+    "repositories": "{count} 个仓库",
+    "followers": "{count} 关注者",
+    "following": "{count} 正在关注",
+    "profileSettings": "个人资料设置",
+    "editProfileInfo": "编辑您的个人资料信息",
+    "displayName": "显示名称",
+    "bio": "个人简介",
+    "location": "位置",
+    "website": "网站",
+    "editProfile": "编辑资料",
+    "saveChanges": "保存更改",
+    "saving": "保存中...",
+    "cancel": "取消",
+    "saveFailed": "保存失败",
+    "saveFailedRetry": "保存失败，请重试",
+    "updateSuccess": "个人资料更新成功！"
+  },
+  "settings": {
+    "title": "设置",
+    "description": "管理您的个人资料和账户设置",
+    "profile": {
+      "title": "个人资料",
+      "displayName": "显示名称",
+      "displayNamePlaceholder": "输入您的显示名称",
+      "displayNameDefault": "张三",
+      "tagline": "个人标语",
+      "taglinePlaceholder": "输入您的个人标语",
+      "taglineDefault": "全栈开发者，专注于AI和Web技术",
+      "bio": "个人简介",
+      "bioPlaceholder": "输入您的个人简介",
+      "bioDefault": "热爱编程，专注于人工智能和Web开发。喜欢开源项目，致力于构建更好的开发者社区。",
+      "saveChanges": "保存更改"
+    }
+  },
   "auth": {
     "error": {
       "configuration_error": {

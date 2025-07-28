@@ -103,6 +103,48 @@
       "loading": "Loading leaderboard data..."
     }
   },
+  "profile": {
+    "myProfile": "My Profile",
+    "userProfile": "{name}'s Profile",
+    "myProfileDescription": "View and manage your profile information",
+    "userProfileDescription": "View {name}'s profile information",
+    "profile": "Profile",
+    "settings": "Settings",
+    "joinedOn": "Joined on {date}",
+    "repositories": "{count} repositories",
+    "followers": "{count} followers",
+    "following": "{count} following",
+    "profileSettings": "Profile Settings",
+    "editProfileInfo": "Edit your profile information",
+    "displayName": "Display Name",
+    "bio": "Bio",
+    "location": "Location",
+    "website": "Website",
+    "editProfile": "Edit Profile",
+    "saveChanges": "Save Changes",
+    "saving": "Saving...",
+    "cancel": "Cancel",
+    "saveFailed": "Save failed",
+    "saveFailedRetry": "Save failed, please retry",
+    "updateSuccess": "Profile updated successfully!"
+  },
+  "settings": {
+    "title": "Settings",
+    "description": "Manage your profile and account settings",
+    "profile": {
+      "title": "Profile",
+      "displayName": "Display Name",
+      "displayNamePlaceholder": "Enter your display name",
+      "displayNameDefault": "John Doe",
+      "tagline": "Tagline",
+      "taglinePlaceholder": "Enter your tagline",
+      "taglineDefault": "Full-stack developer focused on AI and Web technologies",
+      "bio": "Bio",
+      "bioPlaceholder": "Enter your bio",
+      "bioDefault": "Passionate about programming, focusing on artificial intelligence and web development. Love open source projects and committed to building better developer communities.",
+      "saveChanges": "Save Changes"
+    }
+  },
   "auth": {
     "error": {
       "configuration_error": {
